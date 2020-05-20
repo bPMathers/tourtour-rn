@@ -6,20 +6,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
 
-// const image = { uri: "https://cdn.dribbble.com/users/25737/screenshots/5308630/dlo3bus_dribbbleshot1.png" };
-
-// <View style={styles.searchSection}>
-//     <Icon style={styles.searchIcon} name="ios-search" size={20} color="#000" />
-//     <TextInput
-//         style={styles.input}
-//         placeholder="User Nickname"
-//         onChangeText={(searchString) => { this.setState({ searchString }) }}
-//         underlineColorAndroid="transparent"
-//     />
-// </View>
-
 export const HomeSearchScreen = (props) => {
-    const [searchInput, setSearchInput] = React.useState('Useless Placeholder');
+    const [searchInput, setSearchInput] = React.useState();
 
     const renderGridItem = (itemData) => {
         return (
@@ -40,7 +28,7 @@ export const HomeSearchScreen = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.text}>TourTour</Text>
+                <Text style={styles.text}>TourTour - Nice image ou animation</Text>
             </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
@@ -48,6 +36,7 @@ export const HomeSearchScreen = (props) => {
                     style={styles.searchInput}
                     onChangeText={text => setSearchInput(text)}
                     value={searchInput}
+                    placeholder='Rechercher'
                 />
             </View>
             <FlatList data={CATEGORIES} renderItem={renderGridItem} numColumns={2} />
@@ -58,7 +47,8 @@ export const HomeSearchScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: "column"
+        flexDirection: "column",
+        backgroundColor: 'white'
     },
     image: {
         flex: 1,
@@ -66,14 +56,14 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     text: {
-        color: "white",
+        color: '#2699FB',
         fontSize: 30,
         fontWeight: "bold",
         textAlign: 'center'
     },
     header: {
         height: 200,
-        backgroundColor: '#2699FB',
+        backgroundColor: 'white',
         justifyContent: 'center',
         marginTop: 50
     },

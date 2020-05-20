@@ -34,7 +34,7 @@ const CategoryGridTile = (props) => {
 const styles = StyleSheet.create({
     gridItem: {
         flex: 1,
-        margin: 5,
+        margin: 2,
         height: 150,
         borderRadius: 5,
         elevation: 5,
@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        borderRadius: 10,
-        shadowColor: "black",
-        shadowOpacity: 0.26,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
+        borderRadius: 5,
+        // shadowColor: "black",
+        // shadowOpacity: 0.26,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowRadius: 10,
         padding: 15,
         justifyContent: "center",
         alignItems: "center",
