@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         padding: 15,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgba(0,0,0,.6)'
+        backgroundColor: 'rgba(0,0,0,.4)'
     },
     title: {
         // fontFamily: "open-sans-bold",

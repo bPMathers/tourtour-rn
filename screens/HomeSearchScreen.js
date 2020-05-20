@@ -1,10 +1,12 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import LottieView from "lottie-react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 
 import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
+import Animation from '../components/Animation'
 
 export const HomeSearchScreen = (props) => {
     const [searchInput, setSearchInput] = React.useState();
@@ -27,9 +29,14 @@ export const HomeSearchScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.text}>TourTour - Nice image ou animation</Text>
+            {/* <View style={styles.titleContainer}>
+                <Text style={styles.title}>Bienvenue dans TourTour</Text>
+            </View>*/}
+
+            <View style={styles.animationContainer}>
+                <Animation />
             </View>
+
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
                 <TextInput
@@ -45,6 +52,26 @@ export const HomeSearchScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
+    titleContainer: {
+        marginTop: 60,
+        paddingLeft: 10,
+    },
+    title: {
+        color: '#EA027C',
+        fontWeight: "bold"
+
+    },
+    animationContainer: {
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 50,
+        paddingBottom: 30,
+        backgroundColor: '#a3d6ff',
+        // marginTop: 30
+        // width: 20
+        // flex: 1,
+    },
     container: {
         flex: 1,
         flexDirection: "column",
@@ -82,6 +109,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
+        // marginTop: 50
     },
     searchIcon: {
         padding: 10,
