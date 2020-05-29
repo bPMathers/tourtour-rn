@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Platform, Text, TextInput, Button, StatusBar, StyleSheet, View } from 'react-native';
+import ApolloClient, { gql } from 'apollo-boost';
 
 import useCachedResources from './hooks/useCachedResources';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
@@ -9,6 +10,31 @@ import LinkingConfiguration from './navigation/LinkingConfiguration';
 
 import HomeSearchScreen from './screens/HomeSearchScreen';
 
+console.log('salut')
+
+const client = new ApolloClient({
+  uri: 'https://frozen-caverns-07163.herokuapp.com/',
+});
+
+
+
+const getUsers = gql`
+  query {
+    users{
+      id 
+      name
+    }
+  }
+`
+
+const testQuery = async () => {
+  const response = await client.query({
+    query: getUsers
+  })
+  console.log(response)
+}
+
+testQuery();
 const Stack = createStackNavigator();
 
 // function HomeScreen2({ navigation, route }) {
