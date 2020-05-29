@@ -1,41 +1,44 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Platform, Text, TextInput, Button, StatusBar, StyleSheet, View } from 'react-native';
 import ApolloClient, { gql } from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+
 
 import useCachedResources from './hooks/useCachedResources';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
 
-import HomeSearchScreen from './screens/HomeSearchScreen';
+import HomeApp from './HomeApp'
 
-console.log('salut')
 
 const client = new ApolloClient({
   uri: 'https://frozen-caverns-07163.herokuapp.com/',
 });
+// const client = new ApolloClient({
+//   uri: 'http://localhost:4000/',
+// });
+
+
+// const getUsers = gql`
+//   query {
+//     users{
+//       id 
+//       name
+//     }
+//   }
+// `
+
+// const testQuery = async () => {
+//   const response = await client.query({
+//     query: getUsers
+//   })
+//   console.log(response)
+// }
+
+// testQuery();
 
 
 
-const getUsers = gql`
-  query {
-    users{
-      id 
-      name
-    }
-  }
-`
 
-const testQuery = async () => {
-  const response = await client.query({
-    query: getUsers
-  })
-  console.log(response)
-}
-
-testQuery();
-const Stack = createStackNavigator();
 
 // function HomeScreen2({ navigation, route }) {
 //   React.useEffect(() => {
@@ -58,28 +61,16 @@ const Stack = createStackNavigator();
 
 
 export default function App(props) {
+
   const isLoadingComplete = useCachedResources();
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator initialRouteName="Home2" screenOptions={{
-            headerTintColor: 'white',
-            headerStyle: { backgroundColor: 'tomato' },
-          }}>
-            {/* <Stack.Screen name="Root" component={BottomTabNavigator} /> */}
-            <Stack.Screen
-              name="HomeSearch"
-              component={HomeSearchScreen}
-              options={{ headerShown: false }} />
-            {/* <Stack.Screen name="CreatePost" component={CreatePostScreen} options={{}} /> */}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <ApolloProvider client={client}>
+        <HomeApp {...props} />
+      </ApolloProvider>
     );
   }
 }

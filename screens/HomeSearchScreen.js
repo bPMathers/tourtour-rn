@@ -1,16 +1,31 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import LottieView from "lottie-react-native";
+import ApolloClient, { gql } from 'apollo-boost';
 
+import { useQuery } from '@apollo/react-hooks';
 import { Ionicons } from "@expo/vector-icons";
 
 import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
 import Animation from '../components/Animation'
 
-export const HomeSearchScreen = (props) => {
-    const [searchInput, setSearchInput] = React.useState();
+import UserList from '../components/UserList'
 
+const getUsers = gql`
+  query {
+    users{
+      id 
+      name
+      
+    }
+  }
+`
+
+export const HomeSearchScreen = (props) => {
+    const { loading, error, data } = useQuery(getUsers);
+    const [searchInput, setSearchInput] = React.useState();
+    // console.log(JSON.stringify(data.users, undefined, 2))
     const renderGridItem = (itemData) => {
         return (
             <CategoryGridTile
@@ -27,6 +42,9 @@ export const HomeSearchScreen = (props) => {
         );
     };
 
+    if (loading) return <View style={styles.container}><Text>Loading...</Text></View>;
+    if (error) return <View style={styles.container}><Text>Error...</Text></View>;
+
     return (
         <View style={styles.container}>
             {/* <View style={styles.titleContainer}>
@@ -36,7 +54,9 @@ export const HomeSearchScreen = (props) => {
             <View style={styles.animationContainer}>
                 <Animation />
             </View>
-
+            <View style={styles.userList}>
+                <UserList style={{ flex: 1 }} users={data.users} />
+            </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
                 <TextInput
@@ -114,6 +134,11 @@ const styles = StyleSheet.create({
     searchIcon: {
         padding: 10,
     },
+    userList: {
+        height: 300,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 })
 
 export default HomeSearchScreen;
