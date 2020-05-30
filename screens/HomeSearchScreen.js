@@ -1,16 +1,13 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
-import LottieView from "lottie-react-native";
-import ApolloClient, { gql } from 'apollo-boost';
+import { FlatList, StyleSheet, Text, TextInput, View, Button } from 'react-native';
+// import LottieView from "lottie-react-native";
+import { gql } from 'apollo-boost';
 
 import { useQuery } from '@apollo/react-hooks';
 import { Ionicons } from "@expo/vector-icons";
 
-import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
 import Animation from '../components/Animation'
-
-import UserList from '../components/UserList'
 
 const getCategories = gql`
   query {
@@ -46,12 +43,12 @@ export const HomeSearchScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.titleContainer}>
-                <Text style={styles.title}>Bienvenue dans TourTour</Text>
-            </View>*/}
 
             <View style={styles.animationContainer}>
                 <Animation />
+            </View>
+            <View style={styles.actions}>
+                <Button title="To Cat Search" color='red' onPress={() => props.navigation.navigate('CategorySearch')} />
             </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
@@ -68,6 +65,11 @@ export const HomeSearchScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
+    actions: {
+        marginVertical: 10,
+        alignItems: 'center'
+    },
+
     titleContainer: {
         marginTop: 60,
         paddingLeft: 10,
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         paddingBottom: 30,
         backgroundColor: '#a3d6ff',
+        // backgroundColor: '#3490dc',
         // marginTop: 30
         // width: 20
         // flex: 1,
