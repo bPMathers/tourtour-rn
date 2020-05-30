@@ -43,7 +43,6 @@ export const HomeSearchScreen = (props) => {
 
     return (
         <View style={styles.container}>
-
             <View style={styles.animationContainer}>
                 <Animation />
             </View>
