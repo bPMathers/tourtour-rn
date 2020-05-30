@@ -12,25 +12,24 @@ import Animation from '../components/Animation'
 
 import UserList from '../components/UserList'
 
-const getUsers = gql`
+const getCategories = gql`
   query {
-    users{
+    categories{
       id 
-      name
-      
+      title
+      imageUrl
     }
   }
 `
 
 export const HomeSearchScreen = (props) => {
-    const { loading, error, data } = useQuery(getUsers);
+    const { loading, error, data } = useQuery(getCategories);
     const [searchInput, setSearchInput] = React.useState();
     // console.log(JSON.stringify(data.users, undefined, 2))
     const renderGridItem = (itemData) => {
         return (
             <CategoryGridTile
                 title={itemData.item.title}
-                color={itemData.item.color}
                 imgUrl={itemData.item.imageUrl}
                 onSelect={() => {
                     // props.navigation.navigate("CategoryMeals", {
@@ -54,9 +53,6 @@ export const HomeSearchScreen = (props) => {
             <View style={styles.animationContainer}>
                 <Animation />
             </View>
-            <View style={styles.userList}>
-                <UserList style={{ flex: 1 }} users={data.users} />
-            </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
                 <TextInput
@@ -66,7 +62,7 @@ export const HomeSearchScreen = (props) => {
                     placeholder='Rechercher'
                 />
             </View>
-            <FlatList data={CATEGORIES} renderItem={renderGridItem} numColumns={2} />
+            <FlatList data={data.categories} renderItem={renderGridItem} numColumns={2} />
         </View>
     );
 }

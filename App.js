@@ -11,7 +11,8 @@ import HomeApp from './HomeApp'
 
 
 const client = new ApolloClient({
-  uri: 'https://frozen-caverns-07163.herokuapp.com/',
+  // change to local node server
+  uri: 'http://localhost:4000/',
 });
 // const client = new ApolloClient({
 //   uri: 'http://localhost:4000/',
