@@ -47,7 +47,7 @@ export const HomeSearchScreen = (props) => {
                 <Animation />
             </View>
             <View style={styles.actions}>
-                <Button title="To Cat Search" color='red' onPress={() => props.navigation.navigate('CategorySearch')} />
+                <Button title="To Cat Search" onPress={() => props.navigation.navigate('CategorySearch')} />
             </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />
