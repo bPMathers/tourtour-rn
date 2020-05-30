@@ -9,57 +9,10 @@ import useCachedResources from './hooks/useCachedResources';
 
 import HomeApp from './HomeApp'
 
-
 const client = new ApolloClient({
-  // change to local node server
-  uri: 'http://localhost:4000/',
+  //local IP adress  may change. find a way to fetch it dynamically?
+  uri: 'http://192.168.100.131:4000/',
 });
-// const client = new ApolloClient({
-//   uri: 'http://localhost:4000/',
-// });
-
-
-// const getUsers = gql`
-//   query {
-//     users{
-//       id 
-//       name
-//     }
-//   }
-// `
-
-// const testQuery = async () => {
-//   const response = await client.query({
-//     query: getUsers
-//   })
-//   console.log(response)
-// }
-
-// testQuery();
-
-
-
-
-
-// function HomeScreen2({ navigation, route }) {
-//   React.useEffect(() => {
-//     if (route.params?.post) {
-//       // Post updated, do something with `route.params.post`
-//       // For example, send the post to the server
-//     }
-//   }, [route.params?.post]);
-
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Button
-//         title="Create post"
-//         onPress={() => navigation.navigate('CreatePost')}
-//       />
-//       <Text style={{ margin: 10 }}>Post: {route.params?.post}</Text>
-//     </View>
-//   );
-// }
-
 
 export default function App(props) {
 
