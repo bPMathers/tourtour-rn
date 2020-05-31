@@ -21,6 +21,7 @@ const CategorySearchScreen = (props) => {
         return (
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
+                <Button title="PlaceDetailScreen" onPress={() => { props.navigation.navigate('PlaceDetail') }} />
             </View>
         );
     };

@@ -11,6 +11,7 @@ import { TourTourColors } from './constants/Colors'
 
 import HomeSearchScreen from './screens/HomeSearchScreen';
 import CategorySearchScreen from './screens/CategorySearchScreen';
+import PlaceDetailScreen from './screens/PlaceDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,10 @@ export default function HomeApp(props) {
                         <Stack.Screen
                             name="CategorySearch"
                             component={CategorySearchScreen}
+                            options={{ headerStyle: { backgroundColor: TourTourColors.primary } }} />
+                        <Stack.Screen
+                            name="PlaceDetail"
+                            component={PlaceDetailScreen}
                             options={{ headerStyle: { backgroundColor: TourTourColors.primary } }} />
                     </Stack.Navigator>
                 </NavigationContainer>
