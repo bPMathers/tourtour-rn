@@ -30,7 +30,16 @@ const CategorySearchScreen = (props) => {
 
     const renderGridItem = (itemData) => {
         return (
-            <PlacePreviewListItem name={itemData.item.name} imageUrl={itemData.item.mainPhoto} />
+            <PlacePreviewListItem
+                name={itemData.item.name}
+                imageUrl={itemData.item.mainPhoto}
+                onSelectUserProfile={() => {
+                    props.navigation.navigate('UserProfile', {
+                        // Add link to user profile when it is constructed
+                        // userId: itemData.item.addedBy
+                    })
+                }}
+            />
         );
     };
 

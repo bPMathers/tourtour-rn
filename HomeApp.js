@@ -12,6 +12,7 @@ import { TourTourColors } from './constants/Colors'
 import HomeSearchScreen from './screens/HomeSearchScreen';
 import CategorySearchScreen from './screens/CategorySearchScreen';
 import PlaceDetailScreen from './screens/PlaceDetailScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,10 @@ export default function HomeApp(props) {
                         <Stack.Screen
                             name="PlaceDetail"
                             component={PlaceDetailScreen}
+                            options={{ headerStyle: { backgroundColor: TourTourColors.primary } }} />
+                        <Stack.Screen
+                            name="UserProfile"
+                            component={UserProfileScreen}
                             options={{ headerStyle: { backgroundColor: TourTourColors.primary } }} />
                     </Stack.Navigator>
                 </NavigationContainer>

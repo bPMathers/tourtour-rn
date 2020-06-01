@@ -36,7 +36,7 @@ const PlacePreviewListItem = (props) => {
                         <View style={styles.bottomRow}>
                             <View>
                                 <Text style={styles.submittedBy}>Ajouté par:  </Text>
-                                <TouchableComponent onPress={() => { console.log('userName pressed') }}>
+                                <TouchableComponent onPress={props.onSelectUserProfile}>
                                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
                                         Flavien Denre de Choix
                                     </Text>
@@ -51,7 +51,7 @@ const PlacePreviewListItem = (props) => {
                     </View>
                 </ImageBackground>
             </TouchableComponent>
-        </View>
+        </View >
     );
 }
 
