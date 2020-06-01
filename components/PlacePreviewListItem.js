@@ -35,14 +35,17 @@ const PlacePreviewListItem = (props) => {
                         </View>
                         <View style={styles.bottomRow}>
                             <View>
+                                <Text style={styles.submittedBy}>Ajouté par:  </Text>
                                 <TouchableComponent onPress={() => { console.log('userName pressed') }}>
-                                    <Text style={styles.submittedBy}>
-                                        Submitted by: <Text style={{ fontWeight: 'bold' }}>Flavien Denre de Choix</Text>
+                                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                                        Flavien Denre de Choix
                                     </Text>
                                 </TouchableComponent>
                             </View>
                             <View>
-                                <Ionicons style={styles.starIcon} name="md-arrow-forward" size={24} color="white" />
+                                <TouchableComponent onPress={() => { console.log('arrow pressed') }}>
+                                    <Ionicons style={styles.starIcon} name="md-arrow-forward" size={24} color="white" />
+                                </TouchableComponent>
                             </View>
                         </View>
                     </View>
