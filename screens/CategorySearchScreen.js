@@ -72,7 +72,7 @@ const CategorySearchScreen = (props) => {
       <View>
         <Button
           title='Changer de location'
-          color={TourTourColors.primary}
+          color={TourTourColors.accent}
         ></Button>
       </View>
       <FlatList data={data.places} renderItem={renderGridItem} />

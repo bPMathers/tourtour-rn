@@ -60,7 +60,7 @@ export default function HomeApp(props) {
               component={CategorySearchScreen}
               options={({ route }) => ({
                 title: route.params.categoryTitle,
-                headerStyle: { backgroundColor: TourTourColors.primary }
+                headerStyle: { backgroundColor: TourTourColors.accent }
               })}
             />
             <Stack.Screen
@@ -68,7 +68,7 @@ export default function HomeApp(props) {
               component={PlaceDetailScreen}
               options={({ route }) => ({
                 title: route.params.name,
-                headerStyle: { backgroundColor: TourTourColors.primary },
+                headerStyle: { backgroundColor: TourTourColors.accent },
                 headerShown: false,
 
               })}
@@ -77,7 +77,7 @@ export default function HomeApp(props) {
               name='UserProfile'
               component={UserProfileScreen}
               options={{
-                headerStyle: { backgroundColor: TourTourColors.primary },
+                headerStyle: { backgroundColor: TourTourColors.accent },
               }}
             />
           </Stack.Navigator>

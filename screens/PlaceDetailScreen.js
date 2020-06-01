@@ -9,7 +9,8 @@ import {
   TouchableNativeFeedback,
   ImageBackground,
   FlatList,
-  ScrollView
+  ScrollView,
+  Button
 } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -17,7 +18,6 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const dummyReviewsList = [
   {
@@ -44,6 +44,24 @@ const dummyReviewsList = [
     rating: '3.5',
     body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
   },
+  {
+    id: "4",
+    author: 'Flavien Denree de Choix',
+    rating: '3.5',
+    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
+  },
+  {
+    id: "4",
+    author: 'Flavien Denree de Choix',
+    rating: '3.5',
+    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
+  },
+  {
+    id: "4",
+    author: 'Flavien Denree de Choix',
+    rating: '3.5',
+    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
+  },
 ]
 
 const PlaceDetailScreen = (props) => {
@@ -53,12 +71,6 @@ const PlaceDetailScreen = (props) => {
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComponent = TouchableNativeFeedback;
-  }
-
-  const reviewListRender = (itemData) => {
-    return (
-      <ReviewCard author={itemData.item.author} body={itemData.item.body} />
-    )
   }
 
   return (
@@ -161,9 +173,18 @@ const PlaceDetailScreen = (props) => {
         </View>
       </View>
       <View style={styles.reviewsListContainer}>
-        <ScrollView>
-          <Text>'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'</Text>
-        </ScrollView>
+        {
+          dummyReviewsList.map((review, index) => {
+            return (
+              <View key={index} style={styles.reviewCardContainer}>
+                <ReviewCard author={review.author} rating={review.rating} body={review.body} />
+              </View>
+            )
+          })
+        }
+      </View>
+      <View style={styles.moreReviewsButtonContainer}>
+        <Button title='Plus de reviews' color={TourTourColors.accent} />
       </View>
     </ScrollView>
 
@@ -261,7 +282,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: 15
+    marginHorizontal: 12
 
   },
   reviewsHeaderRowTitle: {
@@ -271,7 +292,13 @@ const styles = StyleSheet.create({
   },
   reviewsListContainer: {
     flex: 1,
-    backgroundColor: 'pink'
+  },
+  reviewCardContainer: {
+    marginHorizontal: 12,
+    marginVertical: 5
+  },
+  moreReviewsButtonContainer: {
+    marginBottom: 40
   }
 });
 
