@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 
 import { TourTourColors } from '../constants/Colors';
 
@@ -26,6 +26,14 @@ const CategorySearchScreen = (props) => {
     variables: {
       catId: props.route.params.categoryId,
     },
+  });
+
+  props.navigation.setOptions({
+    headerRight: () => (
+      <TouchableOpacity style={{ marginRight: 15 }} onPress={() => props.navigation.navigate('UserProfile')}>
+        <AntDesign name='plus' size={24} color='white' />
+      </TouchableOpacity>
+    ),
   });
 
   const renderGridItem = (itemData) => {
@@ -98,8 +106,8 @@ const styles = StyleSheet.create({
     overflow: Platform.OS === 'android' ? 'hidden' : 'hidden',
   },
   locationButton: {
-    marginVertical: 5,
-    paddingVertical: 8,
+    marginVertical: 10,
+    paddingVertical: 5,
     backgroundColor: TourTourColors.accent,
     borderRadius: 10,
     width: Dimensions.get("screen").width / 2
