@@ -19,11 +19,15 @@ const ReviewCard = (props) => {
         <View style={styles.reviewHeader}>
           <View style={styles.reviewHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: 5 }}>
-                <Image style={styles.tinyUserProfilePic} source={{ uri: 'https://www.atlassian.design/server/images/avatars/avatar-96.png' }} />
-              </View>
+              <TouchableComponent onPress={props.onUserProfileSelect}>
+                <View style={{ marginRight: 5 }}>
+                  <Image style={styles.tinyUserProfilePic} source={{ uri: 'https://www.atlassian.design/server/images/avatars/avatar-96.png' }} />
+                </View>
+              </TouchableComponent>
               <View>
-                <Text style={styles.authorName}>{props.author}</Text>
+                <TouchableComponent onPress={props.onUserProfileSelect}>
+                  <Text style={styles.authorName}>{props.author}</Text>
+                </TouchableComponent>
                 <StarRating color='white' />
               </View>
             </View>

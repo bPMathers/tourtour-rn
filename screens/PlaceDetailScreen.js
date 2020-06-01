@@ -67,6 +67,8 @@ const dummyReviewsList = [
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
 
+
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -105,7 +107,7 @@ const PlaceDetailScreen = (props) => {
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.submittedBy}>Ajouté par: </Text>
-                <TouchableComponent onPress={() => { props.navigation.setOptions({ title: 'Updated!' }) }}>
+                <TouchableComponent onPress={() => { props.navigation.navigate('UserProfile') }}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>
                     Flavien Denree de Choix
                   </Text>
@@ -149,7 +151,7 @@ const PlaceDetailScreen = (props) => {
         <TouchableComponent>
           <View style={styles.actionGroup}>
             <View style={styles.actionButton}>
-              <Ionicons name='ios-camera' size={27} color={TourTourColors.accent} />
+              <MaterialCommunityIcons name='camera-enhance' size={25} color={TourTourColors.accent} />
             </View>
             <View>
               <Text style={styles.actionTitle}>Photo</Text>
@@ -177,7 +179,7 @@ const PlaceDetailScreen = (props) => {
           dummyReviewsList.map((review, index) => {
             return (
               <View key={index} style={styles.reviewCardContainer}>
-                <ReviewCard author={review.author} rating={review.rating} body={review.body} />
+                <ReviewCard author={review.author} rating={review.rating} body={review.body} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
               </View>
             )
           })
