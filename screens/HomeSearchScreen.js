@@ -29,9 +29,10 @@ export const HomeSearchScreen = (props) => {
                 title={itemData.item.title}
                 imgUrl={itemData.item.imageUrl}
                 onSelect={() => {
-                    // props.navigation.navigate("CategoryMeals", {
-                    //     categoryId: itemData.item.id,
-                    // });
+                    // console.log(itemData.item.id)
+                    props.navigation.navigate("CategorySearch", {
+                        categoryId: itemData.item.id,
+                    });
                 }
                 }
             />
@@ -45,9 +46,6 @@ export const HomeSearchScreen = (props) => {
         <View style={styles.container}>
             <View style={styles.animationContainer}>
                 <Animation />
-            </View>
-            <View style={styles.actions}>
-                <Button title="To Cat Search" onPress={() => props.navigation.navigate('CategorySearch')} />
             </View>
             <View style={styles.searchSection}>
                 <Ionicons style={styles.searchIcon} name='ios-search' size={25} color='black' />

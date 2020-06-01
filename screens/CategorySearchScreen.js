@@ -5,24 +5,32 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { TourTourColors } from '../constants/Colors'
 
+import PlacePreviewListItem from '../components/PlacePreviewListItem'
+
+// How can I dynamically set the query parameter?
 const getPlaces = gql`
-  query {
-    places{
-      id 
-      name
-    }
+  query($catId: String) {
+    places(query: $catId) {
+        id
+        name
+        mainPhoto
+        category {
+            id
+        }
   }
+}
 `
 
 const CategorySearchScreen = (props) => {
-    const { loading, error, data } = useQuery(getPlaces);
+    const { loading, error, data } = useQuery(getPlaces, {
+        variables: {
+            catId: props.route.params.categoryId
+        },
+    });
 
     const renderGridItem = (itemData) => {
         return (
-            <View style={styles.listItem}>
-                <Text>{itemData.item.name}</Text>
-                <Button title="PlaceDetailScreen" onPress={() => { props.navigation.navigate('PlaceDetail') }} />
-            </View>
+            <PlacePreviewListItem name={itemData.item.name} imageUrl={itemData.item.mainPhoto} />
         );
     };
 
@@ -31,8 +39,8 @@ const CategorySearchScreen = (props) => {
 
     return (
         <View style={styles.container}>
-            <View>
-                <Text>Places à poutine près de Montreal</Text>
+            <View style={{ alignItems: 'center' }}>
+                <Text>Places à poutine près de <Text style={{ fontWeight: 'bold' }}>Montreal, QC</Text></Text>
             </View>
             <View>
                 <Button title="Changer de location" color={TourTourColors.primary}></Button>
@@ -44,7 +52,8 @@ const CategorySearchScreen = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        margin: 10
     },
     listItem: {
         flex: 1,
