@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   View,
-  Button,
+  StatusBar,
 } from 'react-native';
 // import LottieView from "lottie-react-native";
 import { gql } from 'apollo-boost';
@@ -60,6 +60,7 @@ export const HomeSearchScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <View style={styles.animationContainer}>
         <Animation />
       </View>

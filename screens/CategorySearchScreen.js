@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
+import { FontAwesome5 } from '@expo/vector-icons'
 
 import { TourTourColors } from '../constants/Colors';
 
@@ -62,6 +63,7 @@ const CategorySearchScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
         <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
         <Text>
@@ -69,11 +71,13 @@ const CategorySearchScreen = (props) => {
           <Text style={{ fontWeight: 'bold' }}>Montreal, QC</Text>
         </Text>
       </View>
-      <View>
-        <Button
-          title='Changer de location'
-          color={TourTourColors.accent}
-        ></Button>
+      <View style={{ alignItems: 'center' }}>
+        <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.locationButtonText}>Changer de Location</Text>
+            <FontAwesome5 name='map-marker-alt' size={18} color='white' />
+          </View>
+        </TouchableOpacity>
       </View>
       <FlatList data={data.places} renderItem={renderGridItem} />
     </View>
@@ -93,6 +97,20 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: Platform.OS === 'android' ? 'hidden' : 'hidden',
   },
+  locationButton: {
+    marginVertical: 5,
+    paddingVertical: 8,
+    backgroundColor: TourTourColors.accent,
+    borderRadius: 10,
+    width: Dimensions.get("screen").width / 2
+  },
+  locationButtonText: {
+    color: '#fff',
+    // textAlign: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+
+  }
 });
 
 export default CategorySearchScreen;
