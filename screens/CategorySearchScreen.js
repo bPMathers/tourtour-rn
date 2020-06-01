@@ -39,7 +39,8 @@ const CategorySearchScreen = (props) => {
         }}
         onSelectPlace={() => {
           props.navigation.navigate('PlaceDetail', {
-            place: itemData.item
+            place: itemData.item,
+            title: itemData.item.name
           });
         }}
       />
@@ -61,9 +62,10 @@ const CategorySearchScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
+        <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
         <Text>
-          Places à poutine près de{' '}
+          près de{' '}
           <Text style={{ fontWeight: 'bold' }}>Montreal, QC</Text>
         </Text>
       </View>

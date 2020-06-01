@@ -27,7 +27,6 @@ const Stack = createStackNavigator();
 export default function HomeApp(props) {
   const isLoadingComplete = useCachedResources();
 
-  // console.log(data)
 
   // if (loading) return <p>Loading...</p>;
   // if (error) return <p>Error :(</p>;
@@ -50,21 +49,29 @@ export default function HomeApp(props) {
             <Stack.Screen
               name='HomeSearch'
               component={HomeSearchScreen}
-              options={{ headerShown: false }}
+              options={{
+                title: 'Catégories',
+                headerShown: false
+              }
+              }
             />
             <Stack.Screen
               name='CategorySearch'
               component={CategorySearchScreen}
-              options={{
-                headerStyle: { backgroundColor: TourTourColors.primary },
-              }}
+              options={({ route }) => ({
+                title: route.params.categoryTitle,
+                headerStyle: { backgroundColor: TourTourColors.primary }
+              })}
             />
             <Stack.Screen
               name='PlaceDetail'
               component={PlaceDetailScreen}
-              options={{
+              options={({ route }) => ({
+                title: route.params.name,
                 headerStyle: { backgroundColor: TourTourColors.primary },
-              }}
+                headerShown: false,
+
+              })}
             />
             <Stack.Screen
               name='UserProfile'

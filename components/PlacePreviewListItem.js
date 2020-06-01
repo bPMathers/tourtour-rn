@@ -95,7 +95,7 @@ const PlacePreviewListItem = (props) => {
           </View>
         </ImageBackground>
       </TouchableComponent>
-    </View >
+    </View>
   );
 };
 

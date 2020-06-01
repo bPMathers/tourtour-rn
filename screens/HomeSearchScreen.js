@@ -38,6 +38,7 @@ export const HomeSearchScreen = (props) => {
           // console.log(itemData.item.id)
           props.navigation.navigate('CategorySearch', {
             categoryId: itemData.item.id,
+            categoryTitle: itemData.item.title
           });
         }}
       />
