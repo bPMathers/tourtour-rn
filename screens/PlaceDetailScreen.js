@@ -16,6 +16,7 @@ import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@ex
 import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
+import StarRating from '../components/StarRating'
 
 const dummyReviewsList = [
   {
@@ -84,38 +85,7 @@ const PlaceDetailScreen = (props) => {
               <View>
                 <Text style={styles.name}>{place.name}</Text>
               </View>
-              <View style={styles.starRating}>
-                <Ionicons
-                  style={styles.starIcon}
-                  name='ios-star'
-                  size={16}
-                  color='white'
-                />
-                <Ionicons
-                  style={styles.starIcon}
-                  name='ios-star'
-                  size={16}
-                  color='white'
-                />
-                <Ionicons
-                  style={styles.starIcon}
-                  name='ios-star'
-                  size={16}
-                  color='white'
-                />
-                <Ionicons
-                  style={styles.starIcon}
-                  name='ios-star'
-                  size={16}
-                  color='white'
-                />
-                <Ionicons
-                  style={styles.starIcon}
-                  name='ios-star-half'
-                  size={16}
-                  color='white'
-                />
-              </View>
+              <StarRating color='white' />
               <View>
                 <Text style={styles.reviewCount}>30 reviews</Text>
               </View>
@@ -175,43 +145,12 @@ const PlaceDetailScreen = (props) => {
       </View>
       <FeaturedPhotosGroup />
       <View style={styles.reviewsHeaderRow}>
+
         <View>
           <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
         </View>
         <View>
-
-          <View style={styles.starRating}>
-            <Ionicons
-              style={styles.starIcon}
-              name='ios-star'
-              size={16}
-              color={TourTourColors.accent}
-            />
-            <Ionicons
-              style={styles.starIcon}
-              name='ios-star'
-              size={16}
-              color={TourTourColors.accent}
-            />
-            <Ionicons
-              style={styles.starIcon}
-              name='ios-star'
-              size={16}
-              color={TourTourColors.accent}
-            />
-            <Ionicons
-              style={styles.starIcon}
-              name='ios-star'
-              size={16}
-              color={TourTourColors.accent}
-            />
-            <Ionicons
-              style={styles.starIcon}
-              name='ios-star-half'
-              size={16}
-              color={TourTourColors.accent}
-            />
-          </View>
+          <StarRating color={TourTourColors.accent} />
           <View>
             <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
               30 reviews
@@ -273,12 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  starRating: {
-    flexDirection: 'row',
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+
   starIcon: {
     marginLeft: 2,
   },

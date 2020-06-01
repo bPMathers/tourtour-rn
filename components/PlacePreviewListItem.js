@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import StarRating from './StarRating'
+
+
 const PlacePreviewListItem = (props) => {
   let TouchableComponent = TouchableOpacity;
 
@@ -28,38 +31,7 @@ const PlacePreviewListItem = (props) => {
                 <View>
                   <Text style={styles.name}>{props.name}</Text>
                 </View>
-                <View style={styles.starRating}>
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-star'
-                    size={16}
-                    color='white'
-                  />
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-star'
-                    size={16}
-                    color='white'
-                  />
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-star'
-                    size={16}
-                    color='white'
-                  />
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-star'
-                    size={16}
-                    color='white'
-                  />
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-star-half'
-                    size={16}
-                    color='white'
-                  />
-                </View>
+                <StarRating color='white' />
               </View>
               <View style={styles.secondRow}>
                 <View>
