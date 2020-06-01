@@ -17,6 +17,7 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const dummyReviewsList = [
   {
@@ -61,6 +62,7 @@ const PlaceDetailScreen = (props) => {
   }
 
   return (
+
     <ScrollView>
       <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
       <View style={styles.placeDetailHeader}>
@@ -105,7 +107,7 @@ const PlaceDetailScreen = (props) => {
         <TouchableComponent>
           <View style={styles.actionGroup}>
             <View style={styles.actionButton}>
-              <FontAwesome name='phone' size={28} color={TourTourColors.accent} />
+              <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
             </View>
             <View>
               <Text style={styles.actionTitle}>Appeler</Text>
@@ -115,7 +117,7 @@ const PlaceDetailScreen = (props) => {
         <TouchableComponent>
           <View style={styles.actionGroup}>
             <View style={styles.actionButton}>
-              <FontAwesome5 name='map-marker-alt' size={24} color={TourTourColors.accent} />
+              <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
             </View>
             <View>
               <Text style={styles.actionTitle}>Carte</Text>
@@ -125,7 +127,7 @@ const PlaceDetailScreen = (props) => {
         <TouchableComponent>
           <View style={styles.actionGroup}>
             <View style={styles.actionButton}>
-              <MaterialCommunityIcons name='web' size={32} color={TourTourColors.accent} />
+              <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
             </View>
             <View>
               <Text style={styles.actionTitle}>Site Web</Text>
@@ -135,10 +137,10 @@ const PlaceDetailScreen = (props) => {
         <TouchableComponent>
           <View style={styles.actionGroup}>
             <View style={styles.actionButton}>
-              <MaterialCommunityIcons name='dots-horizontal' size={28} color={TourTourColors.accent} />
+              <Ionicons name='ios-camera' size={27} color={TourTourColors.accent} />
             </View>
             <View>
-              <Text style={styles.actionTitle}>Plus d'info</Text>
+              <Text style={styles.actionTitle}>Photo</Text>
             </View>
           </View>
         </TouchableComponent>
@@ -159,9 +161,13 @@ const PlaceDetailScreen = (props) => {
         </View>
       </View>
       <View style={styles.reviewsListContainer}>
-        <FlatList data={dummyReviewsList} renderItem={reviewListRender} />
+        <ScrollView>
+          <Text>'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more''Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'</Text>
+        </ScrollView>
       </View>
     </ScrollView>
+
+
   );
 };
 
@@ -237,8 +243,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionButton: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     backgroundColor: TourTourColors.primary,
     borderRadius: 25,
     marginBottom: 5,
@@ -262,6 +268,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: TourTourColors.accent,
+  },
+  reviewsListContainer: {
+    flex: 1,
+    backgroundColor: 'pink'
   }
 });
 
