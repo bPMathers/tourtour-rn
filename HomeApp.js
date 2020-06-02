@@ -74,12 +74,15 @@ export default function HomeApp(props) {
 
               })}
             />
+
             <Stack.Screen
               name='UserProfile'
               component={UserProfileScreen}
-              options={{
+              options={({ route }) => ({
+                // title: route.params.userName,
+                title: route.params.userName,
                 headerStyle: { backgroundColor: TourTourColors.accent },
-              }}
+              })}
             />
             <Stack.Screen
               name='AddPlaceModal'

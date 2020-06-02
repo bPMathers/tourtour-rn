@@ -10,7 +10,8 @@ const ReviewCard = (props) => {
 
   const handleOnUserProfileSelect = () => {
     props.navigation.navigate('UserProfile', {
-      userId: props.review.author.id
+      userId: props.review.author.id,
+      userName: props.review.author.name
     })
   }
 

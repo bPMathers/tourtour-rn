@@ -16,6 +16,7 @@ const GET_PLACES = gql`
       imageUrl
       addedBy {
         id
+        name
       }
       review_count
       category {
@@ -53,7 +54,8 @@ const CategorySearchScreen = (props) => {
         imageUrl={itemData.item.imageUrl}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
-            userId: itemData.item.addedBy.id
+            userId: itemData.item.addedBy.id,
+            userName: itemData.item.addedBy.name
           });
         }}
         onSelectPlace={() => {

@@ -282,7 +282,8 @@ const PlaceDetailScreen = (props) => {
                   <Text style={styles.submittedBy}>Ajouté par: </Text>
                   <TouchableComponent onPress={() => {
                     props.navigation.navigate('UserProfile', {
-                      userId: place.addedBy.id
+                      userId: place.addedBy.id,
+                      userName: place.addedBy.name
                     })
                   }}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
