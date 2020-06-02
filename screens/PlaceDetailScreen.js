@@ -27,32 +27,84 @@ import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
 import dummyReviewsList from '../data/dummyReviewsList'
 
+
+const ReviewsContainer = ({ place }) => {
+  const GET_REVIEWS = gql`
+  query($placeId: String) {
+    reviews(query: $placeId) {
+      id
+      title
+      body
+      rating
+      author {
+        name
+        imageUrl
+      }
+      place {
+        id
+      }
+    }
+  }
+`;
+
+  const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
+    variables: { placeId: place.id },
+  });
+
+  if (reviewsLoading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+  if (reviewsError)
+    return (
+      <View style={styles.container}>
+        <Text>Error...</Text>
+      </View>
+    );
+
+  return (
+    reviewsData.reviews.map((review) => {
+      return (
+        <View key={review.id} style={styles.reviewCardContainer} >
+          <ReviewCard review={review} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
+        </View>
+      )
+    }))
+}
+
+
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
-  const [photoUrl, setPhotoUrl] = useState();
+
+
 
   const GET_PHOTOS = gql`
     query($placeId: String) {
       photos(query: $placeId) {
         id
         url
-        placeId {
+        place {
           id
         }
       }
     }
   `;
 
+
+  //recheck this mutation since we have modified schema quite a bit
   const ADD_PHOTO = gql`
     mutation($url: String!, $placeId: String!) {
       createPhoto(data:{
         url: $url,
-        placeId: $placeId
+        place:  $placeId
       }){
         id 
         url
-        placeId {
+        place {
           id
         }
       }
@@ -60,7 +112,6 @@ const PlaceDetailScreen = (props) => {
   `;
 
 
-  const [addPhoto, { data }] = useMutation(ADD_PHOTO)
 
 
 
@@ -206,10 +257,10 @@ const PlaceDetailScreen = (props) => {
           </View>
         </Modal>
       </View>
-      <ScrollView>
+      <ScrollView scrollIndicatorInsets={{ right: 1 }}>
         <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
         <View style={styles.placeDetailHeader}>
-          <ImageBackground source={{ uri: place.mainPhoto }} style={styles.image}>
+          <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
             <View style={styles.overlayContentContainer}>
               <TouchableComponent onPress={() => { props.navigation.goBack() }}>
                 <View style={styles.topGroup}>
@@ -298,21 +349,13 @@ const PlaceDetailScreen = (props) => {
             <StarRating color={TourTourColors.accent} />
             <View>
               <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-                30 reviews
-    </Text>
+                30 Reviews
+              </Text>
             </View>
           </View>
         </View>
         <View style={styles.reviewsListContainer}>
-          {
-            dummyReviewsList.map((review, index) => {
-              return (
-                <View key={index} style={styles.reviewCardContainer}>
-                  <ReviewCard author={review.author} rating={review.rating} body={review.body} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
-                </View>
-              )
-            })
-          }
+          <ReviewsContainer place={place} />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
           <Button title='Plus de reviews' color={TourTourColors.accent} />

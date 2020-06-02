@@ -22,6 +22,10 @@ const getCategories = gql`
       id
       title
       imageUrl
+      addedBy{
+        id
+        name
+      }
     }
   }
 `;

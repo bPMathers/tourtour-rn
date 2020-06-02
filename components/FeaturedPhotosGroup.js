@@ -63,9 +63,6 @@ const FeaturedPhotosGroup = (props) => {
       photos(query: $placeId) {
         id
         url
-        placeId {
-          id
-        }
       }
     }
   `;

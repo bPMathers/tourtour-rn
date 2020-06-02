@@ -13,8 +13,12 @@ const GET_PLACES = gql`
     places(query: $catId) {
       id
       name
-      mainPhoto
+      imageUrl
+      review_count
       category {
+        id
+      }
+      photos{
         id
       }
     }
@@ -43,7 +47,7 @@ const CategorySearchScreen = (props) => {
     return (
       <PlacePreviewListItem
         name={itemData.item.name}
-        imageUrl={itemData.item.mainPhoto}
+        imageUrl={itemData.item.imageUrl}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
             // userId: itemData.item.addedBy
@@ -51,10 +55,7 @@ const CategorySearchScreen = (props) => {
         }}
         onSelectPlace={() => {
           props.navigation.navigate('PlaceDetail', {
-            // Redundant param setting here.
             place: itemData.item,
-            placeId: itemData.item.id,
-            title: itemData.item.name
           });
         }}
       />
@@ -77,7 +78,6 @@ const CategorySearchScreen = (props) => {
 
 
   return (
-
     <View style={styles.container}>
       <View style={styles.modalContainer}>
         <Modal

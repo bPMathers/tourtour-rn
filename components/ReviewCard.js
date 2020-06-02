@@ -6,7 +6,7 @@ import { TourTourColors } from '../constants/Colors';
 import StarRating from './StarRating'
 
 
-const ReviewCard = (props) => {
+const ReviewCard = (props, { review }) => {
 
   let TouchableComponent = TouchableOpacity;
 
@@ -21,14 +21,15 @@ const ReviewCard = (props) => {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableComponent onPress={props.onUserProfileSelect}>
                 <View style={{ marginRight: 5 }}>
-                  <Image style={styles.tinyUserProfilePic} source={{ uri: 'https://www.atlassian.design/server/images/avatars/avatar-96.png' }} />
+                  <Image style={styles.tinyUserProfilePic} source={{ uri: props.review.author.imageUrl }} />
                 </View>
               </TouchableComponent>
               <View>
                 <TouchableComponent onPress={props.onUserProfileSelect}>
-                  <Text style={styles.authorName}>{props.author}</Text>
+                  <Text style={styles.authorName}>{props.review.author.name}</Text>
                 </TouchableComponent>
                 <StarRating color='white' />
+                <Text style={styles.timeAgoText}>2h ago</Text>
               </View>
             </View>
             <TouchableComponent>
@@ -36,7 +37,7 @@ const ReviewCard = (props) => {
             </TouchableComponent>
           </View>
         </View>
-        <Text style={styles.reviewBody}>{props.body}</Text>
+        <Text style={styles.reviewBody}>{props.review.body}</Text>
       </View>
     </TouchableComponent>
   );
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-
   },
   reviewBody: {
     color: 'white',
@@ -74,6 +74,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50
   },
+  timeAgoText: {
+    color: 'white',
+    fontSize: 10
+  }
 })
 
 export default ReviewCard;
