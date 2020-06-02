@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -10,64 +10,144 @@ import {
   ImageBackground,
   FlatList,
   ScrollView,
-  Button
+  Button,
+  Alert,
+  Modal,
+  TouchableHighlight
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker'
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-
-const dummyReviewsList = [
-  {
-    id: "1",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "2",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "3",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "4",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "4",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "4",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-  {
-    id: "4",
-    author: 'Flavien Denree de Choix',
-    rating: '3.5',
-    body: 'Bacon ipsum dolor amet meatball spare ribs salami, beef ball tip capicola chicken tail strip steak kielbasa shankle cupim ham hock pork chop filet mignon. Landjaeger short ribs pork kielbasa ribeye sirloin capicola hamburger strip steak corned beef shank brisket pork loin. Kielbasa pastrami ham strip steak sausage short loin leberkas andouille. T-bone swine jerky, spare ribs beef cow tri-tip leberka… read more'
-  },
-]
+import dummyReviewsList from '../data/dummyReviewsList'
 
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState();
+
+  const ADD_PHOTO = gql`
+    mutation($url: String!, $placeId: String!) {
+      createPhoto(data:{
+        url: $url,
+        placeId: $placeId
+      }){
+        id 
+        url
+        placeId {
+          id
+        }
+      }
+    }
+  `;
+
+  const [addPhoto, { data }] = useMutation(ADD_PHOTO)
 
 
+
+  // useEffect(() => {
+  //   if (photoUrl) {
+  //     console.log(photoUrl)
+  //   }
+  // })
+
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+      base64: true
+    });
+    if (!result.cancelled) {
+      // setPhotoUrl(result.uri)
+
+      let base64Img = `data:image/jpg;base64,${result.base64}`
+
+      //Add your cloud name
+      let apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+      let data = {
+        "file": base64Img,
+        "upload_preset": "TourTour1",
+      }
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      }).then(async r => {
+        let data = await r.json()
+        // Send mutation to graphQL API
+        addPhoto({ variables: { url: data.secure_url, placeId: place.id } })
+        // console.log(data.secure_url)
+
+        return data.secure_url
+      }).catch(err => console.log(err))
+    }
+  }
+
+  let openCameraAsync = async () => {
+    let permissionResult2 = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult2.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+      base64: true
+    });
+    if (!result.cancelled) {
+      // setPhotoUrl(result.uri)
+
+      let base64Img = `data:image/jpg;base64,${result.base64}`
+
+      //Add your cloud name
+      let apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+      let data = {
+        "file": base64Img,
+        "upload_preset": "TourTour1",
+      }
+      fetch(apiUrl, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json'
+        },
+        method: 'POST',
+      }).then(async r => {
+        let data = await r.json()
+        addPhoto({ variables: { url: data.secure_url, placeId: place.id } })
+
+        return data.secure_url
+      }).catch(err => console.log(err))
+    }
+  }
+
+  const handleUploadExistingPicture = async () => {
+    await openImagePickerAsync();
+    setModalVisible(false);
+  }
+
+  const handleTakeNewPictureForUpload = async () => {
+    await openCameraAsync();
+    setModalVisible(false);
+  }
 
   let TouchableComponent = TouchableOpacity;
 
@@ -76,119 +156,150 @@ const PlaceDetailScreen = (props) => {
   }
 
   return (
-
-    <ScrollView>
-      <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
-      <View style={styles.placeDetailHeader}>
-        <ImageBackground source={{ uri: place.mainPhoto }} style={styles.image}>
-          <View style={styles.overlayContentContainer}>
-            <TouchableComponent onPress={() => { props.navigation.goBack() }}>
-              <View style={styles.topGroup}>
-                <View style={styles.backArrow}>
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='ios-arrow-back'
-                    size={24}
-                    color='white'
-                  />
-                </View>
-                {/*<View>
-                  <Text style={{ color: 'white' }}>retour</Text>
-                </View>*/}
-              </View>
-            </TouchableComponent>
-            <View style={styles.bottomGroup}>
-              <View>
-                <Text style={styles.name}>{place.name}</Text>
-              </View>
-              <StarRating color='white' />
-              <View>
-                <Text style={styles.reviewCount}>30 reviews</Text>
-              </View>
+    <View>
+      <View style={styles.modalContainer}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}></Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text style={styles.submittedBy}>Ajouté par: </Text>
-                <TouchableComponent onPress={() => { props.navigation.navigate('UserProfile') }}>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                    Flavien Denree de Choix
-                  </Text>
-                </TouchableComponent>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
+                  onPress={handleTakeNewPictureForUpload}
+                >
+                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={handleUploadExistingPicture}
+                >
+                  <Text style={styles.textStyle}>Photo déjà existante</Text>
+                </TouchableHighlight>
               </View>
             </View>
           </View>
-        </ImageBackground>
+        </Modal>
       </View>
-      <View style={styles.actionsRow}>
-        <TouchableComponent>
-          <View style={styles.actionGroup}>
-            <View style={styles.actionButton}>
-              <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
+      <ScrollView>
+        <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
+        <View style={styles.placeDetailHeader}>
+          <ImageBackground source={{ uri: place.mainPhoto }} style={styles.image}>
+            <View style={styles.overlayContentContainer}>
+              <TouchableComponent onPress={() => { props.navigation.goBack() }}>
+                <View style={styles.topGroup}>
+                  <View style={styles.backArrow}>
+                    <Ionicons
+                      style={styles.starIcon}
+                      name='ios-arrow-back'
+                      size={24}
+                      color='white'
+                    />
+                  </View>
+                  {/*<View>
+      <Text style={{ color: 'white' }}>retour</Text>
+    </View>*/}
+                </View>
+              </TouchableComponent>
+              <View style={styles.bottomGroup}>
+                <View>
+                  <Text style={styles.name}>{place.name}</Text>
+                </View>
+                <StarRating color='white' />
+                <View>
+                  <Text style={styles.reviewCount}>30 reviews</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={styles.submittedBy}>Ajouté par: </Text>
+                  <TouchableComponent onPress={() => { props.navigation.navigate('UserProfile') }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                      Flavien Denree de Choix
+    </Text>
+                  </TouchableComponent>
+                </View>
+              </View>
             </View>
-            <View>
-              <Text style={styles.actionTitle}>Appeler</Text>
+          </ImageBackground>
+        </View>
+        <View style={styles.actionsRow}>
+          <TouchableComponent>
+            <View style={styles.actionGroup}>
+              <View style={styles.actionButton}>
+                <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
+              </View>
+              <View>
+                <Text style={styles.actionTitle}>Appeler</Text>
+              </View>
             </View>
-          </View>
-        </TouchableComponent>
-        <TouchableComponent>
-          <View style={styles.actionGroup}>
-            <View style={styles.actionButton}>
-              <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
+          </TouchableComponent>
+          <TouchableComponent>
+            <View style={styles.actionGroup}>
+              <View style={styles.actionButton}>
+                <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
+              </View>
+              <View>
+                <Text style={styles.actionTitle}>Carte</Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.actionTitle}>Carte</Text>
+          </TouchableComponent>
+          <TouchableComponent>
+            <View style={styles.actionGroup}>
+              <View style={styles.actionButton}>
+                <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
+              </View>
+              <View>
+                <Text style={styles.actionTitle}>Site Web</Text>
+              </View>
             </View>
-          </View>
-        </TouchableComponent>
-        <TouchableComponent>
-          <View style={styles.actionGroup}>
-            <View style={styles.actionButton}>
-              <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
+          </TouchableComponent>
+          <TouchableComponent onPress={() => { setModalVisible(true) }}>
+            <View style={styles.actionGroup}>
+              <View style={styles.actionButton}>
+                <MaterialCommunityIcons name='camera-enhance' size={25} color={TourTourColors.accent} />
+              </View>
+              <View>
+                <Text style={styles.actionTitle}>Photo</Text>
+              </View>
             </View>
-            <View>
-              <Text style={styles.actionTitle}>Site Web</Text>
-            </View>
-          </View>
-        </TouchableComponent>
-        <TouchableComponent>
-          <View style={styles.actionGroup}>
-            <View style={styles.actionButton}>
-              <MaterialCommunityIcons name='camera-enhance' size={25} color={TourTourColors.accent} />
-            </View>
-            <View>
-              <Text style={styles.actionTitle}>Photo</Text>
-            </View>
-          </View>
-        </TouchableComponent>
-      </View>
-      <FeaturedPhotosGroup />
-      <View style={styles.reviewsHeaderRow}>
+          </TouchableComponent>
+        </View>
+        <FeaturedPhotosGroup place={place} />
+        <View style={styles.reviewsHeaderRow}>
 
-        <View>
-          <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
-        </View>
-        <View>
-          <StarRating color={TourTourColors.accent} />
           <View>
-            <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-              30 reviews
-            </Text>
+            <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
+          </View>
+          <View>
+            <StarRating color={TourTourColors.accent} />
+            <View>
+              <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
+                30 reviews
+    </Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.reviewsListContainer}>
-        {
-          dummyReviewsList.map((review, index) => {
-            return (
-              <View key={index} style={styles.reviewCardContainer}>
-                <ReviewCard author={review.author} rating={review.rating} body={review.body} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
-              </View>
-            )
-          })
-        }
-      </View>
-      <View style={styles.moreReviewsButtonContainer}>
-        <Button title='Plus de reviews' color={TourTourColors.accent} />
-      </View>
-    </ScrollView>
+        <View style={styles.reviewsListContainer}>
+          {
+            dummyReviewsList.map((review, index) => {
+              return (
+                <View key={index} style={styles.reviewCardContainer}>
+                  <ReviewCard author={review.author} rating={review.rating} body={review.body} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
+                </View>
+              )
+            })
+          }
+        </View>
+        <View style={styles.moreReviewsButtonContainer}>
+          <Button title='Plus de reviews' color={TourTourColors.accent} />
+        </View>
+      </ScrollView>
+    </View>
 
 
   );
@@ -301,6 +412,44 @@ const styles = StyleSheet.create({
   },
   moreReviewsButtonContainer: {
     marginBottom: 40
+  },
+  centeredView: {
+    // flex: 1,
+    height: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    // marginTop: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Text, Dimensions } from 'react-native';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 
 import { TourTourColors } from '../constants/Colors'
 import FeaturedPhoto from './FeaturedPhoto';
@@ -7,61 +9,77 @@ import FeaturedPhoto from './FeaturedPhoto';
 const dummyPhotos = [
   {
     key: "1",
-    imageUrl: 'https://www.neomedia.com/upload/7/evenements/2015/2/211562/ptit-st-do-pauline-jonquiere.jpg'
+    url: 'https://www.neomedia.com/upload/7/evenements/2015/2/211562/ptit-st-do-pauline-jonquiere.jpg'
   },
   {
     key: "2",
-    imageUrl: 'https://www.district132.ca/wp-content/uploads/2016/07/FullSizeRender-2-1024x768.jpg'
+    url: 'https://www.district132.ca/wp-content/uploads/2016/07/FullSizeRender-2-1024x768.jpg'
   },
   {
     key: "3",
-    imageUrl: 'https://i.pinimg.com/originals/59/d4/35/59d435cbc55b2a70f4b86cad1b738d9b.jpg'
+    url: 'https://i.pinimg.com/originals/59/d4/35/59d435cbc55b2a70f4b86cad1b738d9b.jpg'
   },
   {
     key: "4",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
   },
   {
     key: "5",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'file:///Users/bpm19/Library/Developer/CoreSimulator/Devices/0D67DC1C-E2E0-4AE5-AEE0-2FA4FE3955FC/data/Containers/Data/Application/F0104546-51C1-47ED-A1C8-DE15405DD0EA/Library/Caches/ExponentExperienceData/%2540anonymous%252Ftourtour-rn-cfbebf97-3570-4d66-a840-daa77a8dead1/ImagePicker/BE8EDA30-0B51-4E5E-B2BB-513DE730B852.jpg'
   },
   {
     key: "6",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'file:///Users/bpm19/Library/Developer/CoreSimulator/Devices/0D67DC1C-E2E0-4AE5-AEE0-2FA4FE3955FC/data/Containers/Data/Application/F0104546-51C1-47ED-A1C8-DE15405DD0EA/Library/Caches/ExponentExperienceData/%2540anonymous%252Ftourtour-rn-cfbebf97-3570-4d66-a840-daa77a8dead1/ImagePicker/4CCD0C55-62C2-4275-A7F0-351688C37C9C.jpg'
   },
   {
     key: "7",
-    imageUrl: 'https://www.neomedia.com/upload/7/evenements/2015/2/211562/ptit-st-do-pauline-jonquiere.jpg'
+    url: 'https://www.neomedia.com/upload/7/evenements/2015/2/211562/ptit-st-do-pauline-jonquiere.jpg'
   },
   {
     key: "8",
-    imageUrl: 'https://www.district132.ca/wp-content/uploads/2016/07/FullSizeRender-2-1024x768.jpg'
+    url: 'https://www.district132.ca/wp-content/uploads/2016/07/FullSizeRender-2-1024x768.jpg'
   },
   {
     key: "9",
-    imageUrl: 'https://i.pinimg.com/originals/59/d4/35/59d435cbc55b2a70f4b86cad1b738d9b.jpg'
+    url: 'https://i.pinimg.com/originals/59/d4/35/59d435cbc55b2a70f4b86cad1b738d9b.jpg'
   },
   {
     key: "10",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
   },
   {
     key: "11",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
   },
   {
     key: "12",
-    imageUrl: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
+    url: 'https://img.src.ca/2016/03/20/1250x703/160320_a86l5_pauline3_sn1250.jpg'
   },
 ]
 
 const FeaturedPhotosGroup = (props) => {
+  const getPlacePhotos = gql`
+    query($placeId: String) {
+      photos(query: $placeId) {
+        id
+        url
+        placeId {
+          id
+        }
+      }
+    }
+  `;
 
+  const { loading, error, data } = useQuery(getPlacePhotos, {
+    variables: {
+      placeId: props.place.id,
+    },
+  });
 
   const renderGridItem = (itemData) => {
     return (
       <FeaturedPhoto
-        imgUrl={itemData.item.imageUrl}
+        imgUrl={itemData.item.url}
         onSelect={() => {
           // console.log(itemData.item.id)
           // props.navigation.navigate('CategorySearch', {
@@ -85,11 +103,22 @@ const FeaturedPhotosGroup = (props) => {
   //     </View>
   //   );
   // };
+  if (loading)
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  if (error)
+    return (
+      <View style={styles.container}>
+        <Text>Error...</Text>
+      </View>
+    );
 
   return (
     <View style={styles.container}>
-      {/*<FlatList data={dummyPhotos} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />*/}
-      <FlatList data={dummyPhotos} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
+      <FlatList data={data.photos} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
     </View>
   );
 }

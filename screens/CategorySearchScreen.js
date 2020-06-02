@@ -51,7 +51,9 @@ const CategorySearchScreen = (props) => {
         }}
         onSelectPlace={() => {
           props.navigation.navigate('PlaceDetail', {
+            // Redundant param setting here.
             place: itemData.item,
+            placeId: itemData.item.id,
             title: itemData.item.name
           });
         }}
