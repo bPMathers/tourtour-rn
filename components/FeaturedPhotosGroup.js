@@ -58,7 +58,7 @@ const dummyPhotos = [
 ]
 
 const FeaturedPhotosGroup = (props) => {
-  const getPlacePhotos = gql`
+  const GET_PHOTOS = gql`
     query($placeId: String) {
       photos(query: $placeId) {
         id
@@ -70,7 +70,7 @@ const FeaturedPhotosGroup = (props) => {
     }
   `;
 
-  const { loading, error, data } = useQuery(getPlacePhotos, {
+  const { loading, error, data } = useQuery(GET_PHOTOS, {
     variables: {
       placeId: props.place.id,
     },
@@ -118,7 +118,7 @@ const FeaturedPhotosGroup = (props) => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={data.photos} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
+      <FlatList data={data.photos.reverse()} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
     </View>
   );
 }

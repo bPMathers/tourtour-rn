@@ -8,7 +8,7 @@ import { TourTourColors } from '../constants/Colors';
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
-const getPlaces = gql`
+const GET_PLACES = gql`
   query($catId: String) {
     places(query: $catId) {
       id
@@ -23,7 +23,7 @@ const getPlaces = gql`
 
 const CategorySearchScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { loading, error, data } = useQuery(getPlaces, {
+  const { loading, error, data } = useQuery(GET_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },

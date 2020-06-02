@@ -32,6 +32,18 @@ const PlaceDetailScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [photoUrl, setPhotoUrl] = useState();
 
+  const GET_PHOTOS = gql`
+    query($placeId: String) {
+      photos(query: $placeId) {
+        id
+        url
+        placeId {
+          id
+        }
+      }
+    }
+  `;
+
   const ADD_PHOTO = gql`
     mutation($url: String!, $placeId: String!) {
       createPhoto(data:{
@@ -46,6 +58,7 @@ const PlaceDetailScreen = (props) => {
       }
     }
   `;
+
 
   const [addPhoto, { data }] = useMutation(ADD_PHOTO)
 
@@ -91,7 +104,10 @@ const PlaceDetailScreen = (props) => {
       }).then(async r => {
         let data = await r.json()
         // Send mutation to graphQL API
-        addPhoto({ variables: { url: data.secure_url, placeId: place.id } })
+        addPhoto({
+          variables: { url: data.secure_url, placeId: place.id },
+          refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
+        })
         // console.log(data.secure_url)
 
         return data.secure_url
@@ -132,7 +148,10 @@ const PlaceDetailScreen = (props) => {
         method: 'POST',
       }).then(async r => {
         let data = await r.json()
-        addPhoto({ variables: { url: data.secure_url, placeId: place.id } })
+        addPhoto({
+          variables: { url: data.secure_url, placeId: place.id },
+          refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
+        })
 
         return data.secure_url
       }).catch(err => console.log(err))
