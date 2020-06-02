@@ -28,7 +28,7 @@ import StarRating from '../components/StarRating'
 import dummyReviewsList from '../data/dummyReviewsList'
 
 
-const ReviewsContainer = ({ place }) => {
+const ReviewsContainer = ({ place, navigation }) => {
   const GET_REVIEWS = gql`
   query($placeId: String) {
     reviews(query: $placeId) {
@@ -37,6 +37,7 @@ const ReviewsContainer = ({ place }) => {
       body
       rating
       author {
+        id
         name
         imageUrl
       }
@@ -69,7 +70,7 @@ const ReviewsContainer = ({ place }) => {
     reviewsData.reviews.map((review) => {
       return (
         <View key={review.id} style={styles.reviewCardContainer} >
-          <ReviewCard review={review} onUserProfileSelect={() => { props.navigation.navigate('UserProfile') }} />
+          <ReviewCard review={review} navigation={navigation} />
         </View>
       )
     }))
@@ -279,7 +280,11 @@ const PlaceDetailScreen = (props) => {
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={styles.submittedBy}>Ajouté par: </Text>
-                  <TouchableComponent onPress={() => { props.navigation.navigate('UserProfile') }}>
+                  <TouchableComponent onPress={() => {
+                    props.navigation.navigate('UserProfile', {
+                      userId: place.addedBy.id
+                    })
+                  }}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
                       Flavien Denree de Choix
     </Text>
@@ -347,7 +352,7 @@ const PlaceDetailScreen = (props) => {
           </View>
         </View>
         <View style={styles.reviewsListContainer}>
-          <ReviewsContainer place={place} />
+          <ReviewsContainer place={place} navigation={props.navigation} />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
           <Button title='Plus de reviews' color={TourTourColors.accent} />

@@ -1,27 +1,65 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
+import { gql } from 'apollo-boost'
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { TourTourColors } from '../constants/Colors'
 
 
 const UserProfileScreen = (props) => {
+    const GET_USER = gql`
+    query($userId: String) {
+      user(query: $userId) {
+        id
+        name
+        imageUrl
+        reviews {
+            id
+        }
+        photos {
+            id
+        }
+      }
+    }
+  `;
+
+    const { loading, error, data } = useQuery(GET_USER, {
+        variables: {
+            userId: props.route.params.userId,
+        },
+    });
+    // console.log(data.user.name)
 
     let TouchableComponent = TouchableOpacity;
 
     if (Platform.OS === 'android' && Platform.Version >= 21) {
         TouchableComponent = TouchableNativeFeedback;
     }
+
+    if (loading)
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+        );
+    if (error)
+        return (
+            <View style={styles.container}>
+                <Text>Error...</Text>
+            </View>
+        );
+
     return (
         <View style={styles.container}>
             <View style={styles.userProfileHeader}>
-                <View >
-                    <Image style={styles.userImg} source={{ uri: 'https://www.atlassian.design/server/images/avatars/avatar-96.png' }} />
+                <View>
+                    <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
                 </View>
             </View>
             <View style={styles.userNameContainer}>
                 <Text style={styles.userName}>
-                    Flavien Denrée de Choix
+                    {data.user.name}
                 </Text>
             </View>
             <View style={styles.userCity}>
@@ -120,7 +158,11 @@ const styles = StyleSheet.create({
         height: 144,
         width: 144,
         marginTop: 30,
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 72,
+        borderColor: TourTourColors.accent,
+        borderWidth: 2,
+        backgroundColor: TourTourColors.primary
     },
     userNameContainer: {
         marginBottom: 3

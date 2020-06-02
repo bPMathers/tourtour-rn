@@ -6,7 +6,13 @@ import { TourTourColors } from '../constants/Colors';
 import StarRating from './StarRating'
 
 
-const ReviewCard = (props, { review }) => {
+const ReviewCard = (props) => {
+
+  const handleOnUserProfileSelect = () => {
+    props.navigation.navigate('UserProfile', {
+      userId: props.review.author.id
+    })
+  }
 
   let TouchableComponent = TouchableOpacity;
 
@@ -19,13 +25,13 @@ const ReviewCard = (props, { review }) => {
         <View style={styles.reviewHeader}>
           <View style={styles.reviewHeaderRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableComponent onPress={props.onUserProfileSelect}>
+              <TouchableComponent onPress={handleOnUserProfileSelect}>
                 <View style={{ marginRight: 5 }}>
                   <Image style={styles.tinyUserProfilePic} source={{ uri: props.review.author.imageUrl }} />
                 </View>
               </TouchableComponent>
               <View>
-                <TouchableComponent onPress={props.onUserProfileSelect}>
+                <TouchableComponent onPress={handleOnUserProfileSelect}>
                   <Text style={styles.authorName}>{props.review.author.name}</Text>
                 </TouchableComponent>
                 <StarRating color='white' />
