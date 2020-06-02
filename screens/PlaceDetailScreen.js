@@ -100,7 +100,7 @@ const PlaceDetailScreen = (props) => {
     mutation($url: String!, $placeId: String!) {
       createPhoto(data:{
         url: $url,
-        place:  $placeId
+        placeId:  $placeId
       }){
         id 
         url
@@ -111,15 +111,7 @@ const PlaceDetailScreen = (props) => {
     }
   `;
 
-
-
-
-
-  // useEffect(() => {
-  //   if (photoUrl) {
-  //     console.log(photoUrl)
-  //   }
-  // })
+  const [addPhoto, { data }] = useMutation(ADD_PHOTO)
 
   let openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -283,7 +275,7 @@ const PlaceDetailScreen = (props) => {
                 </View>
                 <StarRating color='white' />
                 <View>
-                  <Text style={styles.reviewCount}>30 reviews</Text>
+                  <Text style={styles.reviewCount}>69 reviews</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={styles.submittedBy}>Ajouté par: </Text>
@@ -349,7 +341,7 @@ const PlaceDetailScreen = (props) => {
             <StarRating color={TourTourColors.accent} />
             <View>
               <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-                30 Reviews
+                69 Reviews
               </Text>
             </View>
           </View>

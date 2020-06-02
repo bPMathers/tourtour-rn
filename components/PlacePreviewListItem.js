@@ -38,7 +38,7 @@ const PlacePreviewListItem = (props) => {
                   <Text style={styles.location}>Location</Text>
                 </View>
                 <View>
-                  <Text style={styles.reviewCount}>30 reviews</Text>
+                  <Text style={styles.reviewCount}>69 reviews</Text>
                 </View>
               </View>
             </View>
