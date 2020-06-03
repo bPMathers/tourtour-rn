@@ -23,13 +23,12 @@ const NewPlaceScreen = props => {
    */
 
   const [titleValue, setTitleValue] = useState('');
-  const [selectedImage, setSelectedImage] = useState(latData);
+  const [selectedImage, setSelectedImage] = useState(coords);
   const [selectedLocation, setSelectedLocation] = useState();
 
   /**
    * VARIABLES
    */
-
   const passedLocation = props.route.params?.pickedLocation
   // console.log(passedLocation)
 
@@ -60,15 +59,15 @@ const NewPlaceScreen = props => {
 `;
 
   const [addPhoto, { data }] = useMutation(ADD_PHOTO)
-  const { data: latData, client } = useQuery(GET_LAT);
-  // setSelectedLocation(latData)
-  console.log(latData)
+  const { data: coords, client } = useQuery(GET_LAT);
+  // setSelectedLocation(coords)
+  // console.log(coords)
 
   /**
    * HANDLERS
    */
 
-  // https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
+  // 
 
   // const openImagePickerAsync = async () => {
   //   const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -179,15 +178,26 @@ const NewPlaceScreen = props => {
 
   // const actualLocationPickedHandler = (pickedLocation) => {
   //   // setSelectedLocation(pickedLocation)
-  //   console.log(console.log(`pickedLocation: ${pickedLocation}`))
   // }
 
-  const savePlaceHandler = () => {
+  const savePlaceHandler = async () => {
+    // console.log(coords)
     // Initiate GraphQL Mutation & refetch
     // name is in titleValue (change to "nameValue" eventually -for better naming)
-    // imagePath is coming back from cloudinary
+    // imagePath will be coming back from cloudinary eventually
     // Location : convert to human readable first and then store somewhere on state
-    // Location : client.readData for lat & lng?
+
+
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.pickedLat},${coords.pickedLng}&key=${googleApiKey}`)
+
+
+    if (!response.ok) {
+      throw new Error(err)
+    }
+
+    const resData = await response.json()
+    const formattedAddress = resData.results[0].formatted_address
+    console.log(formattedAddress)
 
     //
     props.navigation.goBack();
