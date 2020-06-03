@@ -23,7 +23,7 @@ const NewPlaceScreen = props => {
    */
 
   const [titleValue, setTitleValue] = useState('');
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState(latData);
   const [selectedLocation, setSelectedLocation] = useState();
 
   /**
@@ -52,7 +52,17 @@ const NewPlaceScreen = props => {
     }
   `;
 
+  const GET_LAT = gql`
+{
+  pickedLat @client 
+  pickedLng @client
+}
+`;
+
   const [addPhoto, { data }] = useMutation(ADD_PHOTO)
+  const { data: latData, client } = useQuery(GET_LAT);
+  // setSelectedLocation(latData)
+  console.log(latData)
 
   /**
    * HANDLERS
@@ -163,13 +173,14 @@ const NewPlaceScreen = props => {
   };
 
   const imageTakenHandler = imagePath => {
-    setSelectedImage(imagePath);
+    // setSelectedImage(imagePath);
     // console.log(imagePath)
   };
 
-  const locationPickedHandler = {
-
-  }
+  // const actualLocationPickedHandler = (pickedLocation) => {
+  //   // setSelectedLocation(pickedLocation)
+  //   console.log(console.log(`pickedLocation: ${pickedLocation}`))
+  // }
 
   const savePlaceHandler = () => {
     // Initiate GraphQL Mutation & refetch
@@ -199,6 +210,7 @@ const NewPlaceScreen = props => {
         <LocationPicker
           navigation={props.navigation}
           route={props.route}
+
         />
         <Button
           title="Sauvegarder"

@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet
 } from 'react-native';
+import { useApolloClient } from "@apollo/react-hooks";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { useNavigation } from '@react-navigation/native'
@@ -15,6 +16,7 @@ import { TourTourColors } from '../constants/Colors';
 import MapPreview from './MapPreview';
 
 const LocationPicker = (props) => {
+  const client = useApolloClient();
   const navigation = useNavigation()
   const [isFetching, setIsFetching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState();
@@ -55,13 +57,21 @@ const LocationPicker = (props) => {
         lat: location.coords.latitude,
         lng: location.coords.longitude
       });
+      client.writeData({
+        data: {
+          pickedLat: location.coords.latitude,
+          pickedLng: location.coords.longitude
+        }
+      })
     } catch (err) {
+      console.log(err)
       Alert.alert(
         'Could not fetch location!',
         'Please try again later or pick a location on the map.',
         [{ text: 'Okay' }]
       );
     }
+
     setIsFetching(false);
   };
 

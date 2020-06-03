@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons'
 const MapScreen = (props) => {
   const client = useApolloClient();
   const [selectedLocation, setSelectedLocation] = useState()
+  const [mapRgn, setMapRgn] = useState()
 
   props.navigation.setOptions({
     headerRight: () => (
@@ -28,25 +29,36 @@ const MapScreen = (props) => {
       return
     }
 
-    // client.writeData({data: {pickedLat: }})
+    client.writeData({
+      data: {
+        pickedLat: selectedLocation.lat,
+        pickedLng: selectedLocation.lng,
+      }
+    })
+
     props.navigation.navigate({
       name: 'AddPlace',
       params: { pickedLocation: selectedLocation }
     })
   }, [selectedLocation])
 
-  const mapRegion = {
-    latitude: 45.523960,
-    longitude: -73.582526,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
-  }
+  // const mapRegion = mapRgn
 
   const selectLocationHandler = event => {
     setSelectedLocation({
       lat: event.nativeEvent.coordinate.latitude,
       lng: event.nativeEvent.coordinate.longitude,
     })
+    // setMapRgn({
+    //   latitude: event.nativeEvent.coordinate.latitude,
+    //   longitude: event.nativeEvent.coordinate.longitude,
+    //   latitudeDelta: 0.0922,
+    //   longitudeDelta: 0.0421
+    // })
+  }
+
+  const handleOnRegionChangeComplete = (region) => {
+    setMapRgn(region)
   }
 
   let markerCoordinates
@@ -59,7 +71,17 @@ const MapScreen = (props) => {
   }
 
   return (
-    <MapView provider="google" style={styles.map} region={mapRegion} onPress={selectLocationHandler}>
+    <MapView
+      provider="google"
+      style={styles.map}
+      initialRegion={{
+        latitude: 45.523960,
+        longitude: -73.582526,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      }}
+      onPress={selectLocationHandler}
+      onRegionChangeComplete={handleOnRegionChangeComplete}>
       {markerCoordinates && <Marker title="Endroit Choisi" coordinate={markerCoordinates}></Marker>}
     </MapView >
   );
