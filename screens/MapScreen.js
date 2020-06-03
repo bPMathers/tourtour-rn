@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'
+import { useApolloClient } from "@apollo/react-hooks";
 
 import { Ionicons } from '@expo/vector-icons'
 
 const MapScreen = (props) => {
+  const client = useApolloClient();
   const [selectedLocation, setSelectedLocation] = useState()
 
   props.navigation.setOptions({
@@ -25,6 +27,8 @@ const MapScreen = (props) => {
       );
       return
     }
+
+    // client.writeData({data: {pickedLat: }})
     props.navigation.navigate({
       name: 'AddPlace',
       params: { pickedLocation: selectedLocation }

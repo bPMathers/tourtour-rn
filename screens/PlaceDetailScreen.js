@@ -96,7 +96,6 @@ const PlaceDetailScreen = (props) => {
   `;
 
 
-  //recheck this mutation since we have modified schema quite a bit
   const ADD_PHOTO = gql`
     mutation($url: String!, $placeId: String!) {
       createPhoto(data:{
@@ -114,15 +113,15 @@ const PlaceDetailScreen = (props) => {
 
   const [addPhoto, { data }] = useMutation(ADD_PHOTO)
 
-  let openImagePickerAsync = async () => {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  const openImagePickerAsync = async () => {
+    const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
 
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.5,
@@ -131,11 +130,11 @@ const PlaceDetailScreen = (props) => {
     if (!result.cancelled) {
       // setPhotoUrl(result.uri)
 
-      let base64Img = `data:image/jpg;base64,${result.base64}`
+      const base64Img = `data:image/jpg;base64,${result.base64}`
 
       //Add your cloud name
-      let apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-      let data = {
+      const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+      const data = {
         "file": base64Img,
         "upload_preset": "TourTour1",
       }
@@ -146,7 +145,7 @@ const PlaceDetailScreen = (props) => {
         },
         method: 'POST',
       }).then(async r => {
-        let data = await r.json()
+        const data = await r.json()
         // Send mutation to graphQL API
         addPhoto({
           variables: { url: data.secure_url, placeId: place.id },
@@ -159,15 +158,15 @@ const PlaceDetailScreen = (props) => {
     }
   }
 
-  let openCameraAsync = async () => {
-    let permissionResult2 = await ImagePicker.requestCameraPermissionsAsync();
+  const openCameraAsync = async () => {
+    const permissionResult2 = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult2.granted === false) {
       alert("Permission to access camera roll is required!");
       return;
     }
 
-    let result = await ImagePicker.launchCameraAsync({
+    const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.5,
@@ -176,11 +175,11 @@ const PlaceDetailScreen = (props) => {
     if (!result.cancelled) {
       // setPhotoUrl(result.uri)
 
-      let base64Img = `data:image/jpg;base64,${result.base64}`
+      const base64Img = `data:image/jpg;base64,${result.base64}`
 
       //Add your cloud name
-      let apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-      let data = {
+      const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+      const data = {
         "file": base64Img,
         "upload_preset": "TourTour1",
       }
@@ -191,7 +190,7 @@ const PlaceDetailScreen = (props) => {
         },
         method: 'POST',
       }).then(async r => {
-        let data = await r.json()
+        const data = await r.json()
         addPhoto({
           variables: { url: data.secure_url, placeId: place.id },
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]

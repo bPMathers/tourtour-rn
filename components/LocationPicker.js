@@ -75,17 +75,17 @@ const LocationPicker = (props) => {
         {isFetching ? (
           <ActivityIndicator size="large" color={TourTourColors.primary} />
         ) : (
-            <Text>No location chosen yet!</Text>
+            <Text>Aucune location choisie.</Text>
           )}
       </MapPreview>
       <View style={styles.actions}>
         <Button
-          title="Get User Location"
+          title="Prendre ma location"
           color={TourTourColors.primary}
           onPress={getLocationHandler}
         />
         <Button
-          title="Pick on Map"
+          title="Choisir sur Map"
           color={TourTourColors.primary}
           onPress={pickOnMapHandler}
         />
