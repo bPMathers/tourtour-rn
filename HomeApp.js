@@ -23,6 +23,7 @@ import PlaceDetailScreen from './screens/PlaceDetailScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import AddPlaceModalScreen from './screens/AddPlaceModalScreen';
 import AddPlaceScreen from './screens/AddPlaceScreen';
+import MapScreen from './screens/MapScreen';
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,14 @@ export default function HomeApp(props) {
               options={{
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='Map'
+              component={MapScreen}
+              options={{
+                headerStyle: { backgroundColor: TourTourColors.accent },
+                // headerShown: false,
               }}
             />
           </Stack.Navigator>

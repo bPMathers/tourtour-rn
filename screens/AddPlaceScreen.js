@@ -16,6 +16,8 @@ const NewPlaceScreen = props => {
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
 
+
+
   const titleChangeHandler = text => {
     // you could add validation
     setTitleValue(text);
@@ -40,7 +42,7 @@ const NewPlaceScreen = props => {
           value={titleValue}
         />
         {/*<ImagePicker onImageTaken={imageTakenHandler} />*/}
-        <LocationPicker />
+        <LocationPicker navigation={props.navigation} route={props.route} />
         <Button
           title="Save Place"
           color={TourTourColors.primary}
