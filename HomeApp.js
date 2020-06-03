@@ -22,6 +22,7 @@ import CategorySearchScreen from './screens/CategorySearchScreen';
 import PlaceDetailScreen from './screens/PlaceDetailScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import AddPlaceModalScreen from './screens/AddPlaceModalScreen';
+import AddPlaceScreen from './screens/AddPlaceScreen';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,14 @@ export default function HomeApp(props) {
                 title: route.params.userName,
                 headerStyle: { backgroundColor: TourTourColors.accent },
               })}
+            />
+            <Stack.Screen
+              name='AddPlace'
+              component={AddPlaceScreen}
+              options={{
+                headerStyle: { backgroundColor: TourTourColors.accent },
+                // headerShown: false,
+              }}
             />
             <Stack.Screen
               name='AddPlaceModal'

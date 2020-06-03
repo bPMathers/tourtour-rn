@@ -40,7 +40,8 @@ const CategorySearchScreen = (props) => {
   props.navigation.setOptions({
     headerRight: () => (
       <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {
-        setModalVisible(true);
+        // setModalVisible(true);
+        props.navigation.navigate('AddPlace')
       }}>
         <AntDesign name='plus' size={24} color='white' />
       </TouchableOpacity>
