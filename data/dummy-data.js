@@ -35,7 +35,7 @@ export const CATEGORIES = [
     "c6",
     "Karaoke",
     "#41d95d",
-    "https://lh3.googleusercontent.com/proxy/T0vlcUJm3uaIDrFE06hiZNP5AwxoJjZ5_MNkNVYjfcjE6YDoDadlS96RBekBgnHmp7ZAseHiLFKvhUMH5L5kRZfPx1DY4FbhX_QKC8YjMTLKOLNvSDqV2Y1bVjktLTI"
+    "https://www.thetimes.co.uk/imageserver/image/%2Fmethode%2Ftimes%2Fprod%2Fweb%2Fbin%2F0d4be4ba-3565-11e9-b41a-ec1745518ba6.jpg?crop=1600%2C900%2C0%2C0&resize=1180"
   ),
   new Category(
     "c7",
