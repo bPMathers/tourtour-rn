@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
+import { View, Button, Image, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { useApolloClient } from "@apollo/react-hooks";
@@ -39,12 +39,14 @@ const ImgPicker = props => {
       quality: 0.5
     });
 
+    if (image.cancelled) {
+      return
+    }
     client.writeData({
       data: {
         imageUrl: image.uri
       }
     })
-    console.log("write data accessed")
     props.onImageTaken(image.uri);
   };
 
@@ -58,9 +60,9 @@ const ImgPicker = props => {
 
   return (
     <View style={styles.imagePicker}>
-      <View style={styles.imagePreview}>
+      <TouchableOpacity style={styles.imagePreview} onPress={takeImageHandler}>
         <Image style={styles.image} source={{ uri: cachedImageUri.imageUrl }} />
-      </View>
+      </TouchableOpacity>
       <Button
         title="Prendre Photo"
         color={TourTourColors.primary}
