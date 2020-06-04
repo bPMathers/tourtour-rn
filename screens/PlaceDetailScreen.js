@@ -15,6 +15,8 @@ import {
   Modal,
   TouchableHighlight
 } from 'react-native';
+// import OpenMap from "react-native-open-map";
+import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
@@ -211,6 +213,27 @@ const PlaceDetailScreen = (props) => {
     setModalVisible(false);
   }
 
+  const handleOnPressMap = async () => {
+    // TODO : dynamically feed parameter values
+    // Does including a googlePlaceId work ok along with lat & lng?
+    showLocation({
+      latitude: 39.922157,
+      longitude: 32.825768,
+      sourceLatitude: 39.722157,  // optionally specify starting location for directions
+      sourceLongitude: 32.625768,  // not optional if sourceLatitude is specified
+      title: 'Use foramtted_address here ?',  // optional
+      googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
+      googlePlaceId: 'ChIJp4JiUCNP0xQR1JaSjpW_Hms',  // optionally specify the google-place-id
+      alwaysIncludeGoogle: false, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
+      dialogTitle: 'Svp choisir quelle application ouvrir', // optional (default: 'Open in Maps')
+      dialogMessage: 'Un sphincter, ça dit quoi?', // optional (default: 'What app would you like to use?')
+      cancelText: 'Annuler', // optional (default: 'Cancel')
+      appsWhiteList: ['google-maps', 'apple-maps'] // optionally you can set which apps to show (default: will show all supported apps installed on device)
+      // appTitles: { 'google-maps': 'My custom Google Maps title' } // optionally you can override default app titles
+      // app: 'uber'  // optionally specify specific app to use
+    })
+  }
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -305,7 +328,7 @@ const PlaceDetailScreen = (props) => {
               </View>
             </View>
           </TouchableComponent>
-          <TouchableComponent>
+          <TouchableComponent onPress={handleOnPressMap}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
