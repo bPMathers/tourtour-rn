@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { View, Button, Image, Text, StyleSheet, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { useApolloClient } from "@apollo/react-hooks";
+import { gql } from 'apollo-boost'
+
+import { useNavigation } from '@react-navigation/native'
+import { useQuery } from '@apollo/react-hooks';
+
+
 
 import { TourTourColors } from '../constants/Colors';
 
 const ImgPicker = props => {
-  const [pickedImage, setPickedImage] = useState();
+  const client = useApolloClient();
 
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -32,18 +39,27 @@ const ImgPicker = props => {
       quality: 0.5
     });
 
-    setPickedImage(image.uri);
+    client.writeData({
+      data: {
+        imageUrl: image.uri
+      }
+    })
+    console.log("write data accessed")
     props.onImageTaken(image.uri);
   };
+
+  const GET_CACHED_IMG_URI = gql`
+  {
+    imageUrl @client
+  }
+  `;
+
+  const { data: cachedImageUri } = useQuery(GET_CACHED_IMG_URI);
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {!pickedImage ? (
-          <Text>Aucune photo choisie.</Text>
-        ) : (
-            <Image style={styles.image} source={{ uri: pickedImage }} />
-          )}
+        <Image style={styles.image} source={{ uri: cachedImageUri.imageUrl }} />
       </View>
       <Button
         title="Prendre Photo"

@@ -14,6 +14,7 @@ import { googleApiKey } from '../env'
 import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
+import { GET_CAT_PLACES } from '../graphql/queries'
 
 const NewPlaceScreen = props => {
 
@@ -23,45 +24,51 @@ const NewPlaceScreen = props => {
    */
 
   const [titleValue, setTitleValue] = useState('');
-  const [selectedImage, setSelectedImage] = useState(coords);
-  const [selectedLocation, setSelectedLocation] = useState();
+  // const [selectedImage, setSelectedImage] = useState(coords);
+  // const [selectedLocation, setSelectedLocation] = useState();
 
   /**
    * VARIABLES
    */
-  const passedLocation = props.route.params?.pickedLocation
+  // const passedLocation = props.route.params?.pickedLocation
   // console.log(passedLocation)
 
   /**
    * GRAPHQL
    */
 
-  const ADD_PHOTO = gql`
-    mutation($url: String!, $placeId: String!) {
-      createPhoto(data:{
-        url: $url,
-        placeId:  $placeId
+
+
+  const ADD_PLACE = gql`
+    mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $phone: String, $url: String ) {
+      createPlace(
+        data: {
+          name: $name
+          categoryId: $categoryId
+          imageUrl: $imageUrl
+          lat: $lat
+          lng: $lng
+          phone: $phone
+          url: $url
       }){
         id 
-        url
-        place {
-          id
-        }
       }
     }
   `;
 
-  const GET_LAT = gql`
+  const [addPlace, { data }] = useMutation(ADD_PLACE)
+
+  const ADD_PLACE_DATA = gql`
 {
-  pickedLat @client 
-  pickedLng @client
+  lat @client 
+  lng @client
+  imageUrl @client
 }
 `;
 
-  const [addPhoto, { data }] = useMutation(ADD_PHOTO)
-  const { data: coords, client } = useQuery(GET_LAT);
+  const { data: coords, client } = useQuery(ADD_PLACE_DATA);
   // setSelectedLocation(coords)
-  // console.log(coords)
+  console.log(coords)
 
   /**
    * HANDLERS
@@ -186,20 +193,31 @@ const NewPlaceScreen = props => {
     // name is in titleValue (change to "nameValue" eventually -for better naming)
     // imagePath will be coming back from cloudinary eventually
     // Location : convert to human readable first and then store somewhere on state
-
-
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.pickedLat},${coords.pickedLng}&key=${googleApiKey}`)
-
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${googleApiKey}`)
 
     if (!response.ok) {
-      throw new Error(err)
+      throw new Error("error while fetching reverse geocoding")
     }
 
     const resData = await response.json()
     const formattedAddress = resData.results[0].formatted_address
-    console.log(formattedAddress)
+    const googlePlaceId = resData.results[0].place_id
+    // console.log(formattedAddress)
+    // console.log(googlePlaceId)
 
-    //
+    // call mutation
+    addPlace({
+      variables: {
+        name: titleValue,
+        categoryId: "ckb13k2qw00a8077858tzciik",
+        imageUrl: "https://media-cdn.tripadvisor.com/media/photo-s/07/a1/a8/85/jakes-dive-bar.jpg",
+        lat: 45.517382,
+        lng: -73.559500,
+        phone: "1-514-522-9392",
+      },
+      refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: "ckb13k2qw00a8077858tzciik" } }]
+    })
+
     props.navigation.goBack();
   };
 

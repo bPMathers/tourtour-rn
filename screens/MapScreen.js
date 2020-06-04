@@ -31,8 +31,8 @@ const MapScreen = (props) => {
 
     client.writeData({
       data: {
-        pickedLat: selectedLocation.lat,
-        pickedLng: selectedLocation.lng,
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
       }
     })
 

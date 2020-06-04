@@ -20,7 +20,10 @@ const client = new ApolloClient({
 
 client.writeData({
   data: {
-    pickedLat: "Initial Picked Lat"
+    lat: 45.517382,
+    lng: -73.5599500,
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Plus_symbol.svg/1200px-Plus_symbol.svg.png"
+
   }
 })
 
