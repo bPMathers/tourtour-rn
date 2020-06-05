@@ -20,48 +20,53 @@ const PlacePreviewListItem = (props) => {
 
   return (
     <View style={styles.placePreviewListItem}>
-      <TouchableComponent
-        style={{ flex: 1 }}
-        onPress={props.onSelectPlace}
-      >
+      <TouchableComponent style={{ flex: 1 }} onPress={props.onSelectPlace}>
         <ImageBackground source={{ uri: props.imageUrl }} style={styles.image}>
           <View style={styles.overlayContentContainer}>
-            <View style={styles.topRowGroup}>
-              <View style={styles.topRow}>
-                <View>
-                  <Text style={styles.name}>{props.name}</Text>
+            <View style={styles.leftColumn}>
+              <View style={styles.leftTopGroup}>
+                <View style={styles.leftRow1}>
+                  <View>
+                    <Text style={styles.name}>{props.name}</Text>
+                  </View>
                 </View>
-                <StarRating color='white' />
+                <View style={styles.leftRow2}>
+                  <View>
+                    <Text style={styles.location}>{props.formatted_address}</Text>
+                  </View>
+                </View>
               </View>
-              <View style={styles.secondRow}>
-                <View>
-                  <Text style={styles.location}>{props.formatted_address}</Text>
-                </View>
-                <View>
-                  <Text style={styles.reviewCount}>69 reviews</Text>
+              <View style={styles.leftBottomGroup}>
+                <View style={styles.leftRow3}>
+                  <Text style={styles.submittedBy}>Ajouté par: </Text>
+                  <TouchableComponent onPress={props.onSelectUserProfile}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                      {props.addedBy}
+                    </Text>
+                  </TouchableComponent>
                 </View>
               </View>
             </View>
-            <View style={styles.bottomRow}>
+            <View style={styles.rightColumn}>
               <View>
-                <Text style={styles.submittedBy}>Ajouté par: </Text>
-                <TouchableComponent onPress={props.onSelectUserProfile}>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                    {props.addedBy}
-                  </Text>
-                </TouchableComponent>
+                <View style={styles.rightRow1}>
+                  <StarRating color='white' />
+                </View>
+                <View style={styles.rightRow2}>
+                  <Text style={styles.reviewCount}>69 reviews</Text>
+                </View>
               </View>
               <View>
-                <TouchableComponent
-                  onPress={props.onSelectPlace}
-                >
-                  <Ionicons
-                    style={styles.starIcon}
-                    name='md-arrow-forward'
-                    size={24}
-                    color='white'
-                  />
-                </TouchableComponent>
+                <View style={styles.rightRow3}>
+                  <TouchableComponent onPress={props.onSelectPlace}>
+                    <Ionicons
+                      style={styles.starIcon}
+                      name='md-arrow-forward'
+                      size={24}
+                      color='white'
+                    />
+                  </TouchableComponent>
+                </View>
               </View>
             </View>
           </View>
@@ -82,6 +87,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: 10,
   },
   overlayContentContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     height: '100%',
     padding: 10,
@@ -92,24 +98,34 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
-  topRowGroup: {},
+  leftColumn: {
+    height: '100%',
+    width: '65%',
+    justifyContent: 'space-between',
+  },
+  leftRow1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 7,
+  },
+  leftRow2: {},
+  leftRow3: {},
+  rightColumn: {
+    height: '100%',
+    width: '35%',
+    justifyContent: 'space-between',
+  },
+  rightRow1: {
+    alignItems: 'flex-end'
+  },
+  rightRow2: {
 
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 2,
+    alignItems: 'flex-end'
   },
-  secondRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  rightRow3: {
+    alignItems: 'flex-end'
   },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+
   name: {
     color: 'white',
     fontSize: 14,
@@ -125,7 +141,7 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   location: {
-    width: '40%',
+    width: '100%',
     color: 'white',
     fontSize: 12,
   },
