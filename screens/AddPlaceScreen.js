@@ -218,7 +218,7 @@ const NewPlaceScreen = props => {
   };
 
   /**
-   * COMPONENTS
+   * RETURN
    */
 
   return (

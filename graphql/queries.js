@@ -1,5 +1,19 @@
 import { gql } from 'apollo-boost'
 
+const GET_CATEGORIES = gql`
+  query {
+    categories {
+      id
+      title
+      imageUrl
+      addedBy{
+        id
+        name
+      }
+    }
+  }
+`;
+
 const GET_CAT_PLACES = gql`
 query($catId: String) {
   places(query: $catId) {
@@ -61,5 +75,6 @@ export {
   GET_ADD_PLACE_DATA,
   GET_CACHED_IMG_URI,
   GET_SEARCH_LOCATION,
-  GET_MY_CACHED_LOCATION
+  GET_MY_CACHED_LOCATION,
+  GET_CATEGORIES
 }

@@ -86,7 +86,7 @@ export default function HomeApp(props) {
 
 
   /**
-  * COMPONENTS
+  * RETURN
   */
 
   if (!isLoadingComplete) {
