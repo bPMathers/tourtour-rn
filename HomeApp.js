@@ -25,6 +25,7 @@ import AddPlaceModalScreen from './screens/AddPlaceModalScreen';
 import AddPlaceScreen from './screens/AddPlaceScreen';
 import MapScreen from './screens/MapScreen';
 import MapScreen2 from './screens/MapScreen2';
+import GooglePlacesACInput from './components/GooglePlacesACInput';
 
 const Stack = createStackNavigator();
 
@@ -96,14 +97,6 @@ export default function HomeApp(props) {
               }}
             />
             <Stack.Screen
-              name='AddPlaceModal'
-              component={AddPlaceModalScreen}
-              options={{
-                headerStyle: { backgroundColor: TourTourColors.accent },
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
               name='Map'
               component={MapScreen}
               options={{
@@ -114,6 +107,14 @@ export default function HomeApp(props) {
             <Stack.Screen
               name='Map2'
               component={MapScreen2}
+              options={{
+                headerStyle: { backgroundColor: TourTourColors.accent },
+                // headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='GoogleAC'
+              component={GooglePlacesACInput}
               options={{
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,

@@ -1,20 +1,33 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { useApolloClient } from "@apollo/react-hooks";
+import * as Location from 'expo-location';
+
+
 
 import { googleApiKey } from '../env'
 
 
-const GooglePlacesACInput = () => {
+const GooglePlacesACInput = (props) => {
+  const client = useApolloClient();
+
+  const [pickedPlace, setPickedPlace] = React.useState()
+  const [geocodedLoc, setGeocodedLoc] = React.useState()
+
   return (
     <View style={styles.container}>
       <GooglePlacesAutocomplete
+        placeholder='Search'
         query={{
           key: googleApiKey,
           language: 'en', // language of the results
         }}
-        onPress={(data, details = null) => console.log(data)}
+        fetchDetails={true}
+        onPress={(data, details) => {
+          setPickedPlace(details)
+        }}
         onFail={error => console.error(error)}
         requestUrl={{
           url:
@@ -28,6 +41,8 @@ const GooglePlacesACInput = () => {
             borderBottomWidth: 0,
           },
           textInput: {
+            // width: 300,
+            // flex: 1,
             marginLeft: 0,
             marginRight: 0,
             height: 38,
@@ -39,6 +54,9 @@ const GooglePlacesACInput = () => {
           },
         }}
       />
+      <Button title="Choisir" onPress={() => {
+        props.navigation.navigate('AddPlace', { autoCompletePickedPlace: pickedPlace })
+      }} />
     </View>
   );
 };
@@ -46,6 +64,7 @@ const GooglePlacesACInput = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // width: '100%',
     justifyContent: 'center',
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',

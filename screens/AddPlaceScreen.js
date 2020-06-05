@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -24,6 +24,21 @@ const NewPlaceScreen = props => {
   const [name, setName] = useState('');
   const [base64Image, setBase64Image] = useState();
   const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
+  console.log(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
+
+  useEffect(() => {
+    setName(props.route.params?.autoCompletePickedPlace?.name)
+    if (props.route.params?.autoCompletePickedPlace?.geometry) {
+
+      client.writeData({
+        data: {
+          lat: props.route.params?.autoCompletePickedPlace?.geometry.location.lat,
+          lng: props.route.params?.autoCompletePickedPlace?.geometry.location.lng,
+        }
+      })
+    }
+
+  }, [props.route.params?.autoCompletePickedPlace])
 
 
   /**
@@ -189,14 +204,14 @@ const NewPlaceScreen = props => {
       variables: {
         name: name,
         categoryId: props.route.params.catId,
-        imageUrl: cloudinaryUrl,
+        imageUrl: cloudinaryUrl ?? "https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg",
         lat: addPlaceData.lat,
         lng: addPlaceData.lng,
-        placeId: googlePlaceId,
-        formatted_address: formattedAddress,
+        placeId: props.route.params?.autoCompletePickedPlace?.place_id ?? googlePlaceId,
+        formatted_address: props.route.params?.autoCompletePickedPlace?.formatted_address ?? formattedAddress,
         phone: "1-514-522-9392",
       },
-      refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: "ckb13n3qq00b90778ezk4rq95" } }]
+      refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: props.route.params.catId } }]
     })
 
     props.navigation.goBack();
@@ -215,6 +230,9 @@ const NewPlaceScreen = props => {
           onChangeText={nameChangeHandler}
           value={name}
         />
+        <Button title="utiliser Google AutoComplete" onPress={() => {
+          props.navigation.navigate('GoogleAC')
+        }}></Button>
         <ImagePicker onImageTaken={imageTakenHandler} />
         <LocationPicker
           navigation={props.navigation}
