@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, TouchableHighlight, Dimensions, Modal } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
+import * as Location from 'expo-location';
+
 
 import { TourTourColors } from '../constants/Colors';
+import LocationPicker from '../components/LocationPicker'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
@@ -31,12 +34,36 @@ const GET_PLACES = gql`
 `;
 
 const CategorySearchScreen = (props) => {
+  const [city, setCity] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { loading, error, data } = useQuery(GET_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },
   });
+
+  useEffect(() => {
+    setCity(props.route.params?.city)
+  }, [props.route.params.city])
+
+  const handleTakeLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    let revGeocode = await Location.reverseGeocodeAsync({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+    setCity(`${revGeocode[0].city}, ${revGeocode[0].region}`);
+  }
+
+  const handleSetLocation = () => {
+    props.navigation.navigate('Map2')
+  }
 
   props.navigation.setOptions({
     headerRight: () => (
@@ -101,24 +128,26 @@ const CategorySearchScreen = (props) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>On va pouvoir rajouter une place avec un formulaire ici</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
+
+              <View style={{ justifyContent: 'space-around', height: 100 }}>
+                <TouchableOpacity
+                  style={{ ...styles.openButton, backgroundColor: TourTourColors.primary, marginRight: 4 }}
                   onPress={() => {
+                    handleTakeLocation()
                     setModalVisible(!modalVisible);
                   }}
                 >
-                  <Text style={styles.textStyle}>Annuler</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
+                  <Text style={styles.textStyle}>Prendre ma location</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
                   onPress={() => {
+                    handleSetLocation()
                     setModalVisible(!modalVisible);
                   }}
                 >
-                  <Text style={styles.textStyle}>Sauvegarder</Text>
-                </TouchableHighlight>
+                  <Text style={styles.textStyle}>Choisir sur la carte</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -130,11 +159,11 @@ const CategorySearchScreen = (props) => {
           <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
           <Text>
             près de{' '}
-            <Text style={{ fontWeight: 'bold' }}>Montreal, QC</Text>
+            <Text style={{ fontWeight: 'bold' }}>{city}</Text>
           </Text>
         </View>
         <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent}>
+          <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { setModalVisible(true) }}>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.locationButtonText}>Changer de Location</Text>
               <FontAwesome5 name='map-marker-alt' size={18} color='white' />

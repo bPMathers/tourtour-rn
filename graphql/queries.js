@@ -39,8 +39,17 @@ const GET_CACHED_IMG_URI = gql`
 }
 `;
 
+const GET_SEARCH_LOCATION = gql`
+{
+  searchLocLat @client
+  searchLocLng @client
+  searchLocCity @client
+}
+`;
+
 export {
   GET_CAT_PLACES,
   GET_ADD_PLACE_DATA,
-  GET_CACHED_IMG_URI
+  GET_CACHED_IMG_URI,
+  GET_SEARCH_LOCATION
 }
