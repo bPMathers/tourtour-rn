@@ -41,7 +41,7 @@ const GET_PLACES = gql`
 
 const CategorySearchScreen = (props) => {
   const client = useApolloClient();
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState();
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
@@ -50,6 +50,9 @@ const CategorySearchScreen = (props) => {
     },
   });
   const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
+
+  console.log(`Search Location : ${JSON.stringify(searchLocData, undefined, 2)}`)
+  // console.log(`City : ${city}`)
 
   useEffect(() => {
     setCity(searchLocData.searchLocCity)
@@ -73,7 +76,6 @@ const CategorySearchScreen = (props) => {
         searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
       }
     })
-    // setCity(`${revGeocode[0].city}, ${revGeocode[0].region}`);
   }
 
   const handleSetLocation = () => {
@@ -171,20 +173,23 @@ const CategorySearchScreen = (props) => {
       <View style={{ marginBottom: 100 }}>
         <StatusBar barStyle="light-content" />
         <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-          <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
-          <Text>
-            près de{' '}
-            <Text style={{ fontWeight: 'bold' }}>{city}</Text>
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
+            <Text>
+              près de{' '}
+            </Text>
+          </View>
+          <View>{city === "" ? <View><Button title="Choisir Location" onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
+          </View>
         </View>
-        <View style={{ alignItems: 'center' }}>
+        {city ? <View style={{ alignItems: 'center' }}>
           <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { setModalVisible(true) }}>
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={styles.locationButtonText}>Changer de Location</Text>
               <FontAwesome5 name='map-marker-alt' size={18} color='white' />
             </View>
           </TouchableOpacity>
-        </View>
+        </View> : null}
         <FlatList data={data.places} renderItem={renderGridItem} />
       </View>
     </View>

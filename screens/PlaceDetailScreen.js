@@ -15,7 +15,6 @@ import {
   Modal,
   TouchableHighlight
 } from 'react-native';
-// import OpenMap from "react-native-open-map";
 import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -81,7 +80,6 @@ const ReviewsContainer = ({ place, navigation }) => {
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
-  console.log(place)
 
 
   const GET_PHOTOS = gql`

@@ -21,7 +21,6 @@ import HomeSearchScreen from './screens/HomeSearchScreen';
 import CategorySearchScreen from './screens/CategorySearchScreen';
 import PlaceDetailScreen from './screens/PlaceDetailScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
-import AddPlaceModalScreen from './screens/AddPlaceModalScreen';
 import AddPlaceScreen from './screens/AddPlaceScreen';
 import MapScreen from './screens/MapScreen';
 import MapScreen2 from './screens/MapScreen2';

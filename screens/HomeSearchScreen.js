@@ -9,9 +9,11 @@ import {
 } from 'react-native';
 // import LottieView from "lottie-react-native";
 import { gql } from 'apollo-boost';
+import { useApolloClient } from "@apollo/react-hooks";
 
 import { useQuery } from '@apollo/react-hooks';
 import { Ionicons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
 import CategoryGridTile from '../components/CategoryGridTile';
 import Animation from '../components/Animation';
@@ -33,12 +35,35 @@ const getCategories = gql`
 export const HomeSearchScreen = (props) => {
   const { loading, error, data } = useQuery(getCategories);
   const [searchInput, setSearchInput] = React.useState();
+  const client = useApolloClient()
+
+  const handleTakeLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    let revGeocode = await Location.reverseGeocodeAsync({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+    client.writeData({
+      data: {
+        searchLocLat: location.coords.latitude,
+        searchLocLng: location.coords.longitude,
+        searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+      }
+    })
+  }
+
   const renderGridItem = (itemData) => {
     return (
       <CategoryGridTile
         title={itemData.item.title}
         imgUrl={itemData.item.imageUrl}
         onSelect={() => {
+          handleTakeLocation()
           // console.log(itemData.item.id)
           props.navigation.navigate('CategorySearch', {
             categoryId: itemData.item.id,
