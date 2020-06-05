@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, TouchableHighlight, Dimensions, Modal } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from "@apollo/react-hooks";
@@ -9,39 +9,40 @@ import * as Location from 'expo-location';
 
 
 import { TourTourColors } from '../constants/Colors';
-import LocationPicker from '../components/LocationPicker'
 import { GET_SEARCH_LOCATION, GET_CAT_PLACES } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
-const GET_PLACES = gql`
-  query($catId: String) {
-    places(query: $catId) {
-      id
-      name
-      imageUrl
-      lat
-      lng 
-      google_place_id
-      formatted_address
-      addedBy {
-        id
-        name
-      }
-      review_count
-      category {
-        id
-      }
-      photos{
-        id
-      }
-    }
-  }
-`;
+// const GET_PLACES = gql`
+//   query($catId: String) {
+//     places(query: $catId) {
+//       id
+//       name
+//       imageUrl
+//       lat
+//       lng 
+//       google_place_id
+//       formatted_address
+//       addedBy {
+//         id
+//         name
+//       }
+//       review_count
+//       category {
+//         id
+//       }
+//       photos{
+//         id
+//       }
+//     }
+//   }
+// `;
 
 const CategorySearchScreen = (props) => {
+  const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
+  console.log(searchLocData)
   const client = useApolloClient();
-  const [city, setCity] = useState();
+  const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
@@ -49,9 +50,8 @@ const CategorySearchScreen = (props) => {
       catId: props.route.params.categoryId,
     },
   });
-  const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
 
-  console.log(`Search Location : ${JSON.stringify(searchLocData, undefined, 2)}`)
+  // console.log(`Search Location : ${JSON.stringify(searchLocData, undefined, 2)}`)
   // console.log(`City : ${city}`)
 
   useEffect(() => {
@@ -59,23 +59,27 @@ const CategorySearchScreen = (props) => {
   }, [searchLocData.searchLocCity])
 
   const handleTakeLocation = async () => {
-    let { status } = await Location.requestPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    let revGeocode = await Location.reverseGeocodeAsync({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-    client.writeData({
-      data: {
-        searchLocLat: location.coords.latitude,
-        searchLocLng: location.coords.longitude,
-        searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+    try {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
       }
-    })
+
+      let location = await Location.getCurrentPositionAsync({});
+      let revGeocode = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      client.writeData({
+        data: {
+          searchLocLat: location.coords.latitude,
+          searchLocLng: location.coords.longitude,
+          searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+        }
+      })
+    } catch {
+      console.log('Unable to take location')
+    }
   }
 
   const handleSetLocation = () => {
@@ -85,9 +89,9 @@ const CategorySearchScreen = (props) => {
   props.navigation.setOptions({
     headerRight: () => (
       <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {
-
         props.navigation.navigate('AddPlace', {
-          catId: props.route.params.categoryId
+          catId: props.route.params.categoryId,
+          catTitle: props.route.params.categoryTitle,
         })
       }}>
         <AntDesign name='plus' size={24} color='white' />

@@ -61,11 +61,13 @@ const ImgPicker = props => {
       <TouchableOpacity style={styles.imagePreview} onPress={takeImageHandler}>
         <Image style={styles.image} source={{ uri: cachedImageUri.imageUrl }} />
       </TouchableOpacity>
-      <Button
-        title="Prendre Photo"
-        color={TourTourColors.primary}
-        onPress={takeImageHandler}
-      />
+      <View style={{ marginBottom: 15 }}>
+        <Button
+          title="Prendre Photo"
+          color={TourTourColors.primary}
+          onPress={takeImageHandler}
+        />
+      </View>
     </View>
   );
 };
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: '100%',
     height: 300,
-    marginBottom: 10,
+    marginBottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ccc',

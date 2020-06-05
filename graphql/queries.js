@@ -49,9 +49,17 @@ const GET_SEARCH_LOCATION = gql`
 }
 `;
 
+const GET_MY_CACHED_LOCATION = gql`
+  {
+      myLat @client
+      myLng @client
+}
+`;
+
 export {
   GET_CAT_PLACES,
   GET_ADD_PLACE_DATA,
   GET_CACHED_IMG_URI,
-  GET_SEARCH_LOCATION
+  GET_SEARCH_LOCATION,
+  GET_MY_CACHED_LOCATION
 }

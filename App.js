@@ -1,6 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
-import { Platform, Text, TextInput, Button, StatusBar, StyleSheet, View } from 'react-native';
+import React from 'react';
 import ApolloClient, { gql, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 
@@ -20,11 +18,8 @@ const client = new ApolloClient({
 
 client.writeData({
   data: {
-    lat: 45.517382,
-    lng: -73.5599500,
-    //This file is on my laptop only, find how to bundle with app
-    imageUrl: "file:///Users/bpm19/Documents/Career/TourTour/RNapp/tourtour-rn/assets/images/1200px-Plus_symbol.svg.png",
-    imageBase64: null,
+    myLat: 0,
+    myLng: 0,
     searchLocCity: "",
     searchLocLat: 0,
     searchLocLng: 0,
@@ -32,7 +27,6 @@ client.writeData({
 })
 
 export default function App(props) {
-
   const isLoadingComplete = useCachedResources();
 
   if (!isLoadingComplete) {
@@ -46,9 +40,3 @@ export default function App(props) {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

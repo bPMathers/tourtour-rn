@@ -1,22 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import {
   Platform,
-  Text,
-  TextInput,
-  Button,
+  Alert,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
+import * as Location from 'expo-location';
+import * as Linking from 'expo-linking';
+
 
 import useCachedResources from './hooks/useCachedResources';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
+// import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
-import { TourTourColors } from './constants/Colors';
 
+import { TourTourColors } from './constants/Colors';
 import HomeSearchScreen from './screens/HomeSearchScreen';
 import CategorySearchScreen from './screens/CategorySearchScreen';
 import PlaceDetailScreen from './screens/PlaceDetailScreen';
@@ -29,11 +30,64 @@ import GooglePlacesACInput from './components/GooglePlacesACInput';
 const Stack = createStackNavigator();
 
 export default function HomeApp(props) {
+  /**
+   * HOOKS
+   */
   const isLoadingComplete = useCachedResources();
+  const client = useApolloClient()
+  // console.log(client)
+
+  useEffect(() => {
+    handleTakeLocation()
+  }, [])
+
+  /**
+  * HELPERS
+  */
+  const handleTakeLocation = async () => {
+    try {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      let revGeocode = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      client.writeData({
+        data: {
+          myLat: location.coords.latitude,
+          myLng: location.coords.longitude,
+          searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+          searchLocLat: location.coords.latitude,
+          searchLocLng: location.coords.longitude,
+        }
+      })
+    } catch {
+      Alert.alert(
+        'Attention!',
+        "L'application ne fonctionnera pas si vous ne l'autorisez pas à prendre votre location. Changez vos réglages ou quittez l'application",
+        [{ text: 'Changer mes réglages', onPress: () => { Linking.openURL('app-settings:') } }]
+      );
+    }
+  }
+
+  client.writeData({
+    data: {
+      //This file is on my laptop only, find how to bundle with app
+      imageUrl: "file:///Users/bpm19/Documents/Career/TourTour/RNapp/tourtour-rn/assets/images/1200px-Plus_symbol.svg.png",
+      imageBase64: null,
+
+    }
+  })
 
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error :(</p>;
+
+  /**
+  * COMPONENTS
+  */
 
   if (!isLoadingComplete) {
     return null;
@@ -91,6 +145,7 @@ export default function HomeApp(props) {
               name='AddPlace'
               component={AddPlaceScreen}
               options={{
+                title: "Ajouter un endroit",
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,
               }}
@@ -99,6 +154,7 @@ export default function HomeApp(props) {
               name='Map'
               component={MapScreen}
               options={{
+                title: "Choisir location",
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,
               }}
@@ -107,6 +163,7 @@ export default function HomeApp(props) {
               name='Map2'
               component={MapScreen2}
               options={{
+                title: "Choisir location",
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,
               }}
@@ -115,6 +172,7 @@ export default function HomeApp(props) {
               name='GoogleAC'
               component={GooglePlacesACInput}
               options={{
+                title: "Choisir location",
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,
               }}

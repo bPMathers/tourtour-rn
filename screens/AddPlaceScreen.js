@@ -24,7 +24,7 @@ const NewPlaceScreen = props => {
   const [name, setName] = useState('');
   const [base64Image, setBase64Image] = useState();
   const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
-  console.log(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
+  // console.log(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
 
   useEffect(() => {
     setName(props.route.params?.autoCompletePickedPlace?.name)
@@ -224,15 +224,18 @@ const NewPlaceScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <Text style={styles.label}>Nom de la place</Text>
+        <Text style={styles.label}>Nom</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={nameChangeHandler}
           value={name}
+          placeholder={`Nom du ou de la "${props.route.params.catTitle}" à ajouter`}
         />
-        <Button title="utiliser Google AutoComplete" onPress={() => {
-          props.navigation.navigate('GoogleAC')
-        }}></Button>
+        <View style={{ marginBottom: 20 }}>
+          <Button color={TourTourColors.primary} title="utiliser Google AutoComplete" onPress={() => {
+            props.navigation.navigate('GoogleAC')
+          }}></Button>
+        </View>
         <ImagePicker onImageTaken={imageTakenHandler} />
         <LocationPicker
           navigation={props.navigation}
@@ -263,13 +266,16 @@ const styles = StyleSheet.create({
     margin: 30
   },
   label: {
+    color: TourTourColors.accent,
+    fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 15
   },
   textInput: {
+
     borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-    marginBottom: 15,
+    borderBottomWidth: 2,
+    marginBottom: 0,
     paddingVertical: 4,
     paddingHorizontal: 2
   }

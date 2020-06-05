@@ -23,6 +23,16 @@ const LocationPicker = (props) => {
   const navigation = useNavigation()
   const [isFetching, setIsFetching] = useState(false);
   const [pickedLocation, setPickedLocation] = useState();
+  // console.log(`cachedLocation: ${cachedLocation}`)
+
+  const GET_CACHED_LOCATION = gql`
+  {
+    lat @client 
+    lng @client
+  }
+  `;
+
+  const { data: cachedLocation } = useQuery(GET_CACHED_LOCATION);
 
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -74,14 +84,7 @@ const LocationPicker = (props) => {
     navigation.navigate('Map')
   }
 
-  const GET_CACHED_LOCATION = gql`
-{
-  lat @client 
-  lng @client
-}
-`;
 
-  const { data: cachedLocation } = useQuery(GET_CACHED_LOCATION);
 
   return (
     <View style={styles.locationPicker}>
@@ -99,7 +102,7 @@ const LocationPicker = (props) => {
           onPress={getLocationHandler}
         />
         <Button
-          title="Choisir sur Map"
+          title="Choisir sur Carte"
           color={TourTourColors.primary}
           onPress={pickOnMapHandler}
         />
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   mapPreview: {
-    marginBottom: 10,
+    marginBottom: 0,
     width: '100%',
     height: 300,
     borderColor: '#ccc',
