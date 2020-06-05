@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Button, Image, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { useApolloClient } from "@apollo/react-hooks";
-import { gql } from 'apollo-boost'
-
-import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@apollo/react-hooks';
 
-
-
+import { GET_CACHED_IMG_URI } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
 
 const ImgPicker = props => {
+  /**
+   * HOOKS
+   */
+  const { data: cachedImageUri } = useQuery(GET_CACHED_IMG_URI);
   const client = useApolloClient();
+
+  /**
+   * FUNCTIONS
+   */
 
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -28,6 +32,9 @@ const ImgPicker = props => {
     return true;
   };
 
+  /**
+   * HANDLERS
+   */
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermissions();
     if (!hasPermission) {
@@ -42,21 +49,9 @@ const ImgPicker = props => {
     if (image.cancelled) {
       return
     }
-    client.writeData({
-      data: {
-        imageUrl: image.uri
-      }
-    })
+
     props.onImageTaken(image.uri);
   };
-
-  const GET_CACHED_IMG_URI = gql`
-  {
-    imageUrl @client
-  }
-  `;
-
-  const { data: cachedImageUri } = useQuery(GET_CACHED_IMG_URI);
 
   return (
     <View style={styles.imagePicker}>

@@ -14,30 +14,18 @@ import { googleApiKey } from '../env'
 import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
-import { GET_CAT_PLACES } from '../graphql/queries'
+import { GET_CAT_PLACES, GET_ADD_PLACE_DATA } from '../graphql/queries'
 
 const NewPlaceScreen = props => {
-
-
   /**
    * HOOKS
    */
-
-  const [titleValue, setTitleValue] = useState('');
-  // const [selectedImage, setSelectedImage] = useState(coords);
-  // const [selectedLocation, setSelectedLocation] = useState();
+  const [name, setName] = useState('');
+  const { data: coords, client } = useQuery(GET_ADD_PLACE_DATA);
 
   /**
-   * VARIABLES
+   * GRAPHQL - MOVE TO EXTERNAL FILE WHEN DONE
    */
-  // const passedLocation = props.route.params?.pickedLocation
-  // console.log(passedLocation)
-
-  /**
-   * GRAPHQL
-   */
-
-
 
   const ADD_PLACE = gql`
     mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $phone: String, $url: String ) {
@@ -58,67 +46,35 @@ const NewPlaceScreen = props => {
 
   const [addPlace, { data }] = useMutation(ADD_PLACE)
 
-  const ADD_PLACE_DATA = gql`
-{
-  lat @client 
-  lng @client
-  imageUrl @client
-}
-`;
-
-  const { data: coords, client } = useQuery(ADD_PLACE_DATA);
-  // setSelectedLocation(coords)
-  console.log(coords)
 
   /**
    * HANDLERS
    */
 
-  // 
+  // Image : 1) use modal to select photo library or camera like in add photo
+  //         2) upload to cloudinary and then send return url with mutation
 
-  // const openImagePickerAsync = async () => {
-  //   const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  // const cloudinarySecureUrl = async (localImgUri) => {
+  //   const base64Img = `data:image/jpg;base64,${localImgUri.base64}`
 
-  //   if (permissionResult.granted === false) {
-  //     alert("Permission to access camera roll is required!");
-  //     return;
+  //   const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+  //   const data = {
+  //     "file": base64Img,
+  //     "upload_preset": "TourTour1",
   //   }
+  //   fetch(apiUrl, {
+  //     body: JSON.stringify(data),
+  //     headers: {
+  //       'content-type': 'application/json'
+  //     },
+  //     method: 'POST',
+  //   }).then(async result => {
+  //     const data = await result.json()
 
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 0.5,
-  //     base64: true
-  //   });
-  //   if (!result.cancelled) {
-  //     // setPhotoUrl(result.uri)
-
-  //     const base64Img = `data:image/jpg;base64,${result.base64}`
-
-  //     //Add your cloud name
-  //     const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-  //     const data = {
-  //       "file": base64Img,
-  //       "upload_preset": "TourTour1",
-  //     }
-  //     fetch(apiUrl, {
-  //       body: JSON.stringify(data),
-  //       headers: {
-  //         'content-type': 'application/json'
-  //       },
-  //       method: 'POST',
-  //     }).then(async r => {
-  //       const data = await r.json()
-  //       // Send mutation to graphQL API & refetch
-  //       addPhoto({
-  //         variables: { url: data.secure_url, placeId: place.id },
-  //         refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
-  //       })
-
-  //       return data.secure_url
-  //     }).catch(err => console.log(err))
-  //   }
+  //     return data.secure_url
+  //   }).catch(err => console.log(err))
   // }
+
 
   // const openCameraAsync = async () => {
   //   const permissionResult2 = await ImagePicker.requestCameraPermissionsAsync();
@@ -172,26 +128,23 @@ const NewPlaceScreen = props => {
   //   await openCameraAsync();
   //   setModalVisible(false);
   // }
+  const imageTakenHandler = (imagePath) => {
+    // const cloudinaryResponse = await cloudinarySecureUrl(imagePath)
+    client.writeData({
+      data: {
+        imageUrl: imagePath
+      }
+    })
+  };
 
-  const titleChangeHandler = text => {
+  const nameChangeHandler = text => {
     // should sanitize input ?
-    setTitleValue(text);
+    setName(text);
   };
-
-  const imageTakenHandler = imagePath => {
-    // setSelectedImage(imagePath);
-    // console.log(imagePath)
-  };
-
-  // const actualLocationPickedHandler = (pickedLocation) => {
-  //   // setSelectedLocation(pickedLocation)
-  // }
 
   const savePlaceHandler = async () => {
-    // console.log(coords)
-    // Initiate GraphQL Mutation & refetch
-    // name is in titleValue (change to "nameValue" eventually -for better naming)
     // imagePath will be coming back from cloudinary eventually
+    // Initiate GraphQL Mutation & refetch
     // Location : convert to human readable first and then store somewhere on state
     const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${googleApiKey}`)
 
@@ -202,10 +155,8 @@ const NewPlaceScreen = props => {
     const resData = await response.json()
     const formattedAddress = resData.results[0].formatted_address
     const googlePlaceId = resData.results[0].place_id
-    // console.log(formattedAddress)
-    // console.log(googlePlaceId)
 
-    // call mutation
+    // Initiate GraphQL Mutation & refetch
     addPlace({
       variables: {
         name: titleValue,
@@ -231,8 +182,8 @@ const NewPlaceScreen = props => {
         <Text style={styles.label}>Nom de la place</Text>
         <TextInput
           style={styles.textInput}
-          onChangeText={titleChangeHandler}
-          value={titleValue}
+          onChangeText={nameChangeHandler}
+          value={name}
         />
         <ImagePicker onImageTaken={imageTakenHandler} />
         <LocationPicker
@@ -248,7 +199,8 @@ const NewPlaceScreen = props => {
       </View>
     </ScrollView>
   );
-};
+}
+
 
 NewPlaceScreen.navigationOptions = {
   headerTitle: 'Add Place'
