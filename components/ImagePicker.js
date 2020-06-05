@@ -42,15 +42,18 @@ const ImgPicker = props => {
     }
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.5
+      aspect: [4, 3],
+      quality: 0.5,
+      base64: true
     });
+
+    // const base64Img = `data:image/jpg;base64,${image.base64}`
 
     if (image.cancelled) {
       return
     }
 
-    props.onImageTaken(image.uri);
+    props.onImageTaken(image);
   };
 
   return (

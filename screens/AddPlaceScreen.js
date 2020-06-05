@@ -10,6 +10,7 @@ import {
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
+
 import { googleApiKey } from '../env'
 import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
@@ -21,28 +22,32 @@ const NewPlaceScreen = props => {
    * HOOKS
    */
   const [name, setName] = useState('');
-  const { data: coords, client } = useQuery(GET_ADD_PLACE_DATA);
+  const [base64Image, setBase64Image] = useState();
+  const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
+
 
   /**
    * GRAPHQL - MOVE TO EXTERNAL FILE WHEN DONE
    */
 
   const ADD_PLACE = gql`
-    mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $phone: String, $url: String ) {
-      createPlace(
-        data: {
-          name: $name
-          categoryId: $categoryId
-          imageUrl: $imageUrl
-          lat: $lat
-          lng: $lng
-          phone: $phone
-          url: $url
-      }){
-        id 
-      }
+    mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $placeId: String, $formatted_address: String, $phone: String, $url: String) {
+    createPlace(
+      data: {
+        name: $name
+        categoryId: $categoryId
+        imageUrl: $imageUrl
+        lat: $lat
+        lng: $lng
+        google_place_id: $placeId
+        formatted_address: $formatted_address
+        phone: $phone
+        url: $url
+      }) {
+      id
     }
-  `;
+  }
+    `;
 
   const [addPlace, { data }] = useMutation(ADD_PLACE)
 
@@ -54,8 +59,9 @@ const NewPlaceScreen = props => {
   // Image : 1) use modal to select photo library or camera like in add photo
   //         2) upload to cloudinary and then send return url with mutation
 
+
   // const cloudinarySecureUrl = async (localImgUri) => {
-  //   const base64Img = `data:image/jpg;base64,${localImgUri.base64}`
+  //   const base64Img = `data: image / jpg; base64, ${ localImgUri.base64 } `
 
   //   const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
   //   const data = {
@@ -93,7 +99,7 @@ const NewPlaceScreen = props => {
   //   if (!result.cancelled) {
   //     // setPhotoUrl(result.uri)
 
-  //     const base64Img = `data:image/jpg;base64,${result.base64}`
+  //     const base64Img = `data: image / jpg; base64, ${ result.base64 } `
 
   //     //Add your cloud name
   //     const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
@@ -128,11 +134,14 @@ const NewPlaceScreen = props => {
   //   await openCameraAsync();
   //   setModalVisible(false);
   // }
-  const imageTakenHandler = (imagePath) => {
+  const imageTakenHandler = (image) => {
+    // console.log(`allo: ${ image.base64 } `)
+    // setBase64Image(base64Img)
     // const cloudinaryResponse = await cloudinarySecureUrl(imagePath)
     client.writeData({
       data: {
-        imageUrl: imagePath
+        imageUrl: image.uri,
+        imageBase64: image.base64
       }
     })
   };
@@ -143,30 +152,51 @@ const NewPlaceScreen = props => {
   };
 
   const savePlaceHandler = async () => {
-    // imagePath will be coming back from cloudinary eventually
-    // Initiate GraphQL Mutation & refetch
-    // Location : convert to human readable first and then store somewhere on state
-    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${googleApiKey}`)
+    // send img to cloudinary and get url back
+    const base64ImgToUpload = `data:image/jpg;base64,${addPlaceData.imageBase64}`
 
-    if (!response.ok) {
+    const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
+    const data = {
+      "file": base64ImgToUpload,
+      "upload_preset": "TourTour1",
+    }
+    const cloudinaryUrl = await fetch(apiUrl, {
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json'
+      },
+      method: 'POST',
+    }).then(async r => {
+      const data = await r.json()
+      return data.secure_url
+    }).catch(err => console.log(err))
+
+    // Get location data
+    const revGeoCodingResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${addPlaceData.lat},${addPlaceData.lng}&key=${googleApiKey}`)
+
+    if (!revGeoCodingResponse.ok) {
       throw new Error("error while fetching reverse geocoding")
     }
 
-    const resData = await response.json()
+    const resData = await revGeoCodingResponse.json()
+    // console.log(`resData: ${resData}`)
     const formattedAddress = resData.results[0].formatted_address
+    // console.log(`formattedAddress: ${formattedAddress}`)
     const googlePlaceId = resData.results[0].place_id
-
+    // console.log(`googlePlaceId: ${googlePlaceId}`)
     // Initiate GraphQL Mutation & refetch
     addPlace({
       variables: {
-        name: titleValue,
-        categoryId: "ckb13k2qw00a8077858tzciik",
-        imageUrl: "https://media-cdn.tripadvisor.com/media/photo-s/07/a1/a8/85/jakes-dive-bar.jpg",
-        lat: 45.517382,
-        lng: -73.559500,
+        name: name,
+        categoryId: props.route.params.catId,
+        imageUrl: cloudinaryUrl,
+        lat: addPlaceData.lat,
+        lng: addPlaceData.lng,
+        placeId: googlePlaceId,
+        formatted_address: formattedAddress,
         phone: "1-514-522-9392",
       },
-      refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: "ckb13k2qw00a8077858tzciik" } }]
+      refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: "ckb13n3qq00b90778ezk4rq95" } }]
     })
 
     props.navigation.goBack();

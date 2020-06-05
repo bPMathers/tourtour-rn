@@ -22,8 +22,9 @@ client.writeData({
   data: {
     lat: 45.517382,
     lng: -73.5599500,
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Plus_symbol.svg/1200px-Plus_symbol.svg.png"
-
+    //This file is on my laptop only, find how to bundle with app
+    imageUrl: "file:///Users/bpm19/Documents/Career/TourTour/RNapp/tourtour-rn/assets/images/1200px-Plus_symbol.svg.png",
+    imageBase64: null
   }
 })
 

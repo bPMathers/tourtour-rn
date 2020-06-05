@@ -153,7 +153,6 @@ const PlaceDetailScreen = (props) => {
           variables: { url: data.secure_url, placeId: place.id },
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
         })
-        // console.log(data.secure_url)
 
         return data.secure_url
       }).catch(err => console.log(err))
@@ -198,7 +197,7 @@ const PlaceDetailScreen = (props) => {
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
         })
 
-        return data.secure_url
+        // return data.secure_url
       }).catch(err => console.log(err))
     }
   }

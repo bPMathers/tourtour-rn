@@ -14,6 +14,7 @@ const GET_PLACES = gql`
       id
       name
       imageUrl
+      formatted_address
       addedBy {
         id
         name
@@ -41,7 +42,9 @@ const CategorySearchScreen = (props) => {
     headerRight: () => (
       <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {
 
-        props.navigation.navigate('AddPlace')
+        props.navigation.navigate('AddPlace', {
+          catId: props.route.params.categoryId
+        })
       }}>
         <AntDesign name='plus' size={24} color='white' />
       </TouchableOpacity>
@@ -53,6 +56,8 @@ const CategorySearchScreen = (props) => {
       <PlacePreviewListItem
         name={itemData.item.name}
         imageUrl={itemData.item.imageUrl}
+        formatted_address={itemData.item.formatted_address}
+        addedBy={itemData.item.addedBy.name}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
             userId: itemData.item.addedBy.id,
@@ -119,7 +124,7 @@ const CategorySearchScreen = (props) => {
           </View>
         </Modal>
       </View>
-      <View>
+      <View style={{ marginBottom: 100 }}>
         <StatusBar barStyle="light-content" />
         <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
           <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>

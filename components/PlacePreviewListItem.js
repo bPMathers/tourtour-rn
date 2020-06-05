@@ -35,7 +35,7 @@ const PlacePreviewListItem = (props) => {
               </View>
               <View style={styles.secondRow}>
                 <View>
-                  <Text style={styles.location}>Location</Text>
+                  <Text style={styles.location}>{props.formatted_address}</Text>
                 </View>
                 <View>
                   <Text style={styles.reviewCount}>69 reviews</Text>
@@ -47,7 +47,7 @@ const PlacePreviewListItem = (props) => {
                 <Text style={styles.submittedBy}>Ajouté par: </Text>
                 <TouchableComponent onPress={props.onSelectUserProfile}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                    Flavien Denre de Choix
+                    {props.addedBy}
                   </Text>
                 </TouchableComponent>
               </View>
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   location: {
+    width: '40%',
     color: 'white',
     fontSize: 12,
   },
