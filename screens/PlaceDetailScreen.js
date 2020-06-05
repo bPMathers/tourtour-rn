@@ -81,7 +81,7 @@ const ReviewsContainer = ({ place, navigation }) => {
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
-
+  console.log(place)
 
 
   const GET_PHOTOS = gql`
@@ -215,13 +215,13 @@ const PlaceDetailScreen = (props) => {
     // TODO : dynamically feed parameter values
     // Does including a googlePlaceId work ok along with lat & lng?
     showLocation({
-      latitude: 39.922157,
-      longitude: 32.825768,
-      sourceLatitude: 39.722157,  // optionally specify starting location for directions
-      sourceLongitude: 32.625768,  // not optional if sourceLatitude is specified
-      title: 'Use foramtted_address here ?',  // optional
+      latitude: place.lat,
+      longitude: place.lng,
+      // sourceLatitude: 39.722157,  // optionally specify starting location for directions
+      // sourceLongitude: 32.625768,  // not optional if sourceLatitude is specified
+      title: place.formatted_address,  // optional
       googleForceLatLon: false,  // optionally force GoogleMaps to use the latlon for the query instead of the title
-      googlePlaceId: 'ChIJp4JiUCNP0xQR1JaSjpW_Hms',  // optionally specify the google-place-id
+      googlePlaceId: place.google_place_id,  // optionally specify the google-place-id
       alwaysIncludeGoogle: false, // optional, true will always add Google Maps to iOS and open in Safari, even if app is not installed (default: false)
       dialogTitle: 'Svp choisir quelle application ouvrir', // optional (default: 'Open in Maps')
       dialogMessage: 'Un sphincter, ça dit quoi?', // optional (default: 'What app would you like to use?')

@@ -6,6 +6,8 @@ query($catId: String) {
     id
     name
     imageUrl
+    lat
+    lng
     formatted_address
     google_place_id
     addedBy {

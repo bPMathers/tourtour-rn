@@ -10,7 +10,7 @@ import * as Location from 'expo-location';
 
 import { TourTourColors } from '../constants/Colors';
 import LocationPicker from '../components/LocationPicker'
-import { GET_SEARCH_LOCATION } from '../graphql/queries'
+import { GET_SEARCH_LOCATION, GET_CAT_PLACES } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
@@ -20,6 +20,9 @@ const GET_PLACES = gql`
       id
       name
       imageUrl
+      lat
+      lng 
+      google_place_id
       formatted_address
       addedBy {
         id
@@ -41,13 +44,12 @@ const CategorySearchScreen = (props) => {
   const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const { loading, error, data } = useQuery(GET_PLACES, {
+  const { loading, error, data } = useQuery(GET_CAT_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },
   });
   const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
-  console.log(searchLocData)
 
   useEffect(() => {
     setCity(searchLocData.searchLocCity)
