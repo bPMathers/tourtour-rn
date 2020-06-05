@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, TouchableHighlight, Dimensions, Modal } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
+import { useApolloClient } from "@apollo/react-hooks";
+
 import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import * as Location from 'expo-location';
 
 
 import { TourTourColors } from '../constants/Colors';
 import LocationPicker from '../components/LocationPicker'
+import { GET_SEARCH_LOCATION } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
@@ -34,6 +37,7 @@ const GET_PLACES = gql`
 `;
 
 const CategorySearchScreen = (props) => {
+  const client = useApolloClient();
   const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,10 +46,12 @@ const CategorySearchScreen = (props) => {
       catId: props.route.params.categoryId,
     },
   });
+  const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
+  console.log(searchLocData)
 
   useEffect(() => {
-    setCity(props.route.params?.city)
-  }, [props.route.params.city])
+    setCity(searchLocData.searchLocCity)
+  }, [searchLocData.searchLocCity])
 
   const handleTakeLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -58,7 +64,14 @@ const CategorySearchScreen = (props) => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
-    setCity(`${revGeocode[0].city}, ${revGeocode[0].region}`);
+    client.writeData({
+      data: {
+        searchLocLat: location.coords.latitude,
+        searchLocLng: location.coords.longitude,
+        searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+      }
+    })
+    // setCity(`${revGeocode[0].city}, ${revGeocode[0].region}`);
   }
 
   const handleSetLocation = () => {

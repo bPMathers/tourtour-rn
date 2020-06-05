@@ -32,20 +32,22 @@ const MapScreen2 = (props) => {
       return
     }
 
-    // client.writeData({
-    //   data: {
-    //     lat: selectedLocation.lat,
-    //     lng: selectedLocation.lng,
-    //   }
-    // })
+
     let revGeocode = await Location.reverseGeocodeAsync({
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
     });
+    client.writeData({
+      data: {
+        searchLocLat: selectedLocation.lat,
+        searchLocLng: selectedLocation.lng,
+        searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
+      }
+    })
 
     props.navigation.navigate({
-      name: 'CategorySearch',
-      params: { pickedLocation: selectedLocation, city: `${revGeocode[0].city}, ${revGeocode[0].region}` }
+      name: 'CategorySearch'
+      // params: { pickedLocation: selectedLocation, city: `${revGeocode[0].city}, ${revGeocode[0].region}` }
     })
   }
 

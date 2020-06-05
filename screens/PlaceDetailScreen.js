@@ -27,7 +27,6 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-import dummyReviewsList from '../data/dummyReviewsList'
 
 
 const ReviewsContainer = ({ place, navigation }) => {
