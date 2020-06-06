@@ -26,6 +26,8 @@ import AddPlaceScreen from './screens/AddPlaceScreen';
 import MapScreen from './screens/MapScreen';
 import MapScreen2 from './screens/MapScreen2';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
+import CreateReviewScreen from './screens/CreateReviewScreen';
+import UpdateReviewScreen from './screens/UpdateReviewScreen';
 
 const Stack = createStackNavigator();
 
@@ -173,6 +175,24 @@ export default function HomeApp(props) {
               component={GooglePlacesACInput}
               options={{
                 title: "Choisir location",
+                headerStyle: { backgroundColor: TourTourColors.accent },
+                // headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='CreateReview'
+              component={CreateReviewScreen}
+              options={{
+                title: "Votre Review",
+                headerStyle: { backgroundColor: TourTourColors.accent },
+                // headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name='UpdateReview'
+              component={UpdateReviewScreen}
+              options={{
+                title: "Votre Review",
                 headerStyle: { backgroundColor: TourTourColors.accent },
                 // headerShown: false,
               }}

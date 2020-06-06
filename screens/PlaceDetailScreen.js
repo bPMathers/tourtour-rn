@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableNativeFeedback,
   ImageBackground,
-  FlatList,
   ScrollView,
   Button,
   Alert,
@@ -26,27 +25,10 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
+import { GET_REVIEWS } from '../graphql/queries'
 
 
 const ReviewsContainer = ({ place, navigation }) => {
-  const GET_REVIEWS = gql`
-  query($placeId: String) {
-    reviews(query: $placeId) {
-      id
-      title
-      body
-      rating
-      author {
-        id
-        name
-        imageUrl
-      }
-      place {
-        id
-      }
-    }
-  }
-`;
 
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id },
@@ -93,7 +75,6 @@ const PlaceDetailScreen = (props) => {
       }
     }
   `;
-
 
   const ADD_PHOTO = gql`
     mutation($url: String!, $placeId: String!) {
@@ -243,6 +224,7 @@ const PlaceDetailScreen = (props) => {
           animationType="fade"
           transparent={true}
           visible={modalVisible}
+          onBackdropPress={() => setModalVisible(false)}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
           }}
@@ -253,6 +235,12 @@ const PlaceDetailScreen = (props) => {
               <View style={{ flexDirection: 'row' }}>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.textStyle}>Annuler</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
                   onPress={handleTakeNewPictureForUpload}
                 >
                   <Text style={styles.textStyle}>Nouvelle Photo</Text>
@@ -283,31 +271,30 @@ const PlaceDetailScreen = (props) => {
                       color='white'
                     />
                   </View>
-                  {/*<View>
-      <Text style={{ color: 'white' }}>retour</Text>
-    </View>*/}
                 </View>
               </TouchableComponent>
-              <View style={styles.bottomGroup}>
-                <View>
-                  <Text style={styles.name}>{place.name}</Text>
-                </View>
-                <StarRating color='white' />
-                <View>
-                  <Text style={styles.reviewCount}>69 reviews</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.submittedBy}>Ajouté par: </Text>
-                  <TouchableComponent onPress={() => {
-                    props.navigation.navigate('UserProfile', {
-                      userId: place.addedBy.id,
-                      userName: place.addedBy.name
-                    })
-                  }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                      Flavien Denree de Choix
-    </Text>
-                  </TouchableComponent>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.bottomGroup}>
+                  <View>
+                    <Text style={styles.name}>{place.name}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.address}>{place.formatted_address}</Text>
+                  </View>
+
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.submittedBy}>Ajouté par: </Text>
+                    <TouchableComponent onPress={() => {
+                      props.navigation.navigate('UserProfile', {
+                        userId: place.addedBy.id,
+                        userName: place.addedBy.name
+                      })
+                    }}>
+                      <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                        Flavien Denree de Choix
+                    </Text>
+                    </TouchableComponent>
+                  </View>
                 </View>
               </View>
             </View>
@@ -354,6 +341,16 @@ const PlaceDetailScreen = (props) => {
               </View>
             </View>
           </TouchableComponent>
+          <TouchableComponent onPress={() => { props.navigation.navigate('CreateReview', { place: place }) }}>
+            <View style={styles.actionGroup}>
+              <View style={styles.actionButton}>
+                <Ionicons style={{ marginLeft: 4 }} name='ios-create' size={25} color={TourTourColors.accent} />
+              </View>
+              <View>
+                <Text style={styles.actionTitle}>Review</Text>
+              </View>
+            </View>
+          </TouchableComponent>
         </View>
         <FeaturedPhotosGroup place={place} />
         <View style={styles.reviewsHeaderRow}>
@@ -362,10 +359,10 @@ const PlaceDetailScreen = (props) => {
             <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
           </View>
           <View>
-            <StarRating color={TourTourColors.accent} />
+            <StarRating color={TourTourColors.accent} rating={place.avgRating} />
             <View>
               <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-                69 Reviews
+                {place.review_count} reviews
               </Text>
             </View>
           </View>
@@ -400,7 +397,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: '100%',
     padding: 10,
-    backgroundColor: 'rgba(0,0,0,.45)',
+    backgroundColor: 'rgba(0,0,0,.7)',
   },
   image: {
     flex: 1,
@@ -411,7 +408,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
     flexDirection: 'row',
   },
-
+  address: {
+    marginBottom: 20,
+    color: 'white',
+    maxWidth: '90%'
+  },
   backArrow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -423,11 +424,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottomGroup: {
-    marginLeft: 5
+    marginLeft: 5,
+    marginBottom: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    padding: 10,
+    borderRadius: 10
+
   },
   name: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 
@@ -441,6 +447,7 @@ const styles = StyleSheet.create({
   reviewCount: {
     color: 'white',
     fontSize: 12,
+    marginBottom: 10
   },
   submittedBy: {
     color: 'white',
@@ -453,6 +460,7 @@ const styles = StyleSheet.create({
   },
   actionGroup: {
     alignItems: 'center',
+    // width: 100
   },
   actionButton: {
     width: 40,

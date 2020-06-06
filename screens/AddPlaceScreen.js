@@ -60,9 +60,9 @@ const NewPlaceScreen = props => {
         url: $url
       }) {
       id
+      }
     }
-  }
-    `;
+  `;
 
   const [addPlace, { data }] = useMutation(ADD_PLACE)
 

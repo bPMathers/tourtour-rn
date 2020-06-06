@@ -13,50 +13,29 @@ import { GET_SEARCH_LOCATION, GET_CAT_PLACES } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
-// const GET_PLACES = gql`
-//   query($catId: String) {
-//     places(query: $catId) {
-//       id
-//       name
-//       imageUrl
-//       lat
-//       lng 
-//       google_place_id
-//       formatted_address
-//       addedBy {
-//         id
-//         name
-//       }
-//       review_count
-//       category {
-//         id
-//       }
-//       photos{
-//         id
-//       }
-//     }
-//   }
-// `;
-
 const CategorySearchScreen = (props) => {
+  /**
+   * HOOKS
+   */
+
   const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
-  console.log(searchLocData)
-  const client = useApolloClient();
-  const [city, setCity] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },
   });
-
-  // console.log(`Search Location : ${JSON.stringify(searchLocData, undefined, 2)}`)
-  // console.log(`City : ${city}`)
+  const client = useApolloClient();
+  const [city, setCity] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setCity(searchLocData.searchLocCity)
   }, [searchLocData.searchLocCity])
+
+  /**
+   * HELPERS
+   */
 
   const handleTakeLocation = async () => {
     try {
@@ -86,6 +65,10 @@ const CategorySearchScreen = (props) => {
     props.navigation.navigate('Map2')
   }
 
+  /**
+   * NAV
+   */
+
   props.navigation.setOptions({
     headerRight: () => (
       <TouchableOpacity style={{ marginRight: 15 }} onPress={() => {
@@ -99,6 +82,10 @@ const CategorySearchScreen = (props) => {
     ),
   });
 
+  /**
+   * RETURN
+   */
+
   const renderGridItem = (itemData) => {
     return (
       <PlacePreviewListItem
@@ -106,6 +93,8 @@ const CategorySearchScreen = (props) => {
         imageUrl={itemData.item.imageUrl}
         formatted_address={itemData.item.formatted_address}
         addedBy={itemData.item.addedBy.name}
+        rating={itemData.item.avgRating}
+        reviewCount={itemData.item.review_count}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
             userId: itemData.item.addedBy.id,

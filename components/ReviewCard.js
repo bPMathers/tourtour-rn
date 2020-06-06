@@ -15,6 +15,12 @@ const ReviewCard = (props) => {
     })
   }
 
+  const handleEditPress = () => {
+    props.navigation.navigate('UpdateReview', {
+      review: props.review
+    })
+  }
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -35,16 +41,21 @@ const ReviewCard = (props) => {
                 <TouchableComponent onPress={handleOnUserProfileSelect}>
                   <Text style={styles.authorName}>{props.review.author.name}</Text>
                 </TouchableComponent>
-                <StarRating color='white' />
+                <StarRating rating={props.review.rating} color='white' />
                 <Text style={styles.timeAgoText}>2h ago</Text>
               </View>
             </View>
-            <TouchableComponent>
+            <TouchableComponent onPress={handleEditPress}>
               <FontAwesome5 name='pencil-alt' color='white' size={18} />
             </TouchableComponent>
           </View>
         </View>
-        <Text style={styles.reviewBody}>{props.review.body}</Text>
+        <View style={{ marginBottom: 8 }}>
+          <Text style={styles.reviewTitleText}>:: {props.review.title}</Text>
+        </View>
+        <View>
+          <Text style={styles.reviewBodyText}>{props.review.body}</Text>
+        </View>
       </View>
     </TouchableComponent>
   );
@@ -70,7 +81,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  reviewBody: {
+  reviewTitleText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  reviewBodyText: {
     color: 'white',
     fontSize: 16
   },

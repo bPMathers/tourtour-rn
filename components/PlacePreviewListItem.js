@@ -50,10 +50,10 @@ const PlacePreviewListItem = (props) => {
             <View style={styles.rightColumn}>
               <View>
                 <View style={styles.rightRow1}>
-                  <StarRating color='white' />
+                  <StarRating color='white' rating={props.rating} />
                 </View>
                 <View style={styles.rightRow2}>
-                  <Text style={styles.reviewCount}>69 reviews</Text>
+                  <Text style={styles.reviewCount}>{props.reviewCount} reviews</Text>
                 </View>
               </View>
               <View>

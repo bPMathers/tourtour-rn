@@ -14,29 +14,57 @@ const GET_CATEGORIES = gql`
   }
 `;
 
-const GET_CAT_PLACES = gql`
-query($catId: String) {
-  places(query: $catId) {
-    id
-    name
-    imageUrl
-    lat
-    lng
-    formatted_address
-    google_place_id
-    addedBy {
+
+
+const GET_PLACE = gql`
+  query($placeId: String) {
+    place(query: $placeId) {
       id
       name
-    }
-    review_count
-    category {
-      id
-    }
-    photos{
-      id
+      url
+      phone
+      review_count
+      imageUrl
+      category {
+        id
+      }
+      lat
+      lng
+      formatted_address
+      google_place_id
+      addedBy {
+        id
+        name
+      }
+      avgRating
     }
   }
-}
+`
+
+// Need to paginate
+const GET_CAT_PLACES = gql`
+  query($catId: String) {
+    places(query: $catId) {
+      id
+      name
+      url
+      phone
+      review_count
+      imageUrl
+      category {
+        id
+      }
+      lat
+      lng
+      formatted_address
+      google_place_id
+      addedBy {
+        id
+        name
+      }
+      avgRating
+    }
+  }
 `;
 
 const GET_ADD_PLACE_DATA = gql`
@@ -47,6 +75,27 @@ const GET_ADD_PLACE_DATA = gql`
   imageBase64 @client
 
 }
+`;
+
+const GET_REVIEWS = gql`
+  query($placeId: String) {
+    reviews(query: $placeId) {
+      id
+      title
+      body
+      rating
+      author {
+        id
+        name
+        imageUrl
+      }
+      place {
+        id
+        name
+        formatted_address
+      }
+    }
+  }
 `;
 
 const GET_CACHED_IMG_URI = gql`
@@ -64,7 +113,7 @@ const GET_SEARCH_LOCATION = gql`
 `;
 
 const GET_MY_CACHED_LOCATION = gql`
-  {
+{
       myLat @client
       myLng @client
 }
@@ -76,5 +125,8 @@ export {
   GET_CACHED_IMG_URI,
   GET_SEARCH_LOCATION,
   GET_MY_CACHED_LOCATION,
-  GET_CATEGORIES
+  GET_CATEGORIES,
+  GET_PLACE,
+  GET_REVIEWS
+
 }

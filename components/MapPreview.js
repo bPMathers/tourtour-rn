@@ -11,7 +11,7 @@ const MapPreview = props => {
       props.location.lat
       },${
       props.location.lng
-      }&zoom=14&size=400x300&maptype=roadmap&markers=color:red%7Clabel:A%7C${
+      }&zoom=16&size=400x300&maptype=roadmap&markers=color:red%7Clabel:A%7C${
       props.location.lat
       },${props.location.lng}&key=${googleApiKey}`;
   }
