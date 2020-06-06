@@ -8,8 +8,6 @@ import StarRating from './StarRating'
 
 
 const ReviewCard = (props) => {
-  console.log(props.review.updatedAt)
-  let timestamp = "2015-06-21T06:24:44.124Z";
 
   const handleOnUserProfileSelect = () => {
     props.navigation.navigate('UserProfile', {
