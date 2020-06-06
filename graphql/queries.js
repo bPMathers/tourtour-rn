@@ -94,6 +94,8 @@ const GET_REVIEWS = gql`
         name
         formatted_address
       }
+      createdAt
+      updatedAt
     }
   }
 `;

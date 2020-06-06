@@ -26,6 +26,10 @@ client.writeData({
   }
 })
 
+let moment = require('moment'); //load moment module to set local language
+require('moment/locale/fr'); //for import moment local language file during the application build
+moment.locale('fr');//set moment local language to zh-cn
+
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
 

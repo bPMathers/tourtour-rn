@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Image } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
+import TimeAgo from 'react-native-timeago';
 
 import { TourTourColors } from '../constants/Colors';
 import StarRating from './StarRating'
 
 
 const ReviewCard = (props) => {
+  console.log(props.review.updatedAt)
+  let timestamp = "2015-06-21T06:24:44.124Z";
 
   const handleOnUserProfileSelect = () => {
     props.navigation.navigate('UserProfile', {
@@ -42,7 +45,8 @@ const ReviewCard = (props) => {
                   <Text style={styles.authorName}>{props.review.author.name}</Text>
                 </TouchableComponent>
                 <StarRating rating={props.review.rating} color='white' />
-                <Text style={styles.timeAgoText}>2h ago</Text>
+                {/*<Text style={styles.timeAgoText}>2h ago</Text>*/}
+                <TimeAgo style={styles.timeAgoText} time={props.review.updatedAt} />
               </View>
             </View>
             <TouchableComponent onPress={handleEditPress}>
@@ -99,7 +103,7 @@ const styles = StyleSheet.create({
   },
   timeAgoText: {
     color: 'white',
-    fontSize: 10
+    fontSize: 12
   }
 })
 
