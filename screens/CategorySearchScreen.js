@@ -8,6 +8,8 @@ import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import * as Location from 'expo-location';
 
 
+
+
 import { TourTourColors } from '../constants/Colors';
 import { GET_SEARCH_LOCATION, GET_CAT_PLACES } from '../graphql/queries'
 
@@ -95,6 +97,7 @@ const CategorySearchScreen = (props) => {
         addedBy={itemData.item.addedBy.name}
         rating={itemData.item.avgRating}
         reviewCount={itemData.item.review_count}
+        createdAt={itemData.item.createdAt}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
             userId: itemData.item.addedBy.id,

@@ -18,6 +18,7 @@ import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
+import TimeAgo from 'react-native-timeago';
 
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -282,7 +283,7 @@ const PlaceDetailScreen = (props) => {
                     <Text style={styles.address}>{place.formatted_address}</Text>
                   </View>
 
-                  <View style={{ flexDirection: 'row' }}>
+                  <View>
                     <Text style={styles.submittedBy}>Ajouté par: </Text>
                     <TouchableComponent onPress={() => {
                       props.navigation.navigate('UserProfile', {
@@ -295,6 +296,7 @@ const PlaceDetailScreen = (props) => {
                     </Text>
                     </TouchableComponent>
                   </View>
+                  <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
                 </View>
               </View>
             </View>
@@ -407,11 +409,12 @@ const styles = StyleSheet.create({
   topGroup: {
     marginTop: 30,
     flexDirection: 'row',
+
   },
   address: {
     marginBottom: 20,
     color: 'white',
-    maxWidth: '90%'
+    maxWidth: '90%',
   },
   backArrow: {
     flexDirection: 'row',

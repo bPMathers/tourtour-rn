@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import TimeAgo from 'react-native-timeago';
 
 import StarRating from './StarRating'
 
@@ -45,6 +46,7 @@ const PlacePreviewListItem = (props) => {
                     </Text>
                   </TouchableComponent>
                 </View>
+                <TimeAgo time={props.createdAt} style={{ color: 'white', fontSize: 12 }} />
               </View>
             </View>
             <View style={styles.rightColumn}>

@@ -63,6 +63,8 @@ const GET_CAT_PLACES = gql`
         name
       }
       avgRating
+      createdAt
+      updatedAt
     }
   }
 `;
