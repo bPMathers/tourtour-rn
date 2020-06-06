@@ -28,7 +28,7 @@ const CreateReviewScreen = (props) => {
    */
 
   const ADD_REVIEW = gql`
-    mutation($title: String!, $body: String!, $placeId: String!, $rating: Int!) {
+    mutation($title: String!, $body: String!, $placeId: String!, $rating: Float!) {
     createReview(
       data: {
         title: $title

@@ -29,7 +29,7 @@ const UpdateReviewScreen = (props) => {
    */
 
   const UPDATE_REVIEW = gql`
-    mutation($title: String!, $body: String!, $rating: Int!, $id: ID!) {
+    mutation($title: String!, $body: String!, $rating: Float!, $id: ID!) {
     updateReview(
       id: $id
       data: {
