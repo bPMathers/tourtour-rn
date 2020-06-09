@@ -26,8 +26,6 @@ const NewPlaceScreen = props => {
   const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
   const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
   const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
-  // console.log(`tokenData: ${tokenData.token}`)
-  // console.log(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
 
   useEffect(() => {
     setName(props.route.params?.autoCompletePickedPlace?.name)

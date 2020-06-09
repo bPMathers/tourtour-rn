@@ -16,10 +16,10 @@ const StartupScreen = props => {
 
       try {
         const value = await AsyncStorage.getItem('userToken');
-        console.log(`value: ${value}`)
+        // console.log(`value: ${value}`)
         if (value !== null) {
           // We have data!!
-          console.log('path taken')
+          // console.log('path taken')
           client.writeData({
             data: {
               token: value

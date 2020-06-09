@@ -26,11 +26,11 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-import { GET_REVIEWS } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 
+let loggedInUserId;
 
 const ReviewsContainer = ({ place, navigation }) => {
-
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id },
   });
@@ -53,7 +53,7 @@ const ReviewsContainer = ({ place, navigation }) => {
     reviewsData.reviews.map((review) => {
       return (
         <View key={review.id} style={styles.reviewCardContainer} >
-          <ReviewCard review={review} navigation={navigation} />
+          <ReviewCard loggedInUserId={loggedInUserId} review={review} navigation={navigation} />
         </View>
       )
     }))
@@ -63,6 +63,9 @@ const ReviewsContainer = ({ place, navigation }) => {
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
+  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
+  loggedInUserId = tokenAndIdData?.userId
 
 
   const GET_PHOTOS = gql`
@@ -130,6 +133,11 @@ const PlaceDetailScreen = (props) => {
         // Send mutation to graphQL API
         addPhoto({
           variables: { url: data.secure_url, placeId: place.id },
+          context: {
+            headers: {
+              Authorization: jwtBearer
+            }
+          },
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
         })
 
@@ -173,6 +181,12 @@ const PlaceDetailScreen = (props) => {
         const data = await r.json()
         addPhoto({
           variables: { url: data.secure_url, placeId: place.id },
+          context: {
+            headers: {
+              // Set the token dynamically from cache. 
+              Authorization: jwtBearer
+            }
+          },
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
         })
 

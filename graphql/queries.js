@@ -113,6 +113,12 @@ const GET_TOKEN = gql`
   token @client
 }
 `;
+const GET_TOKEN_AND_USER_ID = gql`
+{
+  token @client
+  userId @client
+}
+`;
 
 const GET_SEARCH_LOCATION = gql`
 {
@@ -138,6 +144,7 @@ export {
   GET_CATEGORIES,
   GET_PLACE,
   GET_REVIEWS,
-  GET_TOKEN
+  GET_TOKEN_AND_USER_ID,
+  GET_TOKEN,
 
 }

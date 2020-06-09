@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { TourTourColors } from '../constants/Colors'
+import { GET_TOKEN_AND_USER_ID } from '../graphql/queries';
 
 const GET_TOKEN = gql`
 {
@@ -17,7 +18,7 @@ const AuthScreen = (props) => {
    * HOOKS
    */
 
-  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
+  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
 
@@ -44,12 +45,14 @@ const AuthScreen = (props) => {
   const [login, { data, client, error }] = useMutation(LOGIN)
   // console.log(error.graphQLErrors)
   let token = data?.loginUser?.token ?? "NoClientTokenValueYet"
+  let userId = data?.loginUser?.user?.id ?? "NoUserIdValueYet"
   // let token = tokenData.token
 
   useEffect(() => {
     client.writeData({
       data: {
-        token: token
+        token: token,
+        userId: userId
       }
     })
 

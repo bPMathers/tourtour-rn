@@ -8,6 +8,7 @@ import StarRating from './StarRating'
 
 
 const ReviewCard = (props) => {
+  const loggedInUserId = props.loggedInUserId
 
   const handleOnUserProfileSelect = () => {
     props.navigation.navigate('UserProfile', {
@@ -47,9 +48,11 @@ const ReviewCard = (props) => {
                 <TimeAgo style={styles.timeAgoText} time={props.review.updatedAt} />
               </View>
             </View>
-            <TouchableComponent onPress={handleEditPress}>
-              <FontAwesome5 name='pencil-alt' color='white' size={18} />
-            </TouchableComponent>
+            {loggedInUserId === props.review.author.id ? (
+              <TouchableComponent onPress={handleEditPress}>
+                <FontAwesome5 name='pencil-alt' color='white' size={18} />
+              </TouchableComponent>
+            ) : null}
           </View>
         </View>
         <View style={{ marginBottom: 8 }}>
