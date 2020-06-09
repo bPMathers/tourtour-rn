@@ -31,6 +31,7 @@ export default function App(props) {
     uri: 'http://192.168.100.142:4000/',
     cache,
     resolvers: {},
+    // How could we acces token to set this auth header to the context so we don't have to add it on every mutation / query?
     // request: (operation) => {
     //   const token = cachedData.token
     //   operation.setContext({

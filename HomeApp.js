@@ -122,7 +122,9 @@ export default function HomeApp(props) {
               component={AuthScreen}
               options={{
                 title: 'Auth',
-                // animationTypeForReplace: isSignOut ? 'pop' : 'push',
+                headerShown: false,
+                gestureEnabled: false,
+                animationTypeForReplace: 'push',
               }}
             />
 

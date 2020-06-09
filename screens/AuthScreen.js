@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, KeyboardAvoidingView, View, TextInput, Text, Button, AsyncStorage } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
-
+import { TourTourColors } from '../constants/Colors'
 
 const GET_TOKEN = gql`
 {
@@ -17,8 +17,9 @@ const AuthScreen = (props) => {
    * HOOKS
    */
 
-
   const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
+  const [email, setEmail] = useState('')
+  const [pw, setPw] = useState('')
 
   /**
    * GRAPHQL
@@ -40,7 +41,8 @@ const AuthScreen = (props) => {
   }
 `;
 
-  const [login, { data, client }] = useMutation(LOGIN)
+  const [login, { data, client, error }] = useMutation(LOGIN)
+  // console.log(error.graphQLErrors)
   let token = data?.loginUser?.token ?? "NoClientTokenValueYet"
   // let token = tokenData.token
 
@@ -74,28 +76,61 @@ const AuthScreen = (props) => {
     login({
       variables: {
         // eventually get from FormInput
-        email: 'gros@jambon2.com',
-        password: 'red12345'
+        email: email,
+        password: pw
       },
       // refetchQueries: [{ query: GET_TOKEN }]
+    }).catch(res => {
+      console.log(`Error: ${res}`)
     })
 
   }
 
+  let ErrorContainer = () => {
+    return <View></View>
+  }
+
+  if (error) {
+    // console.log(error.graphQLErrors)
+    ErrorContainer = () => {
+      return (
+        <View>
+          {error.graphQLErrors.map(({ message }, i) => (
+            <Text style={styles.errorMsgs} key={i}>{message}</Text>
+          ))}
+        </View>
+
+      )
+    }
+  }
+
+
 
   return (
-    <View style={styles.container}>
-      <Text>This is the Auth Screen</Text>
-      <View>
-        <Text>email</Text>
-        <TextInput />
-      </View>
-      <View>
-        <Text>password</Text>
-        <TextInput />
-      </View>
-      <Button title="login" onPress={handleLoginSubmit} color='blue' />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={50}>
+        <View>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.formInput}
+            keyboardType='email-address'
+            onChangeText={email => setEmail(email)}
+            value={email}
+            autoCapitalize='none'
+            clearButtonMode='while-editing'
+          />
+        </View>
+        <Text style={styles.label}>Mot de passe</Text>
+        <TextInput
+          style={styles.formInput}
+          secureTextEntry={true}
+          onChangeText={pw => setPw(pw)}
+          value={pw}
+        />
+        <ErrorContainer />
+        <Button title="Connexion" onPress={handleLoginSubmit} color='white' />
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -103,7 +138,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: TourTourColors.accent,
+  },
+  formInput: {
+    minWidth: '80%',
+    borderWidth: 2,
+    borderColor: 'white',
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: 'white',
+    fontSize: 20,
+    color: '#555'
+  },
+  label: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 10
+  },
+  errorMsgs: {
+    color: TourTourColors.cancel,
+    fontWeight: 'bold',
+    marginBottom: 10
   }
 })
 

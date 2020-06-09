@@ -111,7 +111,7 @@ const CreateReviewScreen = (props) => {
         />
       </View>
       <View>
-        <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
+        <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color={TourTourColors.cancel} />
       </View>
       <View>
         <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
