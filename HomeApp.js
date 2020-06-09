@@ -1,14 +1,17 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
+  AsyncStorage,
   Alert,
   StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
 
@@ -28,6 +31,8 @@ import MapScreen2 from './screens/MapScreen2';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
 import CreateReviewScreen from './screens/CreateReviewScreen';
 import UpdateReviewScreen from './screens/UpdateReviewScreen';
+import AuthScreen from './screens/AuthScreen';
+import StartupScreen from './screens/StartupScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,9 +40,9 @@ export default function HomeApp(props) {
   /**
    * HOOKS
    */
+
   const isLoadingComplete = useCachedResources();
   const client = useApolloClient()
-  // console.log(client)
 
   useEffect(() => {
     handleTakeLocation()
@@ -99,13 +104,28 @@ export default function HomeApp(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle='dark-content' />}
         <NavigationContainer linking={LinkingConfiguration}>
           <Stack.Navigator
-            initialRouteName='Home'
+            initialRouteName='Startup'
             screenOptions={{
               headerTintColor: 'white',
               headerStyle: { backgroundColor: 'tomato' },
             }}
           >
-            {/* <Stack.Screen name="Root" component={BottomTabNavigator} /> */}
+            <Stack.Screen
+              name='Startup'
+              component={StartupScreen}
+              options={{
+                title: 'Startup',
+              }}
+            />
+            <Stack.Screen
+              name='Auth'
+              component={AuthScreen}
+              options={{
+                title: 'Auth',
+                // animationTypeForReplace: isSignOut ? 'pop' : 'push',
+              }}
+            />
+
             <Stack.Screen
               name='HomeSearch'
               component={HomeSearchScreen}
@@ -197,6 +217,7 @@ export default function HomeApp(props) {
                 // headerShown: false,
               }}
             />
+
           </Stack.Navigator>
         </NavigationContainer>
       </View>

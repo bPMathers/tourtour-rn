@@ -15,7 +15,7 @@ import { googleApiKey } from '../env'
 import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
-import { GET_CAT_PLACES, GET_ADD_PLACE_DATA } from '../graphql/queries'
+import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN } from '../graphql/queries'
 
 const NewPlaceScreen = props => {
   /**
@@ -24,6 +24,9 @@ const NewPlaceScreen = props => {
   const [name, setName] = useState('');
   const [base64Image, setBase64Image] = useState();
   const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
+  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
+  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  // console.log(`tokenData: ${tokenData.token}`)
   // console.log(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
 
   useEffect(() => {
@@ -210,6 +213,12 @@ const NewPlaceScreen = props => {
         placeId: props.route.params?.autoCompletePickedPlace?.place_id ?? googlePlaceId,
         formatted_address: props.route.params?.autoCompletePickedPlace?.formatted_address ?? formattedAddress,
         phone: "1-514-522-9392",
+      },
+      context: {
+        headers: {
+          // Set the token dynamically from cache. 
+          Authorization: jwtBearer
+        }
       },
       refetchQueries: [{ query: GET_CAT_PLACES, variables: { catId: props.route.params.catId } }]
     })

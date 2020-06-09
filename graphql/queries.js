@@ -108,6 +108,12 @@ const GET_CACHED_IMG_URI = gql`
 }
 `;
 
+const GET_TOKEN = gql`
+{
+  token @client
+}
+`;
+
 const GET_SEARCH_LOCATION = gql`
 {
   searchLocLat @client
@@ -131,6 +137,7 @@ export {
   GET_MY_CACHED_LOCATION,
   GET_CATEGORIES,
   GET_PLACE,
-  GET_REVIEWS
+  GET_REVIEWS,
+  GET_TOKEN
 
 }

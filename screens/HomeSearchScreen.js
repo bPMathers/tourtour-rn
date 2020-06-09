@@ -5,7 +5,9 @@ import {
   Text,
   TextInput,
   View,
+  Button,
   StatusBar,
+  AsyncStorage
 } from 'react-native';
 
 import { useQuery } from '@apollo/react-hooks';
@@ -68,6 +70,10 @@ export const HomeSearchScreen = (props) => {
           placeholder='Rechercher'
         />
       </View>
+      <Button title="Temp Logout" color="red" onPress={() => {
+        props.navigation.navigate('Auth')
+        AsyncStorage.removeItem('userToken')
+      }} />
       <FlatList
         data={data.categories}
         renderItem={renderGridItem}
