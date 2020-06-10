@@ -11,13 +11,17 @@ import FeaturedPhoto from './FeaturedPhoto';
 
 const FeaturedPhotosGroup = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const [selectedImgUrl, setSelectedImgUrl] = useState(null)
+  const [selectedPhoto, setSelectedPhoto] = useState({ addedBy: '' })
 
   const GET_PHOTOS = gql`
     query($placeId: String) {
       photos(query: $placeId) {
         id
         url
+        addedBy {
+          id
+          name
+        }
       }
     }
   `;
@@ -28,7 +32,13 @@ const FeaturedPhotosGroup = (props) => {
     },
   });
 
-
+  const handleOnUserProfileSelect = () => {
+    setModalVisible(false)
+    props.navigation.navigate('UserProfile', {
+      userId: selectedPhoto.addedBy.id,
+      userName: selectedPhoto.addedBy.name
+    })
+  }
 
   const renderGridItem = (itemData) => {
     let TouchableComponent = TouchableOpacity;
@@ -39,7 +49,7 @@ const FeaturedPhotosGroup = (props) => {
     return (
       <View style={styles.gridItem}>
         <TouchableComponent style={{ flex: 1 }} onPress={() => {
-          setSelectedImgUrl(itemData.item.url)
+          setSelectedPhoto(itemData.item)
           setModalVisible(true)
 
         }}>
@@ -89,7 +99,18 @@ const FeaturedPhotosGroup = (props) => {
                     <AntDesign name="close" size={40} color="red" />
                   </TouchableOpacity>
                 </View>
-                <Image source={{ uri: selectedImgUrl }} style={styles.modalImage} />
+                <ImageBackground source={{ uri: selectedPhoto.url }} style={styles.modalImage}>
+                  <View style={styles.photoModalOverlay}>
+                    <View>
+                      <Text style={styles.addedByModalText}>Ajoutée par: </Text>
+                      <TouchableOpacity onPress={handleOnUserProfileSelect}>
+                        <Text style={{ fontWeight: 'bold', color: 'white' }}>
+                          {selectedPhoto.addedBy.name}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </ImageBackground>
               </View>
             </View>
           </View>
@@ -162,6 +183,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
+  photoModalOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+  },
+  addedByModalText: {
+    color: 'white',
+    fontSize: 18
+
+  }
 })
 
 export default FeaturedPhotosGroup;

@@ -51,7 +51,7 @@ const AuthScreen = (props) => {
   useEffect(() => {
 
     if (token) {
-      const decodedJwt = jwt(userToken, { complete: true });
+      const decodedJwt = jwt(token, { complete: true });
       client.writeData({
         data: {
           token: token,

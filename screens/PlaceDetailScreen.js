@@ -75,6 +75,10 @@ const PlaceDetailScreen = (props) => {
         place {
           id
         }
+        addedBy {
+          id
+          name
+        }
       }
     }
   `;
@@ -367,7 +371,7 @@ const PlaceDetailScreen = (props) => {
             </View>
           </TouchableComponent>
         </View>
-        <FeaturedPhotosGroup place={place} />
+        <FeaturedPhotosGroup place={place} navigation={props.navigation} />
         <View style={styles.reviewsHeaderRow}>
 
           <View>
