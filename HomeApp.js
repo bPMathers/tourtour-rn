@@ -1,5 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import React, { useEffect, useState } from 'react';
 import {
   Platform,
@@ -10,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import jwt from 'jwt-decode'
 
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
@@ -32,10 +34,128 @@ import GooglePlacesACInput from './components/GooglePlacesACInput';
 import CreateReviewScreen from './screens/CreateReviewScreen';
 import UpdateReviewScreen from './screens/UpdateReviewScreen';
 import AuthScreen from './screens/AuthScreen';
+import UserEditScreen from './screens/UserEditScreen';
 import StartupScreen from './screens/StartupScreen';
 import { GET_TOKEN } from './graphql/queries'
 
-const Stack = createStackNavigator();
+const HomeStack = createStackNavigator();
+const UserStack = createStackNavigator();
+const Tab = createBottomTabNavigator()
+
+function UserStackScreen() {
+  return (
+    <UserStack.Navigator>
+      <UserStack.Screen
+        name='UserEdit'
+        component={UserEditScreen}
+      />
+    </UserStack.Navigator>
+  )
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator
+      // initialRouteName='Startup'
+      screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: 'green' },
+      }}
+    >
+      <HomeStack.Screen
+        name='HomeSearch'
+        component={HomeSearchScreen}
+        options={{
+          title: 'Catégories',
+          headerShown: false
+        }
+        }
+      />
+      <HomeStack.Screen
+        name='CategorySearch'
+        component={CategorySearchScreen}
+        options={({ route }) => ({
+          title: route.params.categoryTitle,
+          headerStyle: { backgroundColor: TourTourColors.accent }
+        })}
+      />
+      <HomeStack.Screen
+        name='PlaceDetail'
+        component={PlaceDetailScreen}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          headerShown: false,
+
+        })}
+      />
+
+      <HomeStack.Screen
+        name='UserProfile'
+        component={UserProfileScreen}
+        options={({ route }) => ({
+          // title: route.params.userName,
+          title: route.params.userName,
+          headerStyle: { backgroundColor: TourTourColors.accent },
+        })}
+      />
+      <HomeStack.Screen
+        name='AddPlace'
+        component={AddPlaceScreen}
+        options={{
+          title: "Ajouter un endroit",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='Map'
+        component={MapScreen}
+        options={{
+          title: "Choisir location",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='Map2'
+        component={MapScreen2}
+        options={{
+          title: "Choisir location",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='GoogleAC'
+        component={GooglePlacesACInput}
+        options={{
+          title: "Choisir location",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='CreateReview'
+        component={CreateReviewScreen}
+        options={{
+          title: "Votre Review",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='UpdateReview'
+        component={UpdateReviewScreen}
+        options={{
+          title: "Votre Review",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+}
 
 export default function HomeApp(props) {
   /**
@@ -51,17 +171,21 @@ export default function HomeApp(props) {
   })
   const { loading, error, data } = useQuery(GET_TOKEN)
 
+
   // check if token in device storage
   useEffect(() => {
     const tryLogin = async () => {
       try {
         const userToken = await AsyncStorage.getItem('userToken');
+        const decodedJwt = jwt(userToken, { complete: true });
+        // is this quotes removal really necessary ?
+        const sanitizedToken = userToken.replace(/\"/g, "")
         if (userToken !== null) {
           // We have data!!
           client.writeData({
             data: {
-
-              token: userToken
+              token: sanitizedToken,
+              userId: decodedJwt.userId
             }
           })
           setIsLoggedIn(true)
@@ -143,16 +267,16 @@ export default function HomeApp(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle='dark-content' />}
         <NavigationContainer linking={LinkingConfiguration}>
-          <Stack.Navigator
-            // initialRouteName='Startup'
-            screenOptions={{
-              headerTintColor: 'white',
-              headerStyle: { backgroundColor: 'green' },
-            }}
-          >
-            {!isLoggedIn ? (
 
-              <Stack.Screen
+          {!isLoggedIn ? (
+            <HomeStack.Navigator
+              // initialRouteName='Startup'
+              screenOptions={{
+                headerTintColor: 'white',
+                headerStyle: { backgroundColor: 'green' },
+              }}
+            >
+              <HomeStack.Screen
                 name='Auth'
                 component={AuthScreen}
                 options={{
@@ -162,107 +286,16 @@ export default function HomeApp(props) {
                   animationTypeForReplace: 'pop',
                 }}
               />
-            ) : (
-                <React.Fragment>
-                  <Stack.Screen
-                    name='HomeSearch'
-                    component={HomeSearchScreen}
-                    options={{
-                      title: 'Catégories',
-                      headerShown: false
-                    }
-                    }
-                  />
-                  <Stack.Screen
-                    name='CategorySearch'
-                    component={CategorySearchScreen}
-                    options={({ route }) => ({
-                      title: route.params.categoryTitle,
-                      headerStyle: { backgroundColor: TourTourColors.accent }
-                    })}
-                  />
-                  <Stack.Screen
-                    name='PlaceDetail'
-                    component={PlaceDetailScreen}
-                    options={({ route }) => ({
-                      title: route.params.name,
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      headerShown: false,
-
-                    })}
-                  />
-
-                  <Stack.Screen
-                    name='UserProfile'
-                    component={UserProfileScreen}
-                    options={({ route }) => ({
-                      // title: route.params.userName,
-                      title: route.params.userName,
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                    })}
-                  />
-                  <Stack.Screen
-                    name='AddPlace'
-                    component={AddPlaceScreen}
-                    options={{
-                      title: "Ajouter un endroit",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name='Map'
-                    component={MapScreen}
-                    options={{
-                      title: "Choisir location",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name='Map2'
-                    component={MapScreen2}
-                    options={{
-                      title: "Choisir location",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name='GoogleAC'
-                    component={GooglePlacesACInput}
-                    options={{
-                      title: "Choisir location",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name='CreateReview'
-                    component={CreateReviewScreen}
-                    options={{
-                      title: "Votre Review",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name='UpdateReview'
-                    component={UpdateReviewScreen}
-                    options={{
-                      title: "Votre Review",
-                      headerStyle: { backgroundColor: TourTourColors.accent },
-                      // headerShown: false,
-                    }}
-                  />
-                </React.Fragment>
-              )
-
-            }
-
-          </Stack.Navigator>
+            </HomeStack.Navigator>
+          ) : (
+              <Tab.Navigator>
+                <Tab.Screen name="Home" component={HomeStackScreen} />
+                <Tab.Screen name="User" component={UserStackScreen} />
+              </Tab.Navigator>
+            )
+          }
         </NavigationContainer>
-      </View>
+      </View >
     );
   }
 }
