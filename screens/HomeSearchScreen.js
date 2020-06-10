@@ -10,7 +10,7 @@ import {
   AsyncStorage
 } from 'react-native';
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useApolloClient } from '@apollo/react-hooks';
 import { Ionicons } from '@expo/vector-icons';
 import CategoryGridTile from '../components/CategoryGridTile';
 import Animation from '../components/Animation';
@@ -19,6 +19,7 @@ import { GET_CATEGORIES } from '../graphql/queries'
 
 
 export const HomeSearchScreen = (props) => {
+  const client = useApolloClient()
   const { loading, error, data } = useQuery(GET_CATEGORIES);
   const [searchInput, setSearchInput] = React.useState();
 
@@ -71,8 +72,9 @@ export const HomeSearchScreen = (props) => {
         />
       </View>
       <Button title="Temp Logout" color="red" onPress={() => {
-        props.navigation.navigate('Auth')
         AsyncStorage.removeItem('userToken')
+        // props.navigation.navigate('Auth')
+        client.resetStore()
       }} />
       <FlatList
         data={data.categories}

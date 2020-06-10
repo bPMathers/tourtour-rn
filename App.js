@@ -19,7 +19,9 @@ export default function App(props) {
     //local IP adress  may change. find a way to fetch it dynamically?
     uri: 'http://192.168.100.142:4000/',
     cache,
-    resolvers: {},
+    resolvers: {
+
+    },
     // How could we acces token to set this auth header to the context so we don't have to add it on every mutation / query?
     // request: (operation) => {
     //   const token = cachedData.token

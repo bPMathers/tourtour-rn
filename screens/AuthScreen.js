@@ -63,7 +63,7 @@ const AuthScreen = (props) => {
         await AsyncStorage.setItem('userToken', JSON.stringify(token))
       }
       setItem()
-      props.navigation.navigate('HomeSearch')
+      // props.navigation.navigate('HomeSearch')
     }
   }, [token])
 
