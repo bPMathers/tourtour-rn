@@ -6,6 +6,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import { useApolloClient } from '@apollo/react-hooks';
+import jwt from 'jwt-decode'
 
 
 const StartupScreen = props => {
@@ -13,16 +14,15 @@ const StartupScreen = props => {
 
   useEffect(() => {
     const tryLogin = async () => {
-
       try {
-        const value = await AsyncStorage.getItem('userToken');
-        // console.log(`value: ${value}`)
-        if (value !== null) {
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken !== null) {
           // We have data!!
-          // console.log('path taken')
+          const decodedJwt = jwt(userToken, { complete: true });
           client.writeData({
             data: {
-              token: value
+              token: userToken,
+              userId: decodedJwt.userId
             }
           })
           props.navigation.navigate('HomeSearch')

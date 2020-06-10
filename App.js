@@ -6,19 +6,8 @@ import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import useCachedResources from './hooks/useCachedResources';
 
 import HomeApp from './HomeApp'
-import { AsyncStorage } from 'react-native';
 
 const cache = new InMemoryCache
-
-// const GET_TOKEN = gql`
-// {
-//   token @client 
-// }
-// `;
-
-// const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
-
-
 
 let moment = require('moment'); //load moment module to set local language
 require('moment/locale/fr'); //for import moment local language file during the application build
@@ -49,7 +38,6 @@ export default function App(props) {
       searchLocCity: "",
       searchLocLat: 0,
       searchLocLng: 0,
-      token: "NoClientTokenValueYet"
     }
   })
 

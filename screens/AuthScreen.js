@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, KeyboardAvoidingView, View, TextInput, Text, Button, AsyncStorage } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import jwt from 'jwt-decode'
+
 
 import { TourTourColors } from '../constants/Colors'
 import { GET_TOKEN_AND_USER_ID } from '../graphql/queries';
@@ -44,22 +46,16 @@ const AuthScreen = (props) => {
 
   const [login, { data, client, error }] = useMutation(LOGIN)
   // console.log(error.graphQLErrors)
-  let token = data?.loginUser?.token ?? "NoClientTokenValueYet"
-  let userId = data?.loginUser?.user?.id ?? "NoUserIdValueYet"
-  // let token = tokenData.token
+  let token = data?.loginUser?.token
 
   useEffect(() => {
-    client.writeData({
-      data: {
-        token: token,
-        userId: userId
-      }
-    })
 
-    if (token !== "NoClientTokenValueYet") {
+    if (token) {
+      const decodedJwt = jwt(userToken, { complete: true });
       client.writeData({
         data: {
-          token: token
+          token: token,
+          userId: decodedJwt.userId
         }
       })
 

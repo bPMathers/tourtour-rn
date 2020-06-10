@@ -45,13 +45,13 @@ export default function HomeApp(props) {
   const client = useApolloClient()
 
   useEffect(() => {
-    handleTakeLocation()
+    takeLocation()
   }, [])
 
   /**
   * HELPERS
   */
-  const handleTakeLocation = async () => {
+  const takeLocation = async () => {
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -107,7 +107,7 @@ export default function HomeApp(props) {
             initialRouteName='Startup'
             screenOptions={{
               headerTintColor: 'white',
-              headerStyle: { backgroundColor: 'tomato' },
+              headerStyle: { backgroundColor: 'green' },
             }}
           >
             <Stack.Screen
