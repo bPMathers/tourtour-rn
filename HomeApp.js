@@ -45,11 +45,11 @@ export default function HomeApp(props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const isLoadingComplete = useCachedResources();
   const client = useApolloClient()
-  const { loading, error, data } = useQuery(GET_TOKEN)
-  console.log(data?.token)
   client.onResetStore(() => {
     setIsLoggedIn(false)
+    takeLocation()
   })
+  const { loading, error, data } = useQuery(GET_TOKEN)
 
   // check if token in device storage
   useEffect(() => {
@@ -58,6 +58,12 @@ export default function HomeApp(props) {
         const userToken = await AsyncStorage.getItem('userToken');
         if (userToken !== null) {
           // We have data!!
+          client.writeData({
+            data: {
+
+              token: userToken
+            }
+          })
           setIsLoggedIn(true)
         } else {
 
@@ -67,6 +73,7 @@ export default function HomeApp(props) {
         // Error retrieving data
         console.log(error)
       }
+
     }
 
     tryLogin();
@@ -79,9 +86,9 @@ export default function HomeApp(props) {
     }
   }, [data]);
 
-  useEffect(() => {
-    takeLocation()
-  }, [])
+  // useEffect(() => {
+  //   takeLocation()
+  // }, [])
 
   /**
   * HELPERS

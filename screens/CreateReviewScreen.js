@@ -17,7 +17,7 @@ const CreateReviewScreen = (props) => {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
-  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  const jwtBearer = "".concat("Bearer ", tokenData?.token).replace(/\"/g, "")
 
   /**
    * VARIABLES

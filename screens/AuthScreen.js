@@ -20,7 +20,7 @@ const AuthScreen = (props) => {
    * HOOKS
    */
 
-  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  // const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
 
@@ -45,7 +45,6 @@ const AuthScreen = (props) => {
 `;
 
   const [login, { data, client, error }] = useMutation(LOGIN)
-  // console.log(error.graphQLErrors)
   let token = data?.loginUser?.token
 
   useEffect(() => {
@@ -74,7 +73,6 @@ const AuthScreen = (props) => {
   const handleLoginSubmit = () => {
     login({
       variables: {
-        // eventually get from FormInput
         email: email,
         password: pw
       },
