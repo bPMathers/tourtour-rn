@@ -195,11 +195,8 @@ const NewPlaceScreen = props => {
     }
 
     const resData = await revGeoCodingResponse.json()
-    // console.log(`resData: ${resData}`)
     const formattedAddress = resData.results[0].formatted_address
-    // console.log(`formattedAddress: ${formattedAddress}`)
     const googlePlaceId = resData.results[0].place_id
-    // console.log(`googlePlaceId: ${googlePlaceId}`)
     // Initiate GraphQL Mutation & refetch
     addPlace({
       variables: {
