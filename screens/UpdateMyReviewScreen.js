@@ -5,12 +5,12 @@ import { gql } from 'apollo-boost'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
-import { GET_MY_REVIEWS, GET_TOKEN } from '../graphql/queries'
+import { GET_MY_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
 
 const UpdateReviewScreen = (props) => {
-  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
-  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const jwtBearer = "".concat("Bearer ", tokenAndIdData.token).replace(/\"/g, "")
   /**
    * VARIABLES
    */
@@ -87,15 +87,27 @@ const UpdateReviewScreen = (props) => {
   const onDeleteHandler = () => {
     deleteReview({
       variables: { id: review.id },
-      refetchQueries: [{
-        query: GET_MY_REVIEWS,
-        context: {
-          headers: {
-            // Set the token dynamically from cache. 
-            Authorization: jwtBearer
-          }
+      refetchQueries: [
+        {
+          query: GET_MY_REVIEWS,
+          context: {
+            headers: {
+              Authorization: jwtBearer
+            }
+          },
         },
-      }],
+        {
+          query: GET_USER,
+          variables: {
+            userId: tokenAndIdData.userId
+          },
+          context: {
+            headers: {
+              Authorization: jwtBearer
+            }
+          },
+        }
+      ],
       context: {
         headers: {
           // Set the token dynamically from cache. 

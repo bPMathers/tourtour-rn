@@ -26,7 +26,7 @@ import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-import { GET_REVIEWS, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS } from '../graphql/queries'
 
 let loggedInUserId;
 
@@ -141,7 +141,23 @@ const PlaceDetailScreen = (props) => {
               Authorization: jwtBearer
             }
           },
-          refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
+          refetchQueries: [
+            { query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } },
+            {
+              query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
+                headers: {
+                  Authorization: jwtBearer
+                }
+              },
+            },
+            {
+              query: GET_MY_PHOTOS, variables: { userId: tokenAndIdData.userId }, context: {
+                headers: {
+                  Authorization: jwtBearer
+                }
+              },
+            },
+          ]
         })
 
         return data.secure_url

@@ -37,9 +37,9 @@ import UpdateReviewScreen from './screens/UpdateReviewScreen';
 import UpdateMyReviewScreen from './screens/UpdateMyReviewScreen';
 import AuthScreen from './screens/AuthScreen';
 import UserEditScreen from './screens/UserEditScreen';
-import StartupScreen from './screens/StartupScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import ReviewsListScreen from './screens/MyReviewsListScreen';
+import MyReviewsListScreen from './screens/MyReviewsListScreen';
+import MyPhotosListScreen from './screens/MyPhotosListScreen';
 
 import { GET_TOKEN } from './graphql/queries'
 
@@ -65,22 +65,22 @@ function UserStackScreen() {
       <UserStack.Screen
         name='UserEdit'
         component={UserEditScreen}
-        options={{ title: 'Mon profil' }}
+        options={{ title: 'Mon Profil' }}
       />
       <UserStack.Screen
         name='MyReviews'
-        component={ReviewsListScreen}
-        options={{ title: 'Mes reviews' }}
-      />
-      <UserStack.Screen
-        name='UpdateReview'
-        component={UpdateReviewScreen}
-        options={{ title: 'Mes reviews' }}
+        component={MyReviewsListScreen}
+        options={{ title: 'Mes Reviews' }}
       />
       <UserStack.Screen
         name='UpdateMyReview'
         component={UpdateMyReviewScreen}
-        options={{ title: 'Modifier review' }}
+        options={{ title: 'Modifier Review' }}
+      />
+      <UserStack.Screen
+        name='MyPhotos'
+        component={MyPhotosListScreen}
+        options={{ title: 'Mes Photos' }}
       />
     </UserStack.Navigator>
   )

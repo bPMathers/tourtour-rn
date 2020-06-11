@@ -1,5 +1,24 @@
 import { gql } from 'apollo-boost'
 
+const GET_USER = gql`
+    query($userId: String) {
+      user(query: $userId) {
+        id
+        name
+        imageUrl
+        reviews {
+            id
+        }
+        photos {
+            id
+        }
+        places{
+          id
+        }
+      }
+    }
+  `;
+
 const GET_CATEGORIES = gql`
   query {
     categories {
@@ -124,6 +143,27 @@ const GET_MY_REVIEWS = gql`
   }
 `;
 
+const GET_MY_PHOTOS = gql`
+  query {
+    myPhotos {
+      id
+      url
+      addedBy {
+        id
+        name
+        imageUrl
+      }
+      place {
+        id
+        name
+        formatted_address
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 const GET_CACHED_IMG_URI = gql`
 {
   imageUrl @client
@@ -169,5 +209,7 @@ export {
   GET_MY_REVIEWS,
   GET_TOKEN_AND_USER_ID,
   GET_TOKEN,
+  GET_MY_PHOTOS,
+  GET_USER
 
 }

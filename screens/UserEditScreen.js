@@ -4,28 +4,14 @@ import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLine
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { GET_TOKEN_AND_USER_ID } from '../graphql/queries'
+import { GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
 import { TourTourColors } from '../constants/Colors'
 
 
 const UserEditScreen = (props) => {
 
-  const GET_USER = gql`
-    query($userId: String) {
-      user(query: $userId) {
-        id
-        name
-        imageUrl
-        reviews {
-            id
-        }
-        photos {
-            id
-        }
-      }
-    }
-  `;
+
 
   const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
@@ -91,13 +77,13 @@ const UserEditScreen = (props) => {
           <View style={styles.row}>
             <View style={styles.rowLeftGroup}>
               <View style={styles.rowIconBox}>
-                <Feather name='activity' size={24} color='#333' />
+                <Ionicons name='ios-images' size={26} color='#333' />
               </View>
               <View>
-                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Activité récente</Text>
+                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes places</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}></Text>
+                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
               </View>
             </View>
             <View style={styles.forwardArrow}>
@@ -115,7 +101,7 @@ const UserEditScreen = (props) => {
                 <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes reviews</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> (21)</Text>
+                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
               </View>
             </View>
             <View style={styles.forwardArrow}>
@@ -123,7 +109,7 @@ const UserEditScreen = (props) => {
             </View>
           </View>
         </TouchableComponent>
-        <TouchableComponent>
+        <TouchableComponent onPress={() => { props.navigation.navigate('MyPhotos', { userToken: jwtBearer }) }}>
           <View style={{ ...styles.row, ...styles.lastRow }}>
             <View style={styles.rowLeftGroup}>
               <View style={styles.rowIconBox}>
@@ -133,7 +119,7 @@ const UserEditScreen = (props) => {
                 <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes photos</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> (69)</Text>
+                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
               </View>
             </View>
             <View style={styles.forwardArrow}>

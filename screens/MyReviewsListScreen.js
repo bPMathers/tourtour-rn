@@ -74,7 +74,7 @@ const renderGridItem = (itemData) => {
   );
 }
 
-const ReviewsListScreen = (props) => {
+const MyReviewsListScreen = (props) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_MY_REVIEWS, {
     context: {
       headers: {
@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ReviewsListScreen
+export default MyReviewsListScreen
