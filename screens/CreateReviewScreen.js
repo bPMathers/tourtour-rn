@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import SwipeableRating from 'react-native-swipeable-rating';
 
 import { TourTourColors } from '../constants/Colors'
-import SwipeableRating from 'react-native-swipeable-rating';
 import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
 
@@ -50,12 +50,10 @@ const CreateReviewScreen = (props) => {
    */
 
   const onSubmitHandler = () => {
-    // Send mutation & refetch place 
     addReview({
       variables: { title: title, body: body, placeId: place.id, rating: rating },
       context: {
         headers: {
-          // Set the token dynamically from cache. 
           Authorization: jwtBearer
         }
       },
@@ -70,7 +68,6 @@ const CreateReviewScreen = (props) => {
         },
       ]
     })
-    // Navigate to place detail
     props.navigation.navigate('PlaceDetail')
   }
 
