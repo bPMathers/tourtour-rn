@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
@@ -149,7 +149,16 @@ const UpdateReviewScreen = (props) => {
         <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
       </View>
       <View>
-        <Button title="Supprimer" onPress={onDeleteHandler} color={TourTourColors.primary} />
+        <Button title="Supprimer" onPress={() => {
+          Alert.alert(
+            'Attention!',
+            "Êtes-vous certain(e) de vouloir supprimer ce review ?",
+            [
+              { text: 'Annuler', style: 'destructive' },
+              { text: 'Confirmer', onPress: () => { onDeleteHandler() } },
+            ]
+          )
+        }} color='#F65E3C' />
       </View>
     </View>
   );

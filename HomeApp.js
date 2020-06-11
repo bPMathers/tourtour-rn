@@ -80,7 +80,7 @@ function UserStackScreen() {
       <UserStack.Screen
         name='UpdateMyReview'
         component={UpdateMyReviewScreen}
-        options={{ title: 'Modifier mon review' }}
+        options={{ title: 'Modifier review' }}
       />
     </UserStack.Navigator>
   )
