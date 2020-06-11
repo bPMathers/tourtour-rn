@@ -34,10 +34,13 @@ import MapScreen2 from './screens/MapScreen2';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
 import CreateReviewScreen from './screens/CreateReviewScreen';
 import UpdateReviewScreen from './screens/UpdateReviewScreen';
+import UpdateMyReviewScreen from './screens/UpdateMyReviewScreen';
 import AuthScreen from './screens/AuthScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import StartupScreen from './screens/StartupScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import ReviewsListScreen from './screens/MyReviewsListScreen';
+
 import { GET_TOKEN } from './graphql/queries'
 
 const HomeStack = createStackNavigator();
@@ -62,6 +65,22 @@ function UserStackScreen() {
       <UserStack.Screen
         name='UserEdit'
         component={UserEditScreen}
+        options={{ title: 'Mon profil' }}
+      />
+      <UserStack.Screen
+        name='MyReviews'
+        component={ReviewsListScreen}
+        options={{ title: 'Mes reviews' }}
+      />
+      <UserStack.Screen
+        name='UpdateReview'
+        component={UpdateReviewScreen}
+        options={{ title: 'Mes reviews' }}
+      />
+      <UserStack.Screen
+        name='UpdateMyReview'
+        component={UpdateMyReviewScreen}
+        options={{ title: 'Modifier mon review' }}
       />
     </UserStack.Navigator>
   )
@@ -327,7 +346,7 @@ export default function HomeApp(props) {
                   inactiveTintColor: 'gray',
                 }}>
                 <Tab.Screen options={{ title: "Trouver" }} name="Home" component={HomeStackScreen} />
-                <Tab.Screen options={{ title: "Profil" }} name="User" component={UserStackScreen} />
+                <Tab.Screen options={{ title: "Mon profil" }} name="User" component={UserStackScreen} />
                 <Tab.Screen options={{ title: "Réglages" }} name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )

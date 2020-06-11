@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
-import { GET_REVIEWS, GET_TOKEN } from '../graphql/queries'
+import { GET_MY_REVIEWS, GET_TOKEN } from '../graphql/queries'
 
 
 const UpdateReviewScreen = (props) => {
@@ -64,9 +64,18 @@ const UpdateReviewScreen = (props) => {
     // Send mutation & refetch place 
     updateReview({
       variables: { title: title, body: body, placeId: place.id, rating: rating, id: review.id },
-      refetchQueries: [{ query: GET_REVIEWS, variables: { placeId: place.id } }],
+      refetchQueries: [{
+        query: GET_MY_REVIEWS,
+        context: {
+          headers: {
+            // Set the token dynamically from cache. 
+            Authorization: jwtBearer
+          }
+        },
+      }],
       context: {
         headers: {
+          // Set the token dynamically from cache. 
           Authorization: jwtBearer
         }
       },
@@ -78,9 +87,18 @@ const UpdateReviewScreen = (props) => {
   const onDeleteHandler = () => {
     deleteReview({
       variables: { id: review.id },
-      refetchQueries: [{ query: GET_REVIEWS, variables: { placeId: place.id } }],
+      refetchQueries: [{
+        query: GET_MY_REVIEWS,
+        context: {
+          headers: {
+            // Set the token dynamically from cache. 
+            Authorization: jwtBearer
+          }
+        },
+      }],
       context: {
         headers: {
+          // Set the token dynamically from cache. 
           Authorization: jwtBearer
         }
       },

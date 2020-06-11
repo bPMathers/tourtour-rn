@@ -101,6 +101,28 @@ const GET_REVIEWS = gql`
     }
   }
 `;
+const GET_MY_REVIEWS = gql`
+  query {
+    myReviews {
+      id
+      title
+      body
+      rating
+      author {
+        id
+        name
+        imageUrl
+      }
+      place {
+        id
+        name
+        formatted_address
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 const GET_CACHED_IMG_URI = gql`
 {
@@ -144,6 +166,7 @@ export {
   GET_CATEGORIES,
   GET_PLACE,
   GET_REVIEWS,
+  GET_MY_REVIEWS,
   GET_TOKEN_AND_USER_ID,
   GET_TOKEN,
 
