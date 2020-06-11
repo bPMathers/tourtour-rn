@@ -11,6 +11,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
 
@@ -36,11 +37,24 @@ import UpdateReviewScreen from './screens/UpdateReviewScreen';
 import AuthScreen from './screens/AuthScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import StartupScreen from './screens/StartupScreen';
+import SettingsScreen from './screens/SettingsScreen';
 import { GET_TOKEN } from './graphql/queries'
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const Tab = createBottomTabNavigator()
+
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name='Settings'
+        component={SettingsScreen}
+      />
+    </SettingsStack.Navigator>
+  )
+}
 
 function UserStackScreen() {
   return (
@@ -288,14 +302,38 @@ export default function HomeApp(props) {
               />
             </HomeStack.Navigator>
           ) : (
-              <Tab.Navigator>
-                <Tab.Screen name="Home" component={HomeStackScreen} />
-                <Tab.Screen name="User" component={UserStackScreen} />
+              <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+
+                    if (route.name === 'Home') {
+                      iconName = focused
+                        ? 'ios-search'
+                        : 'ios-search';
+                    } else if (route.name === 'User') {
+                      iconName = focused ? 'ios-contact' : 'ios-contact';
+                    }
+                    else if (route.name === 'Settings') {
+                      iconName = focused ? 'ios-settings' : 'ios-settings';
+                    }
+
+                    // You can return any component that you like here!
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                  }
+                })}
+                tabBarOptions={{
+                  activeTintColor: TourTourColors.accent,
+                  inactiveTintColor: 'gray',
+                }}>
+                <Tab.Screen options={{ title: "Trouver" }} name="Home" component={HomeStackScreen} />
+                <Tab.Screen options={{ title: "Profil" }} name="User" component={UserStackScreen} />
+                <Tab.Screen options={{ title: "Réglages" }} name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )
           }
         </NavigationContainer>
-      </View >
+      </View>
     );
   }
 }
