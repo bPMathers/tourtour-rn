@@ -1,3 +1,5 @@
+// Not sure this component is used in the project
+
 import React from 'react';
 import {
   TouchableOpacity,

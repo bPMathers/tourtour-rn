@@ -142,6 +142,32 @@ const GET_MY_REVIEWS = gql`
     }
   }
 `;
+const GET_MY_PLACES = gql`
+  query {
+    myPlaces {
+        id
+        name
+        url
+        phone
+        review_count
+        imageUrl
+        category {
+          id
+        }
+        lat
+        lng
+        formatted_address
+        google_place_id
+        addedBy {
+          id
+          name
+        }
+        avgRating
+        createdAt
+        updatedAt
+    }
+  }
+`;
 
 const GET_MY_PHOTOS = gql`
   query {
@@ -202,14 +228,15 @@ export {
   GET_ADD_PLACE_DATA,
   GET_CACHED_IMG_URI,
   GET_SEARCH_LOCATION,
-  GET_MY_CACHED_LOCATION,
   GET_CATEGORIES,
   GET_PLACE,
   GET_REVIEWS,
-  GET_MY_REVIEWS,
   GET_TOKEN_AND_USER_ID,
   GET_TOKEN,
+  GET_MY_CACHED_LOCATION,
+  GET_MY_REVIEWS,
   GET_MY_PHOTOS,
+  GET_MY_PLACES,
   GET_USER
 
 }

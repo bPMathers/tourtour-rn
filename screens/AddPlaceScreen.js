@@ -67,93 +67,11 @@ const NewPlaceScreen = props => {
 
   const [addPlace, { data }] = useMutation(ADD_PLACE)
 
-
   /**
-   * HANDLERS
+   * HELPERS
    */
 
-  // Image : 1) use modal to select photo library or camera like in add photo
-  //         2) upload to cloudinary and then send return url with mutation
-
-
-  // const cloudinarySecureUrl = async (localImgUri) => {
-  //   const base64Img = `data: image / jpg; base64, ${ localImgUri.base64 } `
-
-  //   const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-  //   const data = {
-  //     "file": base64Img,
-  //     "upload_preset": "TourTour1",
-  //   }
-  //   fetch(apiUrl, {
-  //     body: JSON.stringify(data),
-  //     headers: {
-  //       'content-type': 'application/json'
-  //     },
-  //     method: 'POST',
-  //   }).then(async result => {
-  //     const data = await result.json()
-
-  //     return data.secure_url
-  //   }).catch(err => console.log(err))
-  // }
-
-
-  // const openCameraAsync = async () => {
-  //   const permissionResult2 = await ImagePicker.requestCameraPermissionsAsync();
-
-  //   if (permissionResult2.granted === false) {
-  //     alert("Permission to access camera roll is required!");
-  //     return;
-  //   }
-
-  //   const result = await ImagePicker.launchCameraAsync({
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 0.5,
-  //     base64: true
-  //   });
-  //   if (!result.cancelled) {
-  //     // setPhotoUrl(result.uri)
-
-  //     const base64Img = `data: image / jpg; base64, ${ result.base64 } `
-
-  //     //Add your cloud name
-  //     const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-  //     const data = {
-  //       "file": base64Img,
-  //       "upload_preset": "TourTour1",
-  //     }
-  //     fetch(apiUrl, {
-  //       body: JSON.stringify(data),
-  //       headers: {
-  //         'content-type': 'application/json'
-  //       },
-  //       method: 'POST',
-  //     }).then(async r => {
-  //       const data = await r.json()
-  //       addPhoto({
-  //         variables: { url: data.secure_url, placeId: place.id },
-  //         refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
-  //       })
-
-  //       return data.secure_url
-  //     }).catch(err => console.log(err))
-  //   }
-  // }
-
-  // const handleUploadExistingPicture = async () => {
-  //   await openImagePickerAsync();
-  //   setModalVisible(false);
-  // }
-
-  // const handleTakeNewPictureForUpload = async () => {
-  //   await openCameraAsync();
-  //   setModalVisible(false);
-  // }
   const imageTakenHandler = (image) => {
-    // console.log(`allo: ${ image.base64 } `)
-    // setBase64Image(base64Img)
-    // const cloudinaryResponse = await cloudinarySecureUrl(imagePath)
     client.writeData({
       data: {
         imageUrl: image.uri,
@@ -207,7 +125,7 @@ const NewPlaceScreen = props => {
         lng: addPlaceData.lng,
         placeId: props.route.params?.autoCompletePickedPlace?.place_id ?? googlePlaceId,
         formatted_address: props.route.params?.autoCompletePickedPlace?.formatted_address ?? formattedAddress,
-        phone: "1-514-522-9392",
+        phone: "",
       },
       context: {
         headers: {

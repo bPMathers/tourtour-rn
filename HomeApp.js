@@ -31,10 +31,12 @@ import UserProfileScreen from './screens/UserProfileScreen';
 import AddPlaceScreen from './screens/AddPlaceScreen';
 import MapScreen from './screens/MapScreen';
 import MapScreen2 from './screens/MapScreen2';
+import MapForPlaceUpdateScreen from './screens/MapForPlaceUpdateScreen';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
 import CreateReviewScreen from './screens/CreateReviewScreen';
 import UpdateReviewScreen from './screens/UpdateReviewScreen';
 import UpdateMyReviewScreen from './screens/UpdateMyReviewScreen';
+import UpdateMyPlaceScreen from './screens/UpdateMyPlaceScreen';
 import AuthScreen from './screens/AuthScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -42,6 +44,7 @@ import MyReviewsListScreen from './screens/MyReviewsListScreen';
 import MyPhotosListScreen from './screens/MyPhotosListScreen';
 
 import { GET_TOKEN } from './graphql/queries'
+import MyPlacesScreen from './screens/MyPlacesScreen';
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -50,7 +53,11 @@ const Tab = createBottomTabNavigator()
 
 function SettingsStackScreen() {
   return (
-    <SettingsStack.Navigator>
+    <SettingsStack.Navigator
+      screenOptions={{
+        headerTintColor: 'white',
+      }}
+    >
       <SettingsStack.Screen
         name='Settings'
         component={SettingsScreen}
@@ -61,11 +68,17 @@ function SettingsStackScreen() {
 
 function UserStackScreen() {
   return (
-    <UserStack.Navigator>
+    <UserStack.Navigator
+      screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: { backgroundColor: TourTourColors.accent }
+      }}
+    >
       <UserStack.Screen
         name='UserEdit'
         component={UserEditScreen}
         options={{ title: 'Mon Profil' }}
+
       />
       <UserStack.Screen
         name='MyReviews'
@@ -81,6 +94,26 @@ function UserStackScreen() {
         name='MyPhotos'
         component={MyPhotosListScreen}
         options={{ title: 'Mes Photos' }}
+      />
+      <UserStack.Screen
+        name='MyPlaces'
+        component={MyPlacesScreen}
+        options={{ title: 'Mes Places' }}
+      />
+      <UserStack.Screen
+        name='UpdateMyPlace'
+        component={UpdateMyPlaceScreen}
+        options={{
+          title: 'Update MyPlace',
+        }}
+      />
+      <UserStack.Screen
+        name='MapForPlaceUpdate'
+        component={MapForPlaceUpdateScreen}
+        options={{
+          title: "Choisir location",
+          // headerShown: false,
+        }}
       />
     </UserStack.Navigator>
   )

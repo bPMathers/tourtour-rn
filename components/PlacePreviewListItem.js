@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';
 
 import StarRating from './StarRating'
@@ -64,6 +64,18 @@ const PlacePreviewListItem = (props) => {
                     <Ionicons
                       style={styles.starIcon}
                       name='md-arrow-forward'
+                      size={24}
+                      color='white'
+                    />
+                  </TouchableComponent>
+                  <TouchableComponent onPress={() => {
+                    props.navigation.navigate('UpdateMyPlace', {
+                      place: props.place
+                    })
+                  }}>
+                    <FontAwesome5
+                      style={styles.starIcon}
+                      name='pencil-alt'
                       size={24}
                       color='white'
                     />

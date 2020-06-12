@@ -73,7 +73,7 @@ const UserEditScreen = (props) => {
         </TouchableComponent>
       </View>
       <View style={styles.rowsContainer}>
-        <TouchableComponent>
+        <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
           <View style={styles.row}>
             <View style={styles.rowLeftGroup}>
               <View style={styles.rowIconBox}>
