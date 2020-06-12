@@ -15,7 +15,7 @@ import { googleApiKey } from '../env'
 import LocationPickerForUpdatePlace from '../components/LocationPickerForUpdatePlace'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
-import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN, GET_PLACE } from '../graphql/queries'
+import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN, GET_PLACE, GET_MY_PLACES } from '../graphql/queries'
 
 const UpdateMyPlaceScreen = props => {
   const place = props.route.params.place
@@ -34,13 +34,14 @@ const UpdateMyPlaceScreen = props => {
 
   // Previous Place Data
   const [name, setName] = useState(place.name);
-  const [catId, setCatId] = useState(place.categoryId);
+  const [catId, setCatId] = useState(place.category.id);
   const [imageUrl, setImageUrl] = useState(place.imageUrl);
   const [lat, setLat] = useState(place.lat);
   const [lng, setLng] = useState(place.lng);
   const [placeId, setPlaceId] = useState(place.google_place_id);
   const [formatted_address, setFormatted_address] = useState(place.formatted_address);
   const [phone, setPhone] = useState(place.phone);
+  console.log(`formatted_address: ${formatted_address}`)
 
   const [locationForMapPreview, setLocationForMapPreview] = useState({ lat: place.lat, lng: place.lng })
 
@@ -64,6 +65,9 @@ const UpdateMyPlaceScreen = props => {
 
   useEffect(() => {
     setLocationForMapPreview(props.route?.params?.pickedLocationOnMap)
+    setLocHasChanged(true)
+    setLat(props.route.params.pickedLocationOnMap?.lat)
+    setLng(props.route.params.pickedLocationOnMap?.lng)
 
   }, [props.route.params.pickedLocationOnMap])
 
@@ -73,11 +77,11 @@ const UpdateMyPlaceScreen = props => {
    */
 
   const UPDATE_PLACE = gql`
-    mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $placeId: String, $formatted_address: String, $phone: String, $url: String) {
-    createPlace(
+    mutation($id: ID!, $name: String!, $imageUrl: String, $lat: Float, $lng: Float, $placeId: String, $formatted_address: String, $phone: String, $url: String) {
+    updatePlace(
+      id: $id
       data: {
         name: $name
-        categoryId: $categoryId
         imageUrl: $imageUrl
         lat: $lat
         lng: $lng
@@ -113,11 +117,44 @@ const UpdateMyPlaceScreen = props => {
   };
 
   const locationReTakenHandler = (newLoc) => {
+
     if (newLoc) {
+
       setLat(newLoc.lat)
       setLng(newLoc.lng)
       setLocHasChanged(true)
     }
+  }
+
+  const completeUpdatePlace = (newFormattedAddress) => {
+    updatePlace({
+      variables: {
+        id: place.id,
+        name: name,
+        // categoryId: catId,
+        imageUrl: imageUrl,
+        lat: lat,
+        lng: lng,
+        placeId: placeId,
+        formatted_address: newFormattedAddress ?? formatted_address,
+        phone: phone,
+      },
+      context: {
+        headers: {
+          // Set the token dynamically from cache. 
+          Authorization: jwtBearer
+        }
+      },
+      refetchQueries: [{
+        query: GET_MY_PLACES, context: {
+          headers: {
+            // Set the token dynamically from cache. 
+            Authorization: jwtBearer
+          }
+        },
+      }]
+    })
+    props.navigation.goBack();
   }
 
   const updatePlaceHandler = async () => {
@@ -145,7 +182,9 @@ const UpdateMyPlaceScreen = props => {
 
     // Get rev geocoding location data if location was changed
     if (locHasChanged) {
-      const revGeoCodingResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${addPlaceData.lat},${addPlaceData.lng}&key=${googleApiKey}`)
+      console.log("lochaschanged route taken")
+
+      const revGeoCodingResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${googleApiKey}`)
 
       if (!revGeoCodingResponse.ok) {
         throw new Error("error while fetching reverse geocoding")
@@ -154,27 +193,11 @@ const UpdateMyPlaceScreen = props => {
       const resData = await revGeoCodingResponse.json()
       setFormatted_address(resData.results[0].formatted_address)
       setPlaceId(resData.results[0].place_id)
+      completeUpdatePlace(resData.results[0].formatted_address)
+      return
     }
     // Initiate GraphQL Mutation & refetch
-    updatePlace({
-      variables: {
-        name: name,
-        categoryId: catId,
-        imageUrl: imageUrl,
-        lat: lat,
-        lng: lng,
-        placeId: placeId,
-        formatted_address: formatted_address,
-        phone: phone,
-      },
-      context: {
-        headers: {
-          // Set the token dynamically from cache. 
-          Authorization: jwtBearer
-        }
-      },
-      refetchQueries: [{ query: GET_PLACE, variables: { placeId: props.route.params.placeId } }]
-    })
+    completeUpdatePlace()
 
     props.navigation.goBack();
   };
@@ -200,7 +223,7 @@ const UpdateMyPlaceScreen = props => {
         <LocationPickerForUpdatePlace
           // navigation={props.navigation}
           route={props.route}
-          onTakeMyLocation={locationReTakenHandler}
+          onTakeNewLocation={locationReTakenHandler}
           locationForMapPreview={locationForMapPreview}
         />
         <Button

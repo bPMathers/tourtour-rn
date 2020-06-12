@@ -81,7 +81,7 @@ const LocationPickerForUpdatePlace = (props) => {
         lng: location.coords.longitude
       });
 
-      props.onTakeMyLocation({
+      props.onTakeNewLocation({
         lat: location.coords.latitude,
         lng: location.coords.longitude
       })
