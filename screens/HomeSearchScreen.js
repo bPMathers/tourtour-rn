@@ -19,7 +19,6 @@ import { GET_CATEGORIES } from '../graphql/queries'
 
 
 export const HomeSearchScreen = (props) => {
-  const client = useApolloClient()
   const { loading, error, data } = useQuery(GET_CATEGORIES);
   const [searchInput, setSearchInput] = React.useState();
 
@@ -71,11 +70,7 @@ export const HomeSearchScreen = (props) => {
           placeholder='Rechercher'
         />
       </View>
-      <Button title="Temp Logout" color="red" onPress={() => {
-        AsyncStorage.removeItem('userToken')
-        // props.navigation.navigate('Auth')
-        client.resetStore()
-      }} />
+
       <FlatList
         data={data.categories}
         renderItem={renderGridItem}
