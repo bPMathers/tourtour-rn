@@ -7,12 +7,12 @@ import useCachedResources from './hooks/useCachedResources';
 
 import HomeApp from './HomeApp'
 
-const cache = new InMemoryCache
 
 let moment = require('moment'); //load moment module to set local language
 require('moment/locale/fr'); //for import moment local language file during the application build
 moment.locale('fr');//set moment local language to zh-cn
 
+const cache = new InMemoryCache
 export default function App(props) {
 
   const client = new ApolloClient({
