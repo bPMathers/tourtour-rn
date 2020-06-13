@@ -11,7 +11,7 @@ import * as Location from 'expo-location';
 
 
 import { TourTourColors } from '../constants/Colors';
-import { GET_SEARCH_LOCATION, GET_CAT_PLACES } from '../graphql/queries'
+import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
@@ -20,6 +20,7 @@ const CategorySearchScreen = (props) => {
    * HOOKS
    */
 
+  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
     variables: {
@@ -91,13 +92,8 @@ const CategorySearchScreen = (props) => {
   const renderGridItem = (itemData) => {
     return (
       <PlacePreviewListItem
-        name={itemData.item.name}
-        imageUrl={itemData.item.imageUrl}
-        formatted_address={itemData.item.formatted_address}
-        addedBy={itemData.item.addedBy.name}
-        rating={itemData.item.avgRating}
-        reviewCount={itemData.item.review_count}
-        createdAt={itemData.item.createdAt}
+        loggedInUserId={tokenAndIdData.userId}
+        place={itemData.item}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
             userId: itemData.item.addedBy.id,

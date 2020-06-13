@@ -125,7 +125,7 @@ function HomeStackScreen() {
       // initialRouteName='Startup'
       screenOptions={{
         headerTintColor: 'white',
-        headerStyle: { backgroundColor: 'green' },
+        headerStyle: { backgroundColor: TourTourColors.accent },
       }}
     >
       <HomeStack.Screen
@@ -216,6 +216,21 @@ function HomeStackScreen() {
         options={{
           title: "Votre Review",
           headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <UserStack.Screen
+        name='UpdateMyPlace'
+        component={UpdateMyPlaceScreen}
+        options={{
+          title: 'Update MyPlace',
+        }}
+      />
+      <UserStack.Screen
+        name='MapForPlaceUpdate'
+        component={MapForPlaceUpdateScreen}
+        options={{
+          title: "Choisir location",
           // headerShown: false,
         }}
       />
@@ -339,7 +354,7 @@ export default function HomeApp(props) {
               // initialRouteName='Startup'
               screenOptions={{
                 headerTintColor: 'white',
-                headerStyle: { backgroundColor: 'green' },
+                headerStyle: { backgroundColor: TourTourColors.accent },
               }}
             >
               <HomeStack.Screen

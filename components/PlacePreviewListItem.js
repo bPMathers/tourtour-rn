@@ -8,11 +8,15 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';
+import { useNavigation } from '@react-navigation/native'
 
 import StarRating from './StarRating'
 
 
 const PlacePreviewListItem = (props) => {
+  const { place } = props
+  const navigation = useNavigation()
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -22,18 +26,31 @@ const PlacePreviewListItem = (props) => {
   return (
     <View style={styles.placePreviewListItem}>
       <TouchableComponent style={{ flex: 1 }} onPress={props.onSelectPlace}>
-        <ImageBackground source={{ uri: props.imageUrl }} style={styles.image}>
+        <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
           <View style={styles.overlayContentContainer}>
             <View style={styles.leftColumn}>
               <View style={styles.leftTopGroup}>
                 <View style={styles.leftRow1}>
+                  {props.loggedInUserId === props.place.addedBy.id &&
+                    <TouchableComponent style={{ marginRight: 10 }} onPress={() => {
+                      navigation.navigate('UpdateMyPlace', {
+                        place: place
+                      })
+                    }}>
+                      <FontAwesome5
+                        style={styles.starIcon}
+                        name='pencil-alt'
+                        size={20}
+                        color='white'
+                      />
+                    </TouchableComponent>}
                   <View>
-                    <Text style={styles.name}>{props.name}</Text>
+                    <Text style={styles.name}>{place.name}</Text>
                   </View>
                 </View>
                 <View style={styles.leftRow2}>
                   <View>
-                    <Text style={styles.location}>{props.formatted_address}</Text>
+                    <Text style={styles.location}>{place.formatted_address}</Text>
                   </View>
                 </View>
               </View>
@@ -42,40 +59,29 @@ const PlacePreviewListItem = (props) => {
                   <Text style={styles.submittedBy}>Ajouté par: </Text>
                   <TouchableComponent onPress={props.onSelectUserProfile}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                      {props.addedBy}
+                      {place.addedBy.name}
                     </Text>
                   </TouchableComponent>
                 </View>
-                <TimeAgo time={props.createdAt} style={{ color: 'white', fontSize: 12 }} />
+                <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
               </View>
             </View>
             <View style={styles.rightColumn}>
               <View>
                 <View style={styles.rightRow1}>
-                  <StarRating color='white' rating={props.rating} />
+                  <StarRating color='white' rating={place.avgRating} />
                 </View>
                 <View style={styles.rightRow2}>
-                  <Text style={styles.reviewCount}>{props.reviewCount} reviews</Text>
+                  <Text style={styles.reviewCount}>{place.review_count} reviews</Text>
                 </View>
               </View>
               <View>
                 <View style={styles.rightRow3}>
+
                   <TouchableComponent onPress={props.onSelectPlace}>
                     <Ionicons
                       style={styles.starIcon}
                       name='md-arrow-forward'
-                      size={24}
-                      color='white'
-                    />
-                  </TouchableComponent>
-                  <TouchableComponent onPress={() => {
-                    props.navigation.navigate('UpdateMyPlace', {
-                      place: props.place
-                    })
-                  }}>
-                    <FontAwesome5
-                      style={styles.starIcon}
-                      name='pencil-alt'
                       size={24}
                       color='white'
                     />
