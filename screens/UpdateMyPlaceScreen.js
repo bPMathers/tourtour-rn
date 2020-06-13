@@ -16,14 +16,14 @@ import { getReverseGeocodingInfo } from '../utils/getReverseGeocodingInfo'
 import LocationPickerForUpdatePlace from '../components/LocationPickerForUpdatePlace'
 import { TourTourColors } from '../constants/Colors';
 import ImagePickerForUpdatePlace from '../components/ImagePickerForUpdatePlace';
-import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN, GET_PLACE, GET_MY_PLACES } from '../graphql/queries'
+import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN, GET_PLACE, GET_MY_PLACES, GET_USER, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 
 const UpdateMyPlaceScreen = props => {
   const place = props.route.params.place
 
   const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
-  const { data: tokenData, client: unusedClient2 } = useQuery(GET_TOKEN);
-  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  const { data: tokenAndIdData, client: unusedClient2 } = useQuery(GET_TOKEN_AND_USER_ID);
+  const jwtBearer = "".concat("Bearer ", tokenAndIdData.token).replace(/\"/g, "")
 
   // Previous Place Data
   const [name, setName] = useState(place.name);
@@ -184,6 +184,17 @@ const UpdateMyPlaceScreen = props => {
             catId: place.category.id
           }
         },
+        {
+          query: GET_USER,
+          variables: {
+            userId: tokenAndIdData.userId
+          },
+          context: {
+            headers: {
+              Authorization: jwtBearer
+            }
+          },
+        }
       ]
     })
     props.navigation.goBack()
