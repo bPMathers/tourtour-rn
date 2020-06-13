@@ -5,7 +5,8 @@ import {
   Button,
   Text,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -72,8 +73,19 @@ const UpdateMyPlaceScreen = props => {
       }
     }
   `;
+  const [updatePlace] = useMutation(UPDATE_PLACE)
 
-  const [updatePlace, { data }] = useMutation(UPDATE_PLACE)
+  const DELETE_PLACE = gql`
+    mutation($placeId: ID!) {
+      deletePlace(
+        id: $placeId 
+      ){
+        id
+      }
+    }  
+  `
+  const [deletePlace] = useMutation(DELETE_PLACE)
+
 
   /**
    * HELPERS
@@ -148,6 +160,37 @@ const UpdateMyPlaceScreen = props => {
 
   }
 
+  const onDeleteHandler = () => {
+    deletePlace({
+      variables: {
+        placeId: place.id
+      },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      },
+      refetchQueries: [
+        {
+          query: GET_MY_PLACES, context: {
+            headers: {
+              Authorization: jwtBearer
+            }
+          },
+        },
+        {
+          query: GET_CAT_PLACES,
+          variables: {
+            catId: place.category.id
+          }
+        },
+      ]
+    })
+    props.navigation.goBack()
+  }
+
+
+
   /**
    * RETURN
    */
@@ -170,11 +213,30 @@ const UpdateMyPlaceScreen = props => {
           onTakeNewLocation={locationReTakenHandler}
           locationForMapPreview={locationForMapPreview}
         />
-        <Button
-          title="Mettre à jour"
-          color={TourTourColors.accent}
-          onPress={() => { updatePlaceHandler(imgBase64, { lat, lng }) }}
-        />
+        <View style={{ marginBottom: 20 }}>
+          <Button
+            title="Mettre à jour"
+            color={TourTourColors.accent}
+            onPress={() => { updatePlaceHandler(imgBase64, { lat, lng }) }}
+          />
+        </View>
+        <View style={{ marginBottom: 20 }}>
+
+          <Button
+            title="Supprimer"
+            color='red'
+            onPress={() => {
+              Alert.alert(
+                'Attention!',
+                "Êtes-vous certain(e) de vouloir supprimer cet endroit ?",
+                [
+                  { text: 'Annuler', style: 'destructive' },
+                  { text: 'Confirmer', onPress: () => { onDeleteHandler() } },
+                ]
+              )
+            }}
+          />
+        </View>
       </View>
     </ScrollView>
   );
