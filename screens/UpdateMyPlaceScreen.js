@@ -106,44 +106,45 @@ const UpdateMyPlaceScreen = props => {
     }
   }
 
-  const callUpdatePlace = (newImgUrl, newFormattedAddressAndGooglePlaceId) => {
-    updatePlace({
-      variables: {
-        id: place.id,
-        name: name,
-        // categoryId: catId,
-        imageUrl: newImgUrl ?? imageUrl,
-        // url: "pipi",
-        lat: lat,
-        lng: lng,
-        placeId: newFormattedAddressAndGooglePlaceId?.placeId ?? placeId,
-        formatted_address: newFormattedAddressAndGooglePlaceId?.formattedAddress ?? formatted_address,
-        phone: phone,
-      },
-      context: {
-        headers: {
-          // Set the token dynamically from cache. 
-          Authorization: jwtBearer
-        }
-      },
-      refetchQueries: [{
-        query: GET_MY_PLACES, context: {
+  const updatePlaceHandler = async (newImgBase64, newLocation) => {
+
+    try {
+
+      const newImgUrl = await getCloudinaryUrl(newImgBase64)
+      const newFormattedAddressAndGooglePlaceId = await getReverseGeocodingInfo(newLocation)
+
+      updatePlace({
+        variables: {
+          id: place.id,
+          name: name,
+          // categoryId: catId,
+          imageUrl: newImgUrl ?? imageUrl,
+          // url: "pipi",
+          lat: lat,
+          lng: lng,
+          placeId: newFormattedAddressAndGooglePlaceId?.placeId ?? placeId,
+          formatted_address: newFormattedAddressAndGooglePlaceId?.formattedAddress ?? formatted_address,
+          phone: phone,
+        },
+        context: {
           headers: {
             // Set the token dynamically from cache. 
             Authorization: jwtBearer
           }
         },
-      }]
-    })
-    props.navigation.goBack();
-  }
-
-  const updatePlaceHandler = async (newImgBase64, newLocation) => {
-
-    const newImgUrl = await getCloudinaryUrl(newImgBase64)
-    const newFormattedAddressAndGooglePlaceId = await getReverseGeocodingInfo(newLocation)
-
-    callUpdatePlace(newImgUrl, newFormattedAddressAndGooglePlaceId)
+        refetchQueries: [{
+          query: GET_MY_PLACES, context: {
+            headers: {
+              // Set the token dynamically from cache. 
+              Authorization: jwtBearer
+            }
+          },
+        }]
+      })
+      props.navigation.goBack();
+    } catch {
+      throw new Error('Failed to update place')
+    }
 
   }
 

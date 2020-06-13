@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 
-import PlacePreviewListItem from '../components/PlacePreviewListItem'
+import MyPlacesPreviewListItem from '../components/MyPlacesPreviewListItem'
 import { GET_MY_PLACES, GET_TOKEN } from '../graphql/queries'
 
 const MyPlacesScreen = (props) => {
@@ -20,17 +20,7 @@ const MyPlacesScreen = (props) => {
 
   const renderListItem = ({ item }) => {
     return (
-      <PlacePreviewListItem
-        place={item}
-        placeId={item.id}
-        name={item.name}
-        imageUrl={item.imageUrl}
-        formatted_address={item.formatted_address}
-        addedBy={item.addedBy.name}
-        rating={item.avgRating}
-        reviewCount={item.review_count}
-        navigation={props.navigation}
-      />
+      <MyPlacesPreviewListItem place={item} />
     )
   }
 
