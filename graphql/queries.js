@@ -5,6 +5,7 @@ const GET_USER = gql`
       user(query: $userId) {
         id
         name
+        status
         imageUrl
         reviews {
             id

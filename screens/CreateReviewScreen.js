@@ -5,10 +5,15 @@ import { gql } from 'apollo-boost'
 import SwipeableRating from 'react-native-swipeable-rating';
 
 import { TourTourColors } from '../constants/Colors'
-import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER, GET_PLACE, GET_CAT_PLACES } from '../graphql/queries'
 
 
 const CreateReviewScreen = (props) => {
+  /**
+   * VARIABLES
+   */
+
+  const place = props.route.params.place
   /**
    * HOOKS
    */
@@ -16,14 +21,9 @@ const CreateReviewScreen = (props) => {
   const [rating, setRating] = useState(3)
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
-  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
 
-  /**
-   * VARIABLES
-   */
-
-  const place = props.route.params.place
 
   /**
    * GRAPHQL
@@ -59,6 +59,8 @@ const CreateReviewScreen = (props) => {
       },
       refetchQueries: [
         { query: GET_REVIEWS, variables: { placeId: place.id } },
+        { query: GET_PLACE, variables: { placeId: place.id } },
+        { query: GET_CAT_PLACES, variables: { catId: place.catId } },
         {
           query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
             headers: {
