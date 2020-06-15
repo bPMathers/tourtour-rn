@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
-import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
+import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
 import { TourTourColors } from '../constants/Colors'
-
+import { takeExistingImage, takeNewImage } from '../utils/chooseImage'
+import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
 
 const UserEditScreen = (props) => {
 
@@ -22,14 +23,75 @@ const UserEditScreen = (props) => {
   const [userName, setUserName] = useState(data?.user?.name)
   // const [userCity, setUserCity] = useState(data?.user?.location)
   const [userStatus, setUserStatus] = useState(data?.user?.status)
+  const [photoModalVisible, setPhotoModalVisible] = useState(false);
+
 
   useEffect(() => {
     if (data?.user) {
-      console.log(data.user)
       setUserName(data.user.name)
       setUserStatus(data.user.status)
     }
   }, [data?.user])
+
+  /**
+   * GRAPHQL
+   */
+
+  const UPDATE_PICTURE = gql`
+    mutation($imageUrl: String!) {
+      updateUser(
+        data: {
+          imageUrl: $imageUrl
+        }) {
+        id
+        imageUrl
+        }
+      }
+  `;
+
+  const [updatePicture] = useMutation(UPDATE_PICTURE)
+
+  /**
+   * HELPERS 
+   */
+
+  const handleChangeForExistingPicture = async () => {
+    // const desiredRatio = [4,4] --> eventually pass in as an option
+    const newImage = await takeExistingImage()
+    const cloudinaryUrl = await getCloudinaryUrl(newImage.base64)
+    updatePicture({
+      variables: {
+        imageUrl: cloudinaryUrl
+      },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      },
+    })
+    setPhotoModalVisible(false)
+  }
+
+  const handleChangeForNewPicture = async () => {
+    // const desiredRatio = [4,4] --> eventually pass in as an option
+    const newImage = await takeNewImage()
+    const cloudinaryUrl = await getCloudinaryUrl(newImage.base64)
+    updatePicture({
+      variables: {
+        imageUrl: cloudinaryUrl
+      },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      },
+    })
+    setPhotoModalVisible(false)
+  }
+
+  /**
+   * RETURN 
+   */
 
   let TouchableComponent = TouchableOpacity;
 
@@ -51,54 +113,92 @@ const UserEditScreen = (props) => {
     );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userProfileHeader}>
-        <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
-        <TouchableOpacity onPress={() => { }} style={{
-          position: 'absolute',
-          width: 30,
-          height: 30,
-          top: 33,
-          left: 105,
-          borderRadius: 20,
-          backgroundColor: TourTourColors.primary,
-          borderColor: TourTourColors.accent,
-          borderWidth: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
-        </TouchableOpacity>
+    <React.Fragment>
+      <View style={styles.modalContainer}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={photoModalVisible}
+          onBackdropPress={() => setPhotoModalVisible(false)}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}></Text>
+              <View style={{ flexDirection: 'row' }}>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
+                  onPress={() => setPhotoModalVisible(false)}
+                >
+                  <Text style={styles.textStyle}>Annuler</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
+                  onPress={handleChangeForNewPicture}
+                >
+                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={handleChangeForExistingPicture}
+                >
+                  <Text style={styles.textStyle}>Photo déjà existante</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
-      <View style={styles.userInfoContainer}>
-        <View style={styles.userNameContainer}>
-          <Text style={styles.userName}>
-            {userName}
-          </Text>
+      <View style={styles.container}>
+        <View style={styles.userProfileHeader}>
+          <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
+          <TouchableOpacity onPress={() => { setPhotoModalVisible(true) }} style={{
+            position: 'absolute',
+            width: 30,
+            height: 30,
+            top: 33,
+            left: 105,
+            borderRadius: 20,
+            backgroundColor: TourTourColors.primary,
+            borderColor: TourTourColors.accent,
+            borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
+          </TouchableOpacity>
         </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.userCity}>Montréal, QC</Text>
+        <View style={styles.userInfoContainer}>
+          <View style={styles.userNameContainer}>
+            <Text style={styles.userName}>
+              {userName}
+            </Text>
+          </View>
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.userCity}>Montréal, QC</Text>
+          </View>
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.userStatus}>{userStatus}</Text>
+          </View>
+          <TouchableOpacity onPress={() => { }} style={{
+            position: 'absolute',
+            width: 30,
+            height: 30,
+            top: -13,
+            right: -13,
+            borderRadius: 20,
+            backgroundColor: TourTourColors.primary,
+            borderColor: TourTourColors.accent,
+            borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
+          </TouchableOpacity>
         </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.userStatus}>{userStatus}</Text>
-        </View>
-        <TouchableOpacity onPress={() => { }} style={{
-          position: 'absolute',
-          width: 30,
-          height: 30,
-          top: -13,
-          right: -13,
-          borderRadius: 20,
-          backgroundColor: TourTourColors.primary,
-          borderColor: TourTourColors.accent,
-          borderWidth: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
-        </TouchableOpacity>
-      </View>
-      {/*<View style={styles.actionsRow}>
+        {/*<View style={styles.actionsRow}>
 
         <TouchableComponent>
           <View style={styles.actionGroup}>
@@ -111,63 +211,64 @@ const UserEditScreen = (props) => {
           </View>
         </TouchableComponent>
       </View>*/}
-      <View style={styles.rowsContainer}>
-        <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
-          <View style={styles.row}>
-            <View style={styles.rowLeftGroup}>
-              <View style={styles.rowIconBox}>
-                <Ionicons name='ios-images' size={26} color='#333' />
+        <View style={styles.rowsContainer}>
+          <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
+            <View style={styles.row}>
+              <View style={styles.rowLeftGroup}>
+                <View style={styles.rowIconBox}>
+                  <Ionicons name='ios-images' size={26} color='#333' />
+                </View>
+                <View>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes places</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
+                </View>
               </View>
-              <View>
-                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes places</Text>
-              </View>
-              <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
-              </View>
-            </View>
-            <View style={styles.forwardArrow}>
-              <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-            </View>
-          </View>
-        </TouchableComponent>
-        <TouchableComponent onPress={() => { props.navigation.navigate('MyReviews', { userToken: jwtBearer }) }}>
-          <View style={styles.row}>
-            <View style={styles.rowLeftGroup}>
-              <View style={styles.rowIconBox}>
-                <MaterialCommunityIcons name='star-box' size={28} color='#333' />
-              </View>
-              <View>
-                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes reviews</Text>
-              </View>
-              <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
+              <View style={styles.forwardArrow}>
+                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
               </View>
             </View>
-            <View style={styles.forwardArrow}>
-              <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-            </View>
-          </View>
-        </TouchableComponent>
-        <TouchableComponent onPress={() => { props.navigation.navigate('MyPhotos', { userToken: jwtBearer }) }}>
-          <View style={{ ...styles.row, ...styles.lastRow }}>
-            <View style={styles.rowLeftGroup}>
-              <View style={styles.rowIconBox}>
-                <Ionicons name='ios-camera' size={28} color='#333' />
+          </TouchableComponent>
+          <TouchableComponent onPress={() => { props.navigation.navigate('MyReviews', { userToken: jwtBearer }) }}>
+            <View style={styles.row}>
+              <View style={styles.rowLeftGroup}>
+                <View style={styles.rowIconBox}>
+                  <MaterialCommunityIcons name='star-box' size={28} color='#333' />
+                </View>
+                <View>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes reviews</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
+                </View>
               </View>
-              <View>
-                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes photos</Text>
-              </View>
-              <View>
-                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
+              <View style={styles.forwardArrow}>
+                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
               </View>
             </View>
-            <View style={styles.forwardArrow}>
-              <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+          </TouchableComponent>
+          <TouchableComponent onPress={() => { props.navigation.navigate('MyPhotos', { userToken: jwtBearer }) }}>
+            <View style={{ ...styles.row, ...styles.lastRow }}>
+              <View style={styles.rowLeftGroup}>
+                <View style={styles.rowIconBox}>
+                  <Ionicons name='ios-camera' size={28} color='#333' />
+                </View>
+                <View>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes photos</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
+                </View>
+              </View>
+              <View style={styles.forwardArrow}>
+                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+              </View>
             </View>
-          </View>
-        </TouchableComponent>
+          </TouchableComponent>
+        </View>
       </View>
-    </View>
+    </React.Fragment>
   );
 }
 
@@ -261,6 +362,46 @@ const styles = StyleSheet.create({
   },
   forwardArrow: {
     marginRight: 5
+  },
+  centeredView: {
+    // flex: 1,
+    height: '100%',
+    justifyContent: "center",
+    alignItems: "center",
+    // marginTop: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    width: '95%',
+    // marginHorizontal: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 })
 

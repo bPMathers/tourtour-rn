@@ -65,7 +65,6 @@ const PlaceDetailScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const { data: placeData } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
-  console.log(placeData?.place)
 
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   loggedInUserId = tokenAndIdData?.userId
