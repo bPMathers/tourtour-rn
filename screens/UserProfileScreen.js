@@ -158,7 +158,7 @@ const UserProfileScreen = (props) => {
                     </View>
                 </TouchableComponent>
                 <TouchableComponent onPress={() => {
-                    //  props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) 
+                    props.navigation.navigate('UserPlaces')
                 }}>
                     <View style={styles.row}>
                         <View style={styles.rowLeftGroup}>

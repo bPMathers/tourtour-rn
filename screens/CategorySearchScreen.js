@@ -100,11 +100,6 @@ const CategorySearchScreen = (props) => {
             userName: itemData.item.addedBy.name
           });
         }}
-        onSelectPlace={() => {
-          props.navigation.navigate('PlaceDetail', {
-            place: itemData.item,
-          });
-        }}
       />
     );
   };

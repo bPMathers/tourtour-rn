@@ -25,7 +25,11 @@ const PlacePreviewListItem = (props) => {
 
   return (
     <View style={styles.placePreviewListItem}>
-      <TouchableComponent style={{ flex: 1 }} onPress={props.onSelectPlace}>
+      <TouchableComponent style={{ flex: 1 }} onPress={() => {
+        navigation.navigate('PlaceDetail', {
+          place: place
+        })
+      }}>
         <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
           <View style={styles.overlayContentContainer}>
             <View style={styles.leftColumn}>

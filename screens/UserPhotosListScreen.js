@@ -6,11 +6,8 @@ import { AntDesign, Ionicons } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
 
 import { GET_USER_PHOTOS, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
-import { TourTourColors } from '../constants/Colors'
-import { useNavigation } from '@react-navigation/native';
 
 const PhotoCard = ({ itemData }) => {
-  const navigation = useNavigation()
 
   let TouchableComponent = TouchableOpacity;
 
@@ -26,7 +23,6 @@ const PhotoCard = ({ itemData }) => {
     </View>
   )
 }
-
 
 const UserPhotosListScreen = (props) => {
   const photos = props.route.params.photos
@@ -48,6 +44,10 @@ const UserPhotosListScreen = (props) => {
     }
   `;
   const [deletePhoto, { data }] = useMutation(DELETE_PHOTO)
+
+  /**
+   * HELPERS
+   */
 
   const renderGridItem = (itemData) => {
 
@@ -111,6 +111,10 @@ const UserPhotosListScreen = (props) => {
     })
     setModalVisible(false)
   }
+
+  /**
+   * RETURN
+   */
 
   return (
     <React.Fragment>

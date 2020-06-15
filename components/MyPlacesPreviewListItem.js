@@ -63,19 +63,19 @@ const MyPlacesPreviewListItem = (props) => {
             </View>
             <View>
               <View style={styles.rightRow3}>
-
-                <TouchableComponent onPress={() => {
-                  navigation.navigate('UpdateMyPlace', {
-                    place: place
-                  })
-                }}>
-                  <FontAwesome5
-                    style={styles.starIcon}
-                    name='pencil-alt'
-                    size={24}
-                    color='white'
-                  />
-                </TouchableComponent>
+                {place.addedBy.id &&
+                  <TouchableComponent onPress={() => {
+                    navigation.navigate('UpdateMyPlace', {
+                      place: place
+                    })
+                  }}>
+                    <FontAwesome5
+                      style={styles.starIcon}
+                      name='pencil-alt'
+                      size={24}
+                      color='white'
+                    />
+                  </TouchableComponent>}
               </View>
             </View>
           </View>

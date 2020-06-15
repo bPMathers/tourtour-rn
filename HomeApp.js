@@ -42,6 +42,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import MyReviewsListScreen from './screens/MyReviewsListScreen';
 import MyPhotosListScreen from './screens/MyPhotosListScreen';
+import UserPlacesListScreen from './screens/UserPlacesListScreen';
 
 import { GET_TOKEN } from './graphql/queries'
 import MyPlacesScreen from './screens/MyPlacesScreen';
@@ -173,6 +174,15 @@ function HomeStackScreen() {
         options={({ route }) => ({
           // title: route.params.userName,
           title: route.params.userName,
+          headerStyle: { backgroundColor: TourTourColors.accent },
+        })}
+      />
+      <HomeStack.Screen
+        name='UserPlaces'
+        component={UserPlacesListScreen}
+        options={({ route }) => ({
+          // title: route.params.userName,
+          title: "ChangeMe",
           headerStyle: { backgroundColor: TourTourColors.accent },
         })}
       />
