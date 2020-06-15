@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -14,6 +14,9 @@ const UserProfileScreen = (props) => {
         id
         name
         imageUrl
+        places {
+            id
+        }
         reviews {
             id
         }
@@ -68,7 +71,15 @@ const UserProfileScreen = (props) => {
                 </Text>
             </View>
             <View style={styles.actionsRow}>
-                <TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    Alert.alert(
+                        `Attention!`,
+                        `L'option "Messagerie" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        [
+                            { text: 'Ok' },
+                        ]
+                    )
+                }}>
                     <View style={styles.actionGroup}>
                         <View style={styles.actionButton}>
                             <AntDesign name='message1' size={18} color={TourTourColors.accent} />
@@ -78,7 +89,15 @@ const UserProfileScreen = (props) => {
                         </View>
                     </View>
                 </TouchableComponent>
-                <TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    Alert.alert(
+                        `Attention!`,
+                        `L'option "Suivre" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        [
+                            { text: 'Ok' },
+                        ]
+                    )
+                }}>
                     <View style={styles.actionGroup}>
                         <View style={styles.actionButton}>
                             <SimpleLineIcons name='user-follow' size={20} color={TourTourColors.accent} />
@@ -90,7 +109,15 @@ const UserProfileScreen = (props) => {
                 </TouchableComponent>
             </View>
             <View style={styles.rowsContainer}>
-                <TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    Alert.alert(
+                        `Attention!`,
+                        `L'option "Activité récente" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        [
+                            { text: 'Ok' },
+                        ]
+                    )
+                }}>
                     <View style={styles.row}>
                         <View style={styles.rowLeftGroup}>
                             <View style={styles.rowIconBox}>
@@ -108,6 +135,26 @@ const UserProfileScreen = (props) => {
                         </View>
                     </View>
                 </TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    //  props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) 
+                }}>
+                    <View style={styles.row}>
+                        <View style={styles.rowLeftGroup}>
+                            <View style={styles.rowIconBox}>
+                                <Ionicons name='ios-images' size={26} color='#333' />
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Places</Text>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
+                            </View>
+                        </View>
+                        <View style={styles.forwardArrow}>
+                            <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+                        </View>
+                    </View>
+                </TouchableComponent>
                 <TouchableComponent>
                     <View style={styles.row}>
                         <View style={styles.rowLeftGroup}>
@@ -118,7 +165,7 @@ const UserProfileScreen = (props) => {
                                 <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Reviews</Text>
                             </View>
                             <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> (21)</Text>
+                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
                             </View>
                         </View>
                         <View style={styles.forwardArrow}>
@@ -126,7 +173,11 @@ const UserProfileScreen = (props) => {
                         </View>
                     </View>
                 </TouchableComponent>
-                <TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    props.navigation.navigate('UserPhotos', {
+                        userId: props.route.params.userId,
+                    })
+                }}>
                     <View style={{ ...styles.row, ...styles.lastRow }}>
                         <View style={styles.rowLeftGroup}>
                             <View style={styles.rowIconBox}>
@@ -136,7 +187,7 @@ const UserProfileScreen = (props) => {
                                 <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Photos</Text>
                             </View>
                             <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> (69)</Text>
+                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
                             </View>
                         </View>
                         <View style={styles.forwardArrow}>

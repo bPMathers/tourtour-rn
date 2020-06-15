@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const MyReviewsCard = ({ itemData }) => {
   const navigation = useNavigation()
-  const loggedInUserId = itemData.item.author.id
+  // const loggedInUserId = itemData.item.author.id
 
   let TouchableComponent = TouchableOpacity;
 

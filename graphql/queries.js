@@ -191,6 +191,27 @@ const GET_MY_PHOTOS = gql`
   }
 `;
 
+const GET_USER_PHOTOS = gql`
+  query($userId: ID!) {
+    photos(userId: $userId) {
+      id
+      url
+      addedBy {
+        id
+        name
+        imageUrl
+      }
+      place {
+        id
+        name
+        formatted_address
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 const GET_CACHED_IMG_URI = gql`
 {
   imageUrl @client
@@ -238,6 +259,7 @@ export {
   GET_MY_REVIEWS,
   GET_MY_PHOTOS,
   GET_MY_PLACES,
-  GET_USER
+  GET_USER,
+  GET_USER_PHOTOS
 
 }

@@ -45,6 +45,7 @@ import MyPhotosListScreen from './screens/MyPhotosListScreen';
 
 import { GET_TOKEN } from './graphql/queries'
 import MyPlacesScreen from './screens/MyPlacesScreen';
+import UserPhotosListScreen from './screens/UserPhotosListScreen';
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -159,6 +160,15 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name='UserProfile'
         component={UserProfileScreen}
+        options={({ route }) => ({
+          // title: route.params.userName,
+          title: route.params.userName,
+          headerStyle: { backgroundColor: TourTourColors.accent },
+        })}
+      />
+      <HomeStack.Screen
+        name='UserPhotos'
+        component={UserPhotosListScreen}
         options={({ route }) => ({
           // title: route.params.userName,
           title: route.params.userName,
