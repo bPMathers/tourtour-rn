@@ -19,10 +19,32 @@ const UserProfileScreen = (props) => {
         }
         reviews {
             id
+            rating
+            title 
+            body
+            author {
+                id
+                name
+                imageUrl
+            }
+            place {
+                id
+                name 
+            }
+            createdAt
+            updatedAt
         }
         photos {
             id
+            url 
+            addedBy {
+                id
+                name
+            }
+            createdAt
         }
+        createdAt
+        updatedAt
       }
     }
   `;
@@ -155,7 +177,9 @@ const UserProfileScreen = (props) => {
                         </View>
                     </View>
                 </TouchableComponent>
-                <TouchableComponent>
+                <TouchableComponent onPress={() => {
+                    props.navigation.navigate('UserReviews', { reviews: data.user.reviews })
+                }}>
                     <View style={styles.row}>
                         <View style={styles.rowLeftGroup}>
                             <View style={styles.rowIconBox}>
@@ -175,7 +199,7 @@ const UserProfileScreen = (props) => {
                 </TouchableComponent>
                 <TouchableComponent onPress={() => {
                     props.navigation.navigate('UserPhotos', {
-                        userId: props.route.params.userId,
+                        userId: data.user.id,
                     })
                 }}>
                     <View style={{ ...styles.row, ...styles.lastRow }}>

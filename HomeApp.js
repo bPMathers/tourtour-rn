@@ -46,6 +46,7 @@ import MyPhotosListScreen from './screens/MyPhotosListScreen';
 import { GET_TOKEN } from './graphql/queries'
 import MyPlacesScreen from './screens/MyPlacesScreen';
 import UserPhotosListScreen from './screens/UserPhotosListScreen';
+import UserReviewsListScreen from './screens/UserReviewsListScreen';
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -225,6 +226,15 @@ function HomeStackScreen() {
         component={UpdateReviewScreen}
         options={{
           title: "Votre Review",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name='UserReviews'
+        component={UserReviewsListScreen}
+        options={{
+          title: "Change This",
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
