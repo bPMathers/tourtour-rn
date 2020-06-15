@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal, TextInput, Alert } from 'react-native';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
@@ -12,6 +12,10 @@ import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
 
 const UserEditScreen = (props) => {
 
+  /**
+   * HOOKS
+   */
+
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
@@ -21,9 +25,12 @@ const UserEditScreen = (props) => {
     },
   });
   const [userName, setUserName] = useState(data?.user?.name)
+  const [nameForUpdate, setNameForUpdate] = useState();
+  const [statusForUpdate, setStatusForUpdate] = useState();
   // const [userCity, setUserCity] = useState(data?.user?.location)
   const [userStatus, setUserStatus] = useState(data?.user?.status)
   const [photoModalVisible, setPhotoModalVisible] = useState(false);
+  const [editingName, setEditingName] = useState(false)
 
 
   useEffect(() => {
@@ -37,6 +44,7 @@ const UserEditScreen = (props) => {
    * GRAPHQL
    */
 
+  // eventually use same mutation for both updatePicture and update userInfo
   const UPDATE_PICTURE = gql`
     mutation($imageUrl: String!) {
       updateUser(
@@ -51,9 +59,48 @@ const UserEditScreen = (props) => {
 
   const [updatePicture] = useMutation(UPDATE_PICTURE)
 
+  const UPDATE_NAME = gql`
+    mutation($name: String!) {
+      updateUser(
+        data: {
+          name: $name
+        }) {
+        id
+        name
+        imageUrl
+        }
+      }
+  `;
+
+  const [updateName] = useMutation(UPDATE_NAME)
+
   /**
    * HELPERS 
    */
+
+  const nameChangeHandler = text => {
+    // should sanitize input ?
+    setNameForUpdate(text);
+  };
+
+  const handleSaveName = () => {
+    updateName({
+      variables: {
+        name: nameForUpdate
+      },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      },
+    })
+    setEditingName(false)
+  }
+
+  const statusChangeHandler = text => {
+    // should sanitize input ?
+    setStatusForUpdate(text);
+  };
 
   const handleChangeForExistingPicture = async () => {
     // const desiredRatio = [4,4] --> eventually pass in as an option
@@ -114,43 +161,42 @@ const UserEditScreen = (props) => {
 
   return (
     <React.Fragment>
-      <View style={styles.modalContainer}>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={photoModalVisible}
-          onBackdropPress={() => setPhotoModalVisible(false)}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}></Text>
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
-                  onPress={() => setPhotoModalVisible(false)}
-                >
-                  <Text style={styles.textStyle}>Annuler</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
-                  onPress={handleChangeForNewPicture}
-                >
-                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                  onPress={handleChangeForExistingPicture}
-                >
-                  <Text style={styles.textStyle}>Photo déjà existante</Text>
-                </TouchableHighlight>
-              </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={photoModalVisible}
+        onBackdropPress={() => setPhotoModalVisible(false)}
+      // onRequestClose={() => {
+      //   Alert.alert("Modal has been closed.");
+      // }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.photoModalView}>
+            <Text style={styles.modalText}></Text>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
+                onPress={() => setPhotoModalVisible(false)}
+              >
+                <Text style={styles.textStyle}>Annuler</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
+                onPress={handleChangeForNewPicture}
+              >
+                <Text style={styles.textStyle}>Nouvelle Photo</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                onPress={handleChangeForExistingPicture}
+              >
+                <Text style={styles.textStyle}>Photo déjà existante</Text>
+              </TouchableHighlight>
             </View>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
+
       <View style={styles.container}>
         <View style={styles.userProfileHeader}>
           <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
@@ -172,9 +218,71 @@ const UserEditScreen = (props) => {
         </View>
         <View style={styles.userInfoContainer}>
           <View style={styles.userNameContainer}>
-            <Text style={styles.userName}>
-              {userName}
-            </Text>
+            {editingName ?
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TextInput
+                  style={styles.nameChangeInput}
+                  onChangeText={nameChangeHandler}
+                  value={nameForUpdate}
+                  placeholder={`Votre nouveau nom`}
+                />
+                <TouchableOpacity onPress={() => {
+                  Alert.alert(
+                    `${userName}!`,
+                    `Êtes-vous certain(e) de vouloir changer votre nom pour: ${nameForUpdate}?`,
+                    [
+                      { text: 'Annuler', style: 'destructive' },
+                      { text: 'Confirmer', onPress: () => { handleSaveName() } },
+                    ]
+                  )
+                }} style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  marginRight: 5,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Ionicons name='ios-save' size={20} color={TourTourColors.accent} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { setEditingName(false) }} style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  marginRight: 5,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Feather name='x' size={20} color='red' />
+                </TouchableOpacity>
+              </View>
+              :
+              <>
+                <Text style={styles.userName}>
+                  {userName}
+                </Text>
+                <TouchableOpacity onPress={() => { setEditingName(true) }} style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+
+                }}>
+                  <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
+                </TouchableOpacity>
+              </>
+            }
+
           </View>
           <View style={{ marginBottom: 10 }}>
             <Text style={styles.userCity}>Montréal, QC</Text>
@@ -182,35 +290,8 @@ const UserEditScreen = (props) => {
           <View style={{ marginBottom: 10 }}>
             <Text style={styles.userStatus}>{userStatus}</Text>
           </View>
-          <TouchableOpacity onPress={() => { }} style={{
-            position: 'absolute',
-            width: 30,
-            height: 30,
-            top: -13,
-            right: -13,
-            borderRadius: 20,
-            backgroundColor: TourTourColors.primary,
-            borderColor: TourTourColors.accent,
-            borderWidth: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
-          </TouchableOpacity>
-        </View>
-        {/*<View style={styles.actionsRow}>
 
-        <TouchableComponent>
-          <View style={styles.actionGroup}>
-            <View style={styles.actionButton}>
-              <FontAwesome5 name='pencil-alt' size={20} color={TourTourColors.accent} />
-            </View>
-            <View>
-              <Text style={styles.actionTitle}>Modifier</Text>
-            </View>
-          </View>
-        </TouchableComponent>
-      </View>*/}
+        </View>
         <View style={styles.rowsContainer}>
           <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
             <View style={styles.row}>
@@ -291,18 +372,23 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     padding: 10,
     width: '90%',
-    backgroundColor: 'pink',
+    backgroundColor: '#e7e7e7',
     borderWidth: 1,
     borderColor: TourTourColors.accent,
     borderRadius: 10
   },
   userNameContainer: {
-    marginBottom: 3
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 3,
+    flexDirection: 'row'
+
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginRight: 10
   },
   userCity: {
     textAlign: 'center'
@@ -310,29 +396,6 @@ const styles = StyleSheet.create({
   userStatus: {
     textAlign: 'center'
   },
-  // actionsRow: {
-  //   width: '70%',
-  //   marginVertical: 15,
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around'
-  // },
-  // actionGroup: {
-  //   alignItems: 'center',
-  // },
-  // actionButton: {
-  //   width: 40,
-  //   height: 40,
-  //   backgroundColor: TourTourColors.primary,
-  //   borderRadius: 25,
-  //   marginBottom: 5,
-  //   justifyContent: 'center',
-  //   alignItems: "center"
-  // },
-  // actionTitle: {
-  //   color: TourTourColors.accent,
-  //   fontWeight: 'bold',
-  //   fontSize: 12
-  // },
   rowsContainer: {
     width: '100%'
   },
@@ -371,7 +434,7 @@ const styles = StyleSheet.create({
     // marginTop: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.7)'
   },
-  modalView: {
+  photoModalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -402,6 +465,32 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  updateForm: {
+    // flex: 1,
+    padding: 20,
+    width: '90%',
+    backgroundColor: 'yellow'
+  },
+  label: {
+    color: TourTourColors.accent,
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 15
+  },
+  nameChangeInput: {
+    width: '80%',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 2,
+    marginBottom: 0,
+    // paddingVertical: 4,
+    // paddingHorizontal: 2,
+    backgroundColor: 'white',
+    padding: 10,
+    marginRight: 5,
   }
 })
 
