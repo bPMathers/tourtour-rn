@@ -199,7 +199,7 @@ const UserProfileScreen = (props) => {
                 </TouchableComponent>
                 <TouchableComponent onPress={() => {
                     props.navigation.navigate('UserPhotos', {
-                        userId: data.user.id,
+                        photos: data.user.photos
                     })
                 }}>
                     <View style={{ ...styles.row, ...styles.lastRow }}>

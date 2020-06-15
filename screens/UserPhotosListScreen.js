@@ -9,7 +9,7 @@ import { GET_USER_PHOTOS, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/que
 import { TourTourColors } from '../constants/Colors'
 import { useNavigation } from '@react-navigation/native';
 
-const MyPhotoCard = ({ itemData }) => {
+const PhotoCard = ({ itemData }) => {
   const navigation = useNavigation()
 
   let TouchableComponent = TouchableOpacity;
@@ -28,18 +28,13 @@ const MyPhotoCard = ({ itemData }) => {
 }
 
 
-
 const UserPhotosListScreen = (props) => {
+  const photos = props.route.params.photos
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState({ addedBy: '' })
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
-  const { loading: photosLoading, error: photosError, data: photosData } = useQuery(GET_USER_PHOTOS, {
-    variables: {
-      userId: props.route.params.userId,
-    }
-  });
 
   /**
    * GRAPHQL
@@ -67,7 +62,7 @@ const UserPhotosListScreen = (props) => {
         setModalVisible(true)
 
       }}>
-        <MyPhotoCard itemData={itemData} />
+        <PhotoCard itemData={itemData} />
       </TouchableComponent>
     );
   }
@@ -117,19 +112,6 @@ const UserPhotosListScreen = (props) => {
     setModalVisible(false)
   }
 
-  if (photosLoading)
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  if (photosError)
-    return (
-      <View style={styles.container}>
-        <Text>Error...</Text>
-      </View>
-    );
-
   return (
     <React.Fragment>
       <Modal
@@ -178,7 +160,7 @@ const UserPhotosListScreen = (props) => {
         </View>
       </Modal>
       <View style={{ padding: 10 }}>
-        <FlatList numColumns={2} data={photosData.photos} renderItem={renderGridItem} />
+        <FlatList numColumns={2} data={photos} renderItem={renderGridItem} />
       </View>
     </React.Fragment>
   );
