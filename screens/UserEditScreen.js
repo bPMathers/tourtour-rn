@@ -31,6 +31,7 @@ const UserEditScreen = (props) => {
   const [userStatus, setUserStatus] = useState(data?.user?.status)
   const [photoModalVisible, setPhotoModalVisible] = useState(false);
   const [editingName, setEditingName] = useState(false)
+  const [editingStatus, setEditingStatus] = useState(false)
 
 
   useEffect(() => {
@@ -74,6 +75,22 @@ const UserEditScreen = (props) => {
 
   const [updateName] = useMutation(UPDATE_NAME)
 
+  const UPDATE_STATUS = gql`
+    mutation($status: String!) {
+      updateUser(
+        data: {
+          status: $status
+        }) {
+        id
+        name
+        imageUrl
+        status
+        }
+      }
+  `;
+
+  const [updateStatus] = useMutation(UPDATE_STATUS)
+
   /**
    * HELPERS 
    */
@@ -101,6 +118,20 @@ const UserEditScreen = (props) => {
     // should sanitize input ?
     setStatusForUpdate(text);
   };
+
+  const handleSaveStatus = () => {
+    updateStatus({
+      variables: {
+        status: statusForUpdate
+      },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      },
+    })
+    setEditingStatus(false)
+  }
 
   const handleChangeForExistingPicture = async () => {
     // const desiredRatio = [4,4] --> eventually pass in as an option
@@ -220,11 +251,25 @@ const UserEditScreen = (props) => {
           <View style={styles.userNameContainer}>
             {editingName ?
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => { setEditingName(false) }} style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  marginRight: 5,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Feather name='x' size={20} color='red' />
+                </TouchableOpacity>
                 <TextInput
                   style={styles.nameChangeInput}
                   onChangeText={nameChangeHandler}
                   value={nameForUpdate}
                   placeholder={`Votre nouveau nom`}
+                  clearTextOnFocus
                 />
                 <TouchableOpacity onPress={() => {
                   Alert.alert(
@@ -248,7 +293,41 @@ const UserEditScreen = (props) => {
                 }}>
                   <Ionicons name='ios-save' size={20} color={TourTourColors.accent} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setEditingName(false) }} style={{
+
+              </View>
+              :
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.userName}>
+                  {userName}
+                </Text>
+                <TouchableOpacity onPress={() => { setEditingName(true) }} style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 20,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+
+                }}>
+                  <FontAwesome5 name='pencil-alt' size={12} color={TourTourColors.accent} />
+                </TouchableOpacity>
+              </View>
+            }
+
+          </View>
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.userCity}>Montréal, QC</Text>
+          </View>
+          <View style={styles.userStatusContainer}>
+            {editingStatus ?
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+                <TouchableOpacity onPress={() => {
+                  setEditingStatus(false)
+                  setStatusForUpdate('')
+                }} style={{
                   width: 30,
                   height: 30,
                   borderRadius: 20,
@@ -261,34 +340,50 @@ const UserEditScreen = (props) => {
                 }}>
                   <Feather name='x' size={20} color='red' />
                 </TouchableOpacity>
+                <TextInput
+                  style={styles.statusChangeInput}
+                  onChangeText={statusChangeHandler}
+                  value={statusForUpdate}
+                  placeholder={`Votre nouveau statut`}
+                  clearTextOnFocus
+                  multiline={true}
+                />
+                <TouchableOpacity onPress={handleSaveStatus} style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 20,
+                  marginRight: 5,
+                  backgroundColor: TourTourColors.primary,
+                  borderColor: TourTourColors.accent,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}>
+                  <Ionicons name='ios-save' size={20} color={TourTourColors.accent} />
+                </TouchableOpacity>
+
+
               </View>
               :
               <>
-                <Text style={styles.userName}>
-                  {userName}
-                </Text>
-                <TouchableOpacity onPress={() => { setEditingName(true) }} style={{
-                  width: 30,
-                  height: 30,
+                <TouchableOpacity onPress={() => { setEditingStatus(true) }} style={{
+                  position: 'absolute',
+                  width: 24,
+                  height: 24,
+                  top: -10,
+                  right: -10,
                   borderRadius: 20,
                   backgroundColor: TourTourColors.primary,
                   borderColor: TourTourColors.accent,
                   borderWidth: 1,
                   justifyContent: 'center',
-                  alignItems: 'center',
-
+                  alignItems: 'center'
                 }}>
-                  <FontAwesome5 name='pencil-alt' size={15} color={TourTourColors.accent} />
+                  <FontAwesome5 name='pencil-alt' size={12} color={TourTourColors.accent} />
                 </TouchableOpacity>
+                <Text style={styles.userStatus}>{userStatus}</Text>
               </>
             }
-
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={styles.userCity}>Montréal, QC</Text>
-          </View>
-          <View style={{ marginBottom: 10 }}>
-            <Text style={styles.userStatus}>{userStatus}</Text>
           </View>
 
         </View>
@@ -362,7 +457,7 @@ const styles = StyleSheet.create({
     height: 144,
     width: 144,
     marginTop: 30,
-    marginBottom: 30,
+    marginBottom: 20,
     borderRadius: 72,
     borderColor: TourTourColors.accent,
     borderWidth: 2,
@@ -370,10 +465,10 @@ const styles = StyleSheet.create({
   },
   userInfoContainer: {
     marginBottom: 30,
-    padding: 10,
+    padding: 15,
     width: '90%',
-    backgroundColor: '#e7e7e7',
-    borderWidth: 1,
+    // backgroundColor: '#e7e7e7',
+    // borderWidth: 2,
     borderColor: TourTourColors.accent,
     borderRadius: 10
   },
@@ -381,6 +476,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginBottom: 3,
+    paddingHorizontal: 10,
     flexDirection: 'row'
 
   },
@@ -392,6 +488,11 @@ const styles = StyleSheet.create({
   },
   userCity: {
     textAlign: 'center'
+  },
+  userStatusContainer: {
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 10
   },
   userStatus: {
     textAlign: 'center'
@@ -480,9 +581,22 @@ const styles = StyleSheet.create({
   },
   nameChangeInput: {
     width: '80%',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 2,
+    marginBottom: 0,
+    // paddingVertical: 4,
+    // paddingHorizontal: 2,
+    backgroundColor: 'white',
+    padding: 10,
+    marginRight: 5,
+  },
+  statusChangeInput: {
+    flex: 1,
+    fontSize: 14,
+    // textAlign: 'center',
     borderBottomColor: '#ccc',
     borderBottomWidth: 2,
     marginBottom: 0,
