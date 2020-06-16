@@ -275,7 +275,8 @@ export default function HomeApp(props) {
     takeLocation()
   })
   const { loading, error, data } = useQuery(GET_TOKEN)
-
+  console.log(data)
+  console.log(isLoggedIn)
 
   // check if token in device storage
   useEffect(() => {

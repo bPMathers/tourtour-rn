@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, KeyboardAvoidingView, View, TextInput, Text, Button, AsyncStorage } from 'react-native';
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
 
 
 import { TourTourColors } from '../constants/Colors'
-import { GET_TOKEN_AND_USER_ID } from '../graphql/queries';
-
-const GET_TOKEN = gql`
-{
-  token @client 
-}
-`;
-
 
 const AuthScreen = (props) => {
   /**
@@ -62,7 +54,6 @@ const AuthScreen = (props) => {
         await AsyncStorage.setItem('userToken', JSON.stringify(token))
       }
       setItem()
-      // props.navigation.navigate('HomeSearch')
     }
   }, [token])
 
@@ -76,7 +67,6 @@ const AuthScreen = (props) => {
         email: email,
         password: pw
       },
-      // refetchQueries: [{ query: GET_TOKEN }]
     }).catch(res => {
       console.log(`Error: ${res}`)
     })
@@ -88,7 +78,6 @@ const AuthScreen = (props) => {
   }
 
   if (error) {
-    // console.log(error.graphQLErrors)
     ErrorContainer = () => {
       return (
         <View>
