@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -8,10 +8,10 @@ import {
   StyleSheet
 } from 'react-native';
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
 
-
-import { googleApiKey } from '../env'
+import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
+import { getReverseGeocodingInfo } from '../utils/getReverseGeocodingInfo'
 import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
@@ -21,10 +21,14 @@ const NewPlaceScreen = props => {
   /**
    * HOOKS
    */
+  const client = useApolloClient()
   const [name, setName] = useState('');
-  const [base64Image, setBase64Image] = useState();
-  const { data: addPlaceData, client } = useQuery(GET_ADD_PLACE_DATA);
-  const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
+  const [imgBase64, setImgBase64] = useState()
+  const [lat, setLat] = useState()
+  const [lng, setLng] = useState()
+  // use one of my cloudinary files instead!
+  const [imageUri, setImageUri] = useState('https://res.cloudinary.com/db4mzdmnm/image/upload/v1592273897/no-image-icon-6_zoucqc.png')
+  const { data: tokenData } = useQuery(GET_TOKEN);
   const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
 
   useEffect(() => {
@@ -37,13 +41,17 @@ const NewPlaceScreen = props => {
           lng: props.route.params?.autoCompletePickedPlace?.geometry.location.lng,
         }
       })
+
+      setLat(props.route.params?.autoCompletePickedPlace?.geometry.location.lat)
+      setLng(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
     }
 
   }, [props.route.params?.autoCompletePickedPlace])
 
 
+
   /**
-   * GRAPHQL - MOVE TO EXTERNAL FILE WHEN DONE
+   * GRAPHQL 
    */
 
   const ADD_PLACE = gql`
@@ -71,65 +79,41 @@ const NewPlaceScreen = props => {
    * HELPERS
    */
 
-  const imageTakenHandler = (image) => {
-    client.writeData({
-      data: {
-        imageUrl: image.uri,
-        imageBase64: image.base64
-      }
-    })
-  };
-
   const nameChangeHandler = text => {
     // should sanitize input ?
     setName(text);
   };
 
-  const savePlaceHandler = async () => {
-    // send img to cloudinary and get url back
-    const base64ImgToUpload = `data:image/jpg;base64,${addPlaceData.imageBase64}`
+  const imageTakenHandler = (image) => {
+    setImageUri(image.uri)
+    setImgBase64(image.base64)
+  };
 
-    const apiUrl = 'https://api.cloudinary.com/v1_1/db4mzdmnm/image/upload';
-    const data = {
-      "file": base64ImgToUpload,
-      "upload_preset": "TourTour1",
+  const locationTakenHandler = (newLoc) => {
+    if (newLoc) {
+      setLat(newLoc.lat)
+      setLng(newLoc.lng)
     }
-    const cloudinaryUrl = await fetch(apiUrl, {
-      body: JSON.stringify(data),
-      headers: {
-        'content-type': 'application/json'
-      },
-      method: 'POST',
-    }).then(async r => {
-      const data = await r.json()
-      return data.secure_url
-    }).catch(err => console.log(err))
+  }
 
-    // Get location data
-    const revGeoCodingResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${addPlaceData.lat},${addPlaceData.lng}&key=${googleApiKey}`)
+  const savePlaceHandler = async (newImgBase64, newLocation) => {
+    const newImgUrl = await getCloudinaryUrl(newImgBase64)
+    const newFormattedAddressAndGooglePlaceId = await getReverseGeocodingInfo(newLocation)
 
-    if (!revGeoCodingResponse.ok) {
-      throw new Error("error while fetching reverse geocoding")
-    }
-
-    const resData = await revGeoCodingResponse.json()
-    const formattedAddress = resData.results[0].formatted_address
-    const googlePlaceId = resData.results[0].place_id
-    // Initiate GraphQL Mutation & refetch
     addPlace({
+      // eventually prevent adding if some info is missing
       variables: {
         name: name,
         categoryId: props.route.params.catId,
-        imageUrl: cloudinaryUrl ?? "https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg",
-        lat: addPlaceData.lat,
-        lng: addPlaceData.lng,
-        placeId: props.route.params?.autoCompletePickedPlace?.place_id ?? googlePlaceId,
-        formatted_address: props.route.params?.autoCompletePickedPlace?.formatted_address ?? formattedAddress,
+        imageUrl: newImgUrl ?? "https://upload.wikimedia.org/wikipedia/en/6/60/No_Picture.jpg",
+        lat: lat ?? 0,
+        lng: lng ?? 0,
+        placeId: newFormattedAddressAndGooglePlaceId?.placeId ?? '',
+        formatted_address: newFormattedAddressAndGooglePlaceId?.formattedAddress ?? '',
         phone: "",
       },
       context: {
         headers: {
-          // Set the token dynamically from cache. 
           Authorization: jwtBearer
         }
       },
@@ -158,16 +142,16 @@ const NewPlaceScreen = props => {
             props.navigation.navigate('GoogleAC')
           }}></Button>
         </View>
-        <ImagePicker onImageTaken={imageTakenHandler} />
+        <ImagePicker onImageTaken={imageTakenHandler} imageUri={imageUri} />
         <LocationPicker
           navigation={props.navigation}
           route={props.route}
-
+          onLocationTaken={locationTakenHandler}
         />
         <Button
           title="Sauvegarder"
           color={TourTourColors.accent}
-          onPress={savePlaceHandler}
+          onPress={() => { savePlaceHandler(imgBase64, { lat, lng }) }}
         />
       </View>
     </ScrollView>

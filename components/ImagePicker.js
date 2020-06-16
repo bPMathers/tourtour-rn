@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { View, Button, Image, Text, StyleSheet, Alert, TouchableOpacity, Modal, TouchableHighlight } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { useApolloClient } from "@apollo/react-hooks";
-import { useQuery } from '@apollo/react-hooks';
-
-import { GET_CACHED_IMG_URI } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
 
 const ImgPicker = props => {
@@ -13,9 +9,6 @@ const ImgPicker = props => {
    * HOOKS
    */
   const [modalVisible, setModalVisible] = useState(false);
-
-  const { data: cachedImageUri } = useQuery(GET_CACHED_IMG_URI);
-  const client = useApolloClient();
 
   /**
    * FUNCTIONS
@@ -62,8 +55,6 @@ const ImgPicker = props => {
       base64: true
     });
 
-    // const base64Img = `data:image/jpg;base64,${image.base64}`
-
     if (image.cancelled) {
       return
     }
@@ -81,8 +72,6 @@ const ImgPicker = props => {
       quality: 0.5,
       base64: true
     });
-
-    // const base64Img = `data:image/jpg;base64,${image.base64}`
 
     if (image.cancelled) {
       return
@@ -134,7 +123,7 @@ const ImgPicker = props => {
       </View>
       <View style={styles.imagePicker}>
         <TouchableOpacity style={styles.imagePreview} onPress={() => { setModalVisible(true) }}>
-          <Image style={styles.image} source={{ uri: cachedImageUri.imageUrl }} />
+          <Image style={styles.image} source={{ uri: props.imageUri }} />
         </TouchableOpacity>
         <View style={{ marginBottom: 15 }}>
           <Button

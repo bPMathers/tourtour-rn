@@ -8,7 +8,6 @@ import { Ionicons } from '@expo/vector-icons'
 const MapScreen = (props) => {
   const client = useApolloClient();
   const [selectedLocation, setSelectedLocation] = useState()
-  const [mapRgn, setMapRgn] = useState()
 
   props.navigation.setOptions({
     headerRight: () => (
@@ -42,19 +41,11 @@ const MapScreen = (props) => {
     })
   }, [selectedLocation])
 
-  // const mapRegion = mapRgn
-
   const selectLocationHandler = event => {
     setSelectedLocation({
       lat: event.nativeEvent.coordinate.latitude,
       lng: event.nativeEvent.coordinate.longitude,
     })
-    // setMapRgn({
-    //   latitude: event.nativeEvent.coordinate.latitude,
-    //   longitude: event.nativeEvent.coordinate.longitude,
-    //   latitudeDelta: 0.0922,
-    //   longitudeDelta: 0.0421
-    // })
   }
 
   const handleOnRegionChangeComplete = (region) => {

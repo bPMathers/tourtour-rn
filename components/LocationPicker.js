@@ -7,23 +7,19 @@ import {
   Alert,
   StyleSheet
 } from 'react-native';
-import { useApolloClient } from "@apollo/react-hooks";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@apollo/react-hooks';
-
 import { gql } from 'apollo-boost'
 
 import { TourTourColors } from '../constants/Colors';
 import MapPreview from './MapPreview';
 
 const LocationPicker = (props) => {
-  const client = useApolloClient();
   const navigation = useNavigation()
   const [isFetching, setIsFetching] = useState(false);
-  const [pickedLocation, setPickedLocation] = useState();
-  // console.log(`cachedLocation: ${cachedLocation}`)
+  const [pickedLocation, setPickedLocation] = useState(false);
 
   const GET_CACHED_LOCATION = gql`
   {
@@ -33,6 +29,16 @@ const LocationPicker = (props) => {
   `;
 
   const { data: cachedLocation } = useQuery(GET_CACHED_LOCATION);
+
+  useEffect(() => {
+    if (cachedLocation) {
+      setPickedLocation({
+        lat: cachedLocation.lat,
+        lng: cachedLocation.lng
+      })
+      props.onLocationTaken(cachedLocation)
+    }
+  }, [cachedLocation])
 
   const verifyPermissions = async () => {
     const result = await Permissions.askAsync(Permissions.LOCATION);
@@ -62,11 +68,9 @@ const LocationPicker = (props) => {
         lat: location.coords.latitude,
         lng: location.coords.longitude
       });
-      client.writeData({
-        data: {
-          lat: location.coords.latitude,
-          lng: location.coords.longitude
-        }
+      props.onLocationTaken({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude
       })
     } catch (err) {
       console.log(err)
@@ -84,11 +88,9 @@ const LocationPicker = (props) => {
     navigation.navigate('Map')
   }
 
-
-
   return (
     <View style={styles.locationPicker}>
-      <MapPreview style={styles.mapPreview} location={cachedLocation} onPressMap={pickOnMapHandler}>
+      <MapPreview style={styles.mapPreview} location={pickedLocation} onPressMap={pickOnMapHandler}>
         {isFetching ? (
           <ActivityIndicator size="large" color={TourTourColors.primary} />
         ) : (

@@ -1,7 +1,3 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import React, { useEffect, useState } from 'react';
 import {
   Platform,
@@ -14,14 +10,13 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
-
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
-
-
 import useCachedResources from './hooks/useCachedResources';
-// import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { TourTourColors } from './constants/Colors';
 import HomeSearchScreen from './screens/HomeSearchScreen';
@@ -43,11 +38,10 @@ import SettingsScreen from './screens/SettingsScreen';
 import MyReviewsListScreen from './screens/MyReviewsListScreen';
 import MyPhotosListScreen from './screens/MyPhotosListScreen';
 import UserPlacesListScreen from './screens/UserPlacesListScreen';
-
-import { GET_TOKEN } from './graphql/queries'
 import MyPlacesScreen from './screens/MyPlacesScreen';
 import UserPhotosListScreen from './screens/UserPhotosListScreen';
 import UserReviewsListScreen from './screens/UserReviewsListScreen';
+import { GET_TOKEN } from './graphql/queries'
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -361,7 +355,7 @@ export default function HomeApp(props) {
   client.writeData({
     data: {
       //This file is on my laptop only, find how to bundle with app
-      imageUrl: "file:///Users/bpm19/Documents/Career/TourTour/RNapp/tourtour-rn/assets/images/1200px-Plus_symbol.svg.png",
+      imageUrl: "https://res.cloudinary.com/db4mzdmnm/image/upload/v1592273897/no-image-icon-6_zoucqc.png",
       imageBase64: null,
 
     }

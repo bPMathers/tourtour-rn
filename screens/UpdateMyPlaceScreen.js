@@ -121,7 +121,6 @@ const UpdateMyPlaceScreen = props => {
   const updatePlaceHandler = async (newImgBase64, newLocation) => {
 
     try {
-
       const newImgUrl = await getCloudinaryUrl(newImgBase64)
       const newFormattedAddressAndGooglePlaceId = await getReverseGeocodingInfo(newLocation)
 
@@ -129,9 +128,9 @@ const UpdateMyPlaceScreen = props => {
         variables: {
           id: place.id,
           name: name,
-          // categoryId: catId,
+          // categoryId: we can't change that yet
           imageUrl: newImgUrl ?? imageUrl,
-          // url: "pipi",
+          // url: "websitelink",
           lat: lat,
           lng: lng,
           placeId: newFormattedAddressAndGooglePlaceId?.placeId ?? placeId,
@@ -140,14 +139,12 @@ const UpdateMyPlaceScreen = props => {
         },
         context: {
           headers: {
-            // Set the token dynamically from cache. 
             Authorization: jwtBearer
           }
         },
         refetchQueries: [{
           query: GET_MY_PLACES, context: {
             headers: {
-              // Set the token dynamically from cache. 
               Authorization: jwtBearer
             }
           },
