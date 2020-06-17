@@ -30,40 +30,38 @@ const ReviewCard = (props) => {
     TouchableComponent = TouchableNativeFeedback;
   }
   return (
-    <TouchableComponent>
-      <View style={styles.reviewCard}>
-        <View style={styles.reviewHeader}>
-          <View style={styles.reviewHeaderRow}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableComponent onPress={handleOnUserProfileSelect}>
-                <View style={{ marginRight: 5 }}>
-                  <Image style={styles.tinyUserProfilePic} source={{ uri: props.review.author.imageUrl }} />
-                </View>
-              </TouchableComponent>
-              <View>
-                <TouchableComponent onPress={handleOnUserProfileSelect}>
-                  <Text style={styles.authorName}>{props.review.author.name}</Text>
-                </TouchableComponent>
-                <StarRating rating={props.review.rating} color='white' />
-                {/*<Text style={styles.timeAgoText}>2h ago</Text>*/}
-                <TimeAgo style={styles.timeAgoText} time={props.review.updatedAt} />
+    <View style={styles.reviewCard}>
+      <View style={styles.reviewHeader}>
+        <View style={styles.reviewHeaderRow}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableComponent onPress={handleOnUserProfileSelect}>
+              <View style={{ marginRight: 5 }}>
+                <Image style={styles.tinyUserProfilePic} source={{ uri: props.review.author.imageUrl }} />
               </View>
-            </View>
-            {loggedInUserId === props.review.author.id ? (
-              <TouchableComponent onPress={handleEditPress}>
-                <FontAwesome5 name='pencil-alt' color='white' size={18} />
+            </TouchableComponent>
+            <View>
+              <TouchableComponent onPress={handleOnUserProfileSelect}>
+                <Text style={styles.authorName}>{props.review.author.name}</Text>
               </TouchableComponent>
-            ) : null}
+              <StarRating rating={props.review.rating} color='white' />
+              {/*<Text style={styles.timeAgoText}>2h ago</Text>*/}
+              <TimeAgo style={styles.timeAgoText} time={props.review.updatedAt} />
+            </View>
           </View>
-        </View>
-        <View style={{ marginBottom: 8 }}>
-          <Text style={styles.reviewTitleText}>:: {props.review.title}</Text>
-        </View>
-        <View>
-          <Text style={styles.reviewBodyText}>{props.review.body}</Text>
+          {loggedInUserId === props.review.author.id ? (
+            <TouchableComponent onPress={handleEditPress}>
+              <FontAwesome5 name='pencil-alt' color='white' size={18} />
+            </TouchableComponent>
+          ) : null}
         </View>
       </View>
-    </TouchableComponent>
+      <View style={{ marginBottom: 8 }}>
+        <Text style={styles.reviewTitleText}>:: {props.review.title}</Text>
+      </View>
+      <View>
+        <Text style={styles.reviewBodyText}>{props.review.body}</Text>
+      </View>
+    </View>
   );
 }
 

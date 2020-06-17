@@ -51,7 +51,6 @@ const ReviewsListScreen = (props) => {
   useEffect(() => {
     console.log(searchInput.length)
     if (searchInput.length > 2) {
-      console.log("called!")
       setSearchQuery(searchInput)
       refetch()
     } else {
@@ -60,26 +59,13 @@ const ReviewsListScreen = (props) => {
     }
   }, [searchInput, orderBy])
 
-  // useEffect(() => {
-  //   if (!reviewsLoading) {
-  //     console.log("caca")
-  //     setReviewsForDisplay(reviewsData.reviews)
-  //   }
-  // }, [reviewsLoading])
-
   const handleOrderBy = (orderByChoice) => {
+
     setOrderBy(orderByChoice)
     refetch()
     setModalVisible(false)
   }
 
-
-  // if (reviewsLoading)
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text>Loading...</Text>
-  //     </View>
-  //   );
   if (reviewsError)
     return (
       <View style={styles.container}>
@@ -136,7 +122,7 @@ const ReviewsListScreen = (props) => {
             style={styles.searchInput}
             onChangeText={(text) => setSearchInput(text)}
             value={searchInput}
-            placeholder='Rechercher (+ de 2 lettres)'
+            placeholder='Rechercher (min. 2 lettres)'
             autoCapitalize='none'
           />
         </View>
