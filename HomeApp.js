@@ -324,9 +324,9 @@ export default function HomeApp(props) {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   takeLocation()
-  // }, [])
+  useEffect(() => {
+    takeLocation()
+  }, [])
 
   /**
   * HELPERS

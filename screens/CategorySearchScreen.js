@@ -9,7 +9,7 @@ import * as Location from 'expo-location';
 
 
 
-
+import { orderByDistance } from '../utils/orderByDistance'
 import { TourTourColors } from '../constants/Colors';
 import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 
@@ -31,14 +31,41 @@ const CategorySearchScreen = (props) => {
   const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [listLoading, setListLoading] = useState(true);
+  const [placesForDisplay, setPlacesForDisplay] = useState();
+  const [refLocation, setRefLocation] = useState({});
+  const [dummy, setDummy] = useState();
 
   useEffect(() => {
     setCity(searchLocData.searchLocCity)
   }, [searchLocData.searchLocCity])
 
+
   /**
    * HELPERS
    */
+
+  useEffect(() => {
+    if (data?.places) {
+      setListLoading(true)
+      const distanceOrderedPlaces = orderByDistance(data.places, refLocation)
+      setPlacesForDisplay(placesForDisplay => placesForDisplay = distanceOrderedPlaces)
+      setListLoading(false)
+    }
+  }, [data?.places, refLocation, searchLocData])
+
+
+  useEffect(() => {
+    setRefLocation({
+      lat: searchLocData.searchLocLat,
+      lng: searchLocData.searchLocLng,
+    })
+
+  }, [searchLocData])
+
+  useEffect(() => {
+    setDummy("dummy")
+  }, [])
 
   const handleTakeLocation = async () => {
     try {
@@ -58,6 +85,10 @@ const CategorySearchScreen = (props) => {
           searchLocLng: location.coords.longitude,
           searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
         }
+      })
+      setRefLocation({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
       })
     } catch {
       console.log('Unable to take location')
@@ -177,7 +208,7 @@ const CategorySearchScreen = (props) => {
             </View>
           </TouchableOpacity>
         </View> : null}
-        <FlatList data={data.places} renderItem={renderGridItem} />
+        <FlatList data={placesForDisplay} renderItem={renderGridItem} />
       </View>
     </View>
   );
