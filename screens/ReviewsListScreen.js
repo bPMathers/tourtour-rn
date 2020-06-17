@@ -29,11 +29,13 @@ const ReviewsListScreen = (props) => {
   const [orderByText, setOrderByText] = useState("Plus récentes")
   const [modalVisible, setModalVisible] = useState(false)
   const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   navigation = useNavigation()
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: {
       placeId: props.route.params.placeId,
-      orderBy: orderBy
+      orderBy: orderBy,
+      searchQuery: searchQuery
     },
     context: {
       headers: {
@@ -45,27 +47,25 @@ const ReviewsListScreen = (props) => {
   const [reviewsForDisplay, setReviewsForDisplay] = useState(reviewsData?.reviews);
   loggedInUserId = props.route.params.loggedInUserId
 
-  console.log(searchInput)
 
   useEffect(() => {
-    if (searchInput.length > 2 && !reviewsLoading) {
-      console.log("called")
-      const filteredReviews = reviewsData?.reviews.filter(review => review.title.toLowerCase().includes(searchInput.toLowerCase()) || review.body.toLowerCase().includes(searchInput.toLowerCase()))
-
-      console.log(filteredReviews.length)
-      setReviewsForDisplay(filteredReviews)
+    console.log(searchInput.length)
+    if (searchInput.length > 2) {
+      console.log("called!")
+      setSearchQuery(searchInput)
+      refetch()
     } else {
-
-      setReviewsForDisplay(reviewsData?.reviews)
+      setSearchQuery("")
+      refetch()
     }
   }, [searchInput, orderBy])
 
-  useEffect(() => {
-    if (!reviewsLoading) {
-      console.log("caca")
-      setReviewsForDisplay(reviewsData.reviews)
-    }
-  }, [reviewsLoading])
+  // useEffect(() => {
+  //   if (!reviewsLoading) {
+  //     console.log("caca")
+  //     setReviewsForDisplay(reviewsData.reviews)
+  //   }
+  // }, [reviewsLoading])
 
   const handleOrderBy = (orderByChoice) => {
     setOrderBy(orderByChoice)
@@ -73,12 +73,13 @@ const ReviewsListScreen = (props) => {
     setModalVisible(false)
   }
 
-  if (reviewsLoading)
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
+
+  // if (reviewsLoading)
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text>Loading...</Text>
+  //     </View>
+  //   );
   if (reviewsError)
     return (
       <View style={styles.container}>
@@ -145,7 +146,9 @@ const ReviewsListScreen = (props) => {
           <Ionicons name="ios-arrow-round-down" size={24} color={TourTourColors.accent} />
         </TouchableOpacity>
       </View>
-      <FlatList data={reviewsForDisplay} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+      {reviewsLoading ? <View style={styles.container}>
+        <Text>Loading...</Text></View> : <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+      }
     </View>
   );
 }
