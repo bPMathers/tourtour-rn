@@ -157,7 +157,7 @@ const CategorySearchScreen = (props) => {
           </View>
         </Modal>
       </View>
-      <View style={{ marginBottom: 100 }}>
+      <View style={{ marginBottom: 30 }}>
         <StatusBar barStyle="light-content" />
         <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
