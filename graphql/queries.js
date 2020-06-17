@@ -100,8 +100,8 @@ const GET_ADD_PLACE_DATA = gql`
 `;
 
 const GET_REVIEWS = gql`
-  query($placeId: String) {
-    reviews(query: $placeId) {
+  query($placeId: String, $orderBy: ReviewOrderByInput, $first: Int) {
+    reviews(query: $placeId, orderBy: $orderBy, first: $first) {
       id
       title
       body

@@ -32,7 +32,7 @@ let loggedInUserId;
 
 const ReviewsContainer = ({ place, navigation }) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
-    variables: { placeId: place.id },
+    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 5 },
   });
 
   if (reviewsLoading) {
@@ -67,7 +67,8 @@ const PlaceDetailScreen = (props) => {
   const { data: placeData } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
 
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
-  loggedInUserId = tokenAndIdData?.userId
+  const loggedInUserId = tokenAndIdData?.userId
+
 
   const GET_PHOTOS = gql`
     query($placeId: String) {
@@ -408,7 +409,12 @@ const PlaceDetailScreen = (props) => {
           <ReviewsContainer place={place} navigation={props.navigation} />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
-          <Button title='Plus de reviews' color={TourTourColors.accent} />
+          <Button title='Voir toutes les reviews' color={TourTourColors.accent} onPress={() => {
+            props.navigation.navigate('ReviewsList', {
+              placeId: place.id,
+              loggedInUserId: loggedInUserId
+            })
+          }} />
         </View>
       </ScrollView>
     </View>

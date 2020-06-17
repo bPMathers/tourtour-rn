@@ -9,6 +9,7 @@ import StarRating from './StarRating'
 
 const ReviewCard = (props) => {
   const loggedInUserId = props.loggedInUserId
+  // console.log(loggedInUserId)
 
   const handleOnUserProfileSelect = () => {
     props.navigation.navigate('UserProfile', {

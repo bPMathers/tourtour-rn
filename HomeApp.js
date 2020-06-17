@@ -42,6 +42,7 @@ import MyPlacesScreen from './screens/MyPlacesScreen';
 import UserPhotosListScreen from './screens/UserPhotosListScreen';
 import UserReviewsListScreen from './screens/UserReviewsListScreen';
 import { GET_TOKEN } from './graphql/queries'
+import ReviewsListScreen from './screens/ReviewsListScreen';
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -243,6 +244,15 @@ function HomeStackScreen() {
           // headerShown: false,
         }}
       />
+      <HomeStack.Screen
+        name='ReviewsList'
+        component={ReviewsListScreen}
+        options={{
+          title: "Reviews",
+          headerStyle: { backgroundColor: TourTourColors.accent },
+          // headerShown: false,
+        }}
+      />
       <UserStack.Screen
         name='UpdateMyPlace'
         component={UpdateMyPlaceScreen}
@@ -275,8 +285,6 @@ export default function HomeApp(props) {
     takeLocation()
   })
   const { loading, error, data } = useQuery(GET_TOKEN)
-  console.log(data)
-  console.log(isLoggedIn)
 
   // check if token in device storage
   useEffect(() => {
