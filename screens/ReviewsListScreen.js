@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image, Picker, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image, TextInput, Modal } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -28,6 +28,7 @@ const ReviewsListScreen = (props) => {
   const [orderBy, setOrderBy] = useState("updatedAt_DESC")
   const [orderByText, setOrderByText] = useState("Plus récentes")
   const [modalVisible, setModalVisible] = useState(false)
+  const [searchInput, setSearchInput] = useState("");
   navigation = useNavigation()
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: {
@@ -41,7 +42,30 @@ const ReviewsListScreen = (props) => {
       }
     },
   });
+  const [reviewsForDisplay, setReviewsForDisplay] = useState(reviewsData?.reviews);
   loggedInUserId = props.route.params.loggedInUserId
+
+  console.log(searchInput)
+
+  useEffect(() => {
+    if (searchInput.length > 2 && !reviewsLoading) {
+      console.log("called")
+      const filteredReviews = reviewsData?.reviews.filter(review => review.title.toLowerCase().includes(searchInput.toLowerCase()) || review.body.toLowerCase().includes(searchInput.toLowerCase()))
+
+      console.log(filteredReviews.length)
+      setReviewsForDisplay(filteredReviews)
+    } else {
+
+      setReviewsForDisplay(reviewsData?.reviews)
+    }
+  }, [searchInput, orderBy])
+
+  useEffect(() => {
+    if (!reviewsLoading) {
+      console.log("caca")
+      setReviewsForDisplay(reviewsData.reviews)
+    }
+  }, [reviewsLoading])
 
   const handleOrderBy = (orderByChoice) => {
     setOrderBy(orderByChoice)
@@ -93,7 +117,7 @@ const ReviewsListScreen = (props) => {
             </View>
             <View style={styles.pickerLastItem}>
               <TouchableOpacity onPress={() => { handleOrderBy("rating_ASC"); setOrderByText("Pire cote") }}>
-                <Text style={styles.pickerItemText}>Pite cote</Text>
+                <Text style={styles.pickerItemText}>Pire cote</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -102,29 +126,26 @@ const ReviewsListScreen = (props) => {
               <Text style={styles.pickerItemText}>Annuler</Text>
             </TouchableOpacity>
           </View>
-          {/*<Picker
-            selectedValue={orderBy}
-            style={{ height: 300, width: 300, backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-            onValueChange={(itemValue, itemIndex) => {
-              setModalVisible(false)
-              setOrderBy(itemValue)
-            }}
-          >
-            <Picker.Item label="Les plus récentes" value="Les plus récentes" />
-            <Picker.Item label="Les plus anciennes" value="Les plus anciennes" />
-            <Picker.Item label="Les mieux cotées" value="Les mieux cotées" />
-            <Picker.Item label="Les pires cotées" value="Les pires cotées" />
-          </Picker>*/}
         </View>
       </Modal>
       <View style={styles.actionsRow}>
+        <View style={styles.searchSection}>
+          <Ionicons name="ios-search" size={24} color='gray' style={{ paddingHorizontal: 10 }} />
+          <TextInput
+            style={styles.searchInput}
+            onChangeText={(text) => setSearchInput(text)}
+            value={searchInput}
+            placeholder='Rechercher (+ de 2 lettres)'
+            autoCapitalize='none'
+          />
+        </View>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setModalVisible(true)}>
           <Text style={styles.actionButtonText}>{orderByText}</Text>
           <Ionicons name="ios-arrow-round-up" size={24} color={TourTourColors.accent} style={{ marginLeft: 5 }} />
           <Ionicons name="ios-arrow-round-down" size={24} color={TourTourColors.accent} />
         </TouchableOpacity>
       </View>
-      <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+      <FlatList data={reviewsForDisplay} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
     </View>
   );
 }
@@ -134,6 +155,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
+  },
+  searchSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    marginRight: 10,
+    borderRadius: 10,
+
+    // marginTop: 50
+  },
+  searchInput: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: '#fff',
+    color: '#424242',
+    borderRadius: 10,
 
   },
   pickerModal: {
@@ -174,7 +217,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink',
     paddingVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'space-between'
   },
   actionButton: {
     marginVertical: 8,
