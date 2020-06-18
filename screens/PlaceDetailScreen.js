@@ -342,7 +342,7 @@ const PlaceDetailScreen = (props) => {
                   <View style={styles.phoneRow}>
                     <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
                     <View>
-                      <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
+                      <Text style={styles.phone}>{place.phone ? place.phone : "--- numéro non défini ---"}</Text>
                     </View>
                   </View>
                   <View>

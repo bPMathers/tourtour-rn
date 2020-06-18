@@ -27,13 +27,13 @@ const UpdateMyPlaceScreen = props => {
 
   // Previous Place Data
   const [name, setName] = useState(place.name);
+  const [phone, setPhone] = useState(place.phone);
   const [catId, setCatId] = useState(place.category.id);
   const [imageUrl, setImageUrl] = useState(place.imageUrl);
   const [lat, setLat] = useState(place.lat);
   const [lng, setLng] = useState(place.lng);
   const [placeId, setPlaceId] = useState(place.google_place_id);
   const [formatted_address, setFormatted_address] = useState(place.formatted_address);
-  const [phone, setPhone] = useState(place.phone);
   // console.log(`formatted_address: ${formatted_address}`)
 
   const [locationForMapPreview, setLocationForMapPreview] = useState({ lat: place.lat, lng: place.lng })
@@ -96,6 +96,11 @@ const UpdateMyPlaceScreen = props => {
     setName(text);
   };
 
+  const phoneChangeHandler = text => {
+    // should sanitize input ?
+    setPhone(text);
+  };
+
   const imageTakenHandler = (image) => {
     setImageHasChanged(true)
     // manage imageBase64 in local state 
@@ -117,6 +122,7 @@ const UpdateMyPlaceScreen = props => {
       setLocHasChanged(true)
     }
   }
+
 
   const updatePlaceHandler = async (newImgBase64, newLocation) => {
 
@@ -211,9 +217,15 @@ const UpdateMyPlaceScreen = props => {
           style={styles.textInput}
           onChangeText={nameChangeHandler}
           value={name}
-          placeholder={`Nom du ou de la "${props.route.params.catTitle}" à ajouter`}
+          placeholder={`Entrer nom`}
         />
-
+        <Text style={styles.label}>Téléphone</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={phoneChangeHandler}
+          value={phone}
+          placeholder={`Entrer # de tel`}
+        />
         <ImagePickerForUpdatePlace onImageTaken={imageTakenHandler} initialImgUrl={place.imageUrl} />
         <LocationPickerForUpdatePlace
           // navigation={props.navigation}
@@ -267,7 +279,7 @@ const styles = StyleSheet.create({
     color: TourTourColors.accent,
     fontWeight: 'bold',
     fontSize: 18,
-    marginBottom: 15
+    // marginBottom: 15
   },
   textInput: {
 

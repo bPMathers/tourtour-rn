@@ -8,7 +8,7 @@ const SettingsScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Button title="Temp Logout" color="red" onPress={() => {
+      <Button title="Déconnexion" color="red" onPress={() => {
         AsyncStorage.removeItem('userToken')
         props.navigation.navigate('Home')
         client.resetStore()

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';
 import { useNavigation } from '@react-navigation/native'
 
@@ -39,9 +39,15 @@ const MyPlacesPreviewListItem = (props) => {
                   <Text style={styles.location}>{place.formatted_address}</Text>
                 </View>
               </View>
+              <View style={styles.leftRow3}>
+                <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
+                <View>
+                  <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
+                </View>
+              </View>
             </View>
             <View style={styles.leftBottomGroup}>
-              <View style={styles.leftRow3}>
+              <View>
                 <Text style={styles.submittedBy}>Ajouté par: </Text>
                 <TouchableComponent onPress={() => { }}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>
@@ -117,8 +123,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 7,
   },
-  leftRow2: {},
-  leftRow3: {},
+  leftRow2: {
+    marginBottom: 2
+  },
+  leftRow3: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
   rightColumn: {
     height: '100%',
     width: '35%',
@@ -153,6 +165,10 @@ const styles = StyleSheet.create({
     width: '100%',
     color: 'white',
     fontSize: 12,
+  },
+  phone: {
+    color: 'white',
+    fontSize: 12
   },
   reviewCount: {
     color: 'white',
