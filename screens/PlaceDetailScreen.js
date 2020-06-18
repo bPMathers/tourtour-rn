@@ -262,31 +262,27 @@ const PlaceDetailScreen = (props) => {
           transparent={true}
           visible={modalVisible}
           onBackdropPress={() => setModalVisible(false)}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}></Text>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'column' }}>
                 <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.textStyle}>Annuler</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleTakeNewPictureForUpload}
                 >
                   <Text style={styles.textStyle}>Nouvelle Photo</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleUploadExistingPicture}
                 >
                   <Text style={styles.textStyle}>Photo déjà existante</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "red" }}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.textStyle}>Annuler</Text>
                 </TouchableHighlight>
               </View>
             </View>
