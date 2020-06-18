@@ -13,30 +13,52 @@ const AuthScreen = (props) => {
    */
 
   // const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
+  const [isSigningUp, setIsSigningUp] = useState(false)
+
 
   /**
    * GRAPHQL
    */
 
   const LOGIN = gql`
-  mutation($email: String!, $password: String!) {
-  loginUser(
-    data: {
-      email: $email
-      password: $password
-    }) {
-    user {
-      id
-      name
-    }
-    token
-    }
-  }
-`;
-
+    mutation($email: String!, $password: String!) {
+      loginUser(
+        data: {
+          email: $email
+          password: $password
+        }) {
+        user {
+          id
+          name
+        }
+        token
+        }
+      }
+  `;
   const [login, { data, client, error }] = useMutation(LOGIN)
+
+  const CREATE_USER = gql`
+    mutation($name: String!, $email: String!, $password: String!) {
+      createUser(
+        data: {
+          name: $name
+          email: $email
+          password: $password
+        }) {
+        user {
+          id
+          name
+        }
+        token
+        }
+      }
+  `;
+
+  const [createUser, { data: createUserData }] = useMutation(CREATE_USER)
+
   let token = data?.loginUser?.token
 
   useEffect(() => {
@@ -57,6 +79,26 @@ const AuthScreen = (props) => {
     }
   }, [token])
 
+  let signUpToken = createUserData?.createUser?.token
+
+  useEffect(() => {
+
+    if (signUpToken) {
+      const decodedJwt = jwt(signUpToken, { complete: true });
+      client.writeData({
+        data: {
+          token: signUpToken,
+          userId: decodedJwt.userId
+        }
+      })
+
+      const setItem = async () => {
+        await AsyncStorage.setItem('userToken', JSON.stringify(signUpToken))
+      }
+      setItem()
+    }
+  }, [signUpToken])
+
   /**
    * HELPERS
    */
@@ -70,14 +112,30 @@ const AuthScreen = (props) => {
     }).catch(res => {
       console.log(`Error: ${res}`)
     })
+  }
 
+  const handleConfirmSignUp = () => {
+    createUser({
+      variables: {
+        name: name,
+        email: email,
+        password: pw
+      }
+    }).catch(res => {
+      console.log(`Error: ${res}`)
+    })
+    setIsSigningUp(false)
+  }
+
+  const handleSignUp = () => {
+    setIsSigningUp(true)
   }
 
   let ErrorContainer = () => {
     return <View></View>
   }
 
-  if (error) {
+  if (error && !isSigningUp) {
     ErrorContainer = () => {
       return (
         <View>
@@ -95,6 +153,18 @@ const AuthScreen = (props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={50}>
+        {isSigningUp &&
+          <View>
+            <Text style={styles.label}>Nom</Text>
+            <TextInput
+              style={styles.formInput}
+              // keyboardType='email-address'
+              onChangeText={name => setName(name)}
+              value={name}
+              // autoCapitalize='none'
+              clearButtonMode='while-editing'
+            />
+          </View>}
         <View>
           <Text style={styles.label}>Email</Text>
           <TextInput
@@ -114,7 +184,21 @@ const AuthScreen = (props) => {
           value={pw}
         />
         <ErrorContainer />
-        <Button title="Connexion" onPress={handleLoginSubmit} color='white' />
+        {!isSigningUp &&
+          <View>
+            <Button title="Se connecter" onPress={handleLoginSubmit} color='white' />
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: 'white' }}>ou</Text></View>
+            <Button title="Créer un compte" onPress={handleSignUp} color='white' />
+          </View>}
+        {isSigningUp &&
+          <View>
+            <View>
+              <Button title="Soumettre" onPress={handleConfirmSignUp} color='white' />
+            </View>
+            <View>
+              <Button title="Annuler" onPress={() => setIsSigningUp(false)} color='white' />
+            </View>
+          </View>}
       </KeyboardAvoidingView>
     </ScrollView>
   );

@@ -67,6 +67,7 @@ function SettingsStackScreen() {
 function UserStackScreen() {
   return (
     <UserStack.Navigator
+      initialRouteName="UserEdit"
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: { backgroundColor: TourTourColors.accent }
@@ -120,7 +121,7 @@ function UserStackScreen() {
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator
-      // initialRouteName='Startup'
+      initialRouteName='HomeSearch'
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: { backgroundColor: TourTourColors.accent },
@@ -406,6 +407,7 @@ export default function HomeApp(props) {
             </HomeStack.Navigator>
           ) : (
               <Tab.Navigator
+                initialRouteName="Home"
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
