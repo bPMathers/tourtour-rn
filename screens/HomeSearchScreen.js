@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'white',
+    // backgroundColor: '#f5e4d4',
   },
   animationContainer: {
     backgroundColor: '#fff',

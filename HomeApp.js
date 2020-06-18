@@ -428,11 +428,15 @@ export default function HomeApp(props) {
                   }
                 })}
                 tabBarOptions={{
-                  activeTintColor: '#f4e87c',
-                  inactiveTintColor: 'white',
-                  style: { backgroundColor: TourTourColors.accent },
+                  // activeTintColor: '#f4e87c',
+                  activeTintColor: TourTourColors.accent,
+                  inactiveTintColor: 'gray',
+                  style: {
+                    backgroundColor: 'white'
+                  },
                   // safeAreaInset: { bottom: 'always', top: 'never' }
-                }}
+                }
+                }
               >
                 <Tab.Screen options={{ title: "Trouver" }} name="Home" component={HomeStackScreen} />
                 <Tab.Screen options={{ title: "Mon profil" }} name="User" component={UserStackScreen} />
