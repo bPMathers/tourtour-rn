@@ -25,7 +25,7 @@ import PlaceDetailScreen from './screens/PlaceDetailScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import AddPlaceScreen from './screens/AddPlaceScreen';
 import MapScreen from './screens/MapScreen';
-import MapScreen2 from './screens/MapScreen2';
+import MapScreen2 from './screens/MapForSearchLocScreen';
 import MapForPlaceUpdateScreen from './screens/MapForPlaceUpdateScreen';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
 import CreateReviewScreen from './screens/CreateReviewScreen';
@@ -200,7 +200,7 @@ function HomeStackScreen() {
         }}
       />
       <HomeStack.Screen
-        name='Map2'
+        name='MapForSearchLoc'
         component={MapScreen2}
         options={{
           title: "Choisir location",

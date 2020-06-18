@@ -105,7 +105,7 @@ const CategorySearchScreen = (props) => {
   }
 
   const handleSetLocation = () => {
-    props.navigation.navigate('Map2')
+    props.navigation.navigate('MapForSearchLoc')
   }
 
   /**
