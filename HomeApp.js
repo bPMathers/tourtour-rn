@@ -422,13 +422,16 @@ export default function HomeApp(props) {
                     }
 
                     // You can return any component that you like here!
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return <Ionicons name={iconName} size={size} color={color} />
                   }
                 })}
                 tabBarOptions={{
-                  activeTintColor: TourTourColors.accent,
-                  inactiveTintColor: 'gray',
-                }}>
+                  activeTintColor: '#f4e87c',
+                  inactiveTintColor: 'white',
+                  style: { backgroundColor: TourTourColors.accent },
+                  // safeAreaInset: { bottom: 'always', top: 'never' }
+                }}
+              >
                 <Tab.Screen options={{ title: "Trouver" }} name="Home" component={HomeStackScreen} />
                 <Tab.Screen options={{ title: "Mon profil" }} name="User" component={UserStackScreen} />
                 <Tab.Screen options={{ title: "Réglages" }} name="Settings" component={SettingsStackScreen} />
@@ -436,7 +439,7 @@ export default function HomeApp(props) {
             )
           }
         </NavigationContainer>
-      </View>
+      </View >
     );
   }
 }

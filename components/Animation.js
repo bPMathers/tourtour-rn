@@ -24,8 +24,8 @@ export default class Animation extends React.Component {
                     this.animation = animation;
                 }}
                 style={{
-                    width: 150,
-                    height: 150,
+                    width: 110,
+                    height: 110,
                     // backgroundColor: '#fff',
                 }}
                 source={require('../assets/animations/japan-scene.json')}

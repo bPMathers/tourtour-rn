@@ -16,6 +16,7 @@ import CategoryGridTile from '../components/CategoryGridTile';
 import Animation from '../components/Animation';
 
 import { GET_CATEGORIES } from '../graphql/queries'
+import { TourTourColors } from '../constants/Colors';
 
 
 export const HomeSearchScreen = (props) => {
@@ -56,7 +57,7 @@ export const HomeSearchScreen = (props) => {
       <View style={styles.animationContainer}>
         <Animation />
       </View>
-      <View style={styles.searchSection}>
+      {/*<View style={styles.searchSection}>
         <Ionicons
           style={styles.searchIcon}
           name='ios-search'
@@ -69,60 +70,32 @@ export const HomeSearchScreen = (props) => {
           value={searchInput}
           placeholder='Rechercher'
         />
+      </View>*/}
+      <View style={{ marginHorizontal: 2, marginBottom: 180 }}>
+        <FlatList
+          data={data.categories}
+          renderItem={renderGridItem}
+          numColumns={2}
+        />
       </View>
-
-      <FlatList
-        data={data.categories}
-        renderItem={renderGridItem}
-        numColumns={2}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  actions: {
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-
-  titleContainer: {
-    marginTop: 60,
-    paddingLeft: 10,
-  },
-  title: {
-    color: '#EA027C',
-    fontWeight: 'bold',
-  },
-  animationContainer: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
-    paddingBottom: 30,
-    backgroundColor: '#a3d6ff',
-  },
   container: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'white',
   },
-  image: {
-    flex: 1,
-    resizeMode: 'cover',
+  animationContainer: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    color: '#2699FB',
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  header: {
-    height: 200,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    marginTop: 50,
+    paddingTop: 45,
+    paddingBottom: 20,
+    marginBottom: 3,
+    backgroundColor: TourTourColors.accent,
   },
   searchInput: {
     flex: 1,
@@ -133,22 +106,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#424242',
   },
-  searchSection: {
-    // flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    // marginTop: 50
-  },
-  searchIcon: {
-    padding: 10,
-  },
-  userList: {
-    height: 300,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  // searchSection: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#fff',
+  // },
+  // searchIcon: {
+  //   padding: 10,
+  // },
+
 });
 
 export default HomeSearchScreen;

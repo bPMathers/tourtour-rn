@@ -49,7 +49,6 @@ const ReviewsListScreen = (props) => {
 
 
   useEffect(() => {
-    console.log(searchInput.length)
     if (searchInput.length > 2) {
       setSearchQuery(searchInput)
       refetch()

@@ -230,7 +230,7 @@ const CategorySearchScreen = (props) => {
           </View> : null}
         </View>
 
-        <View style={{ marginHorizontal: 10, marginTop: 15 }}>
+        <View style={{ marginHorizontal: 10, marginTop: 15, marginBottom: 100 }}>
           <FlatList data={placesForDisplay} renderItem={renderGridItem} />
         </View>
       </View>
