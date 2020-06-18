@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
+import * as Linking from 'expo-linking';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import TimeAgo from 'react-native-timeago';
@@ -227,6 +228,30 @@ const PlaceDetailScreen = (props) => {
     setModalVisible(false);
   }
 
+  const handleOnPressPhone = () => {
+    if (place.phone && place.phone !== '') {
+      Linking.openURL(`tel:${place.phone}`)
+    } else {
+      handleNoPlacePhone()
+    }
+  }
+
+  const handleNoPlacePhone = () => {
+    Alert.alert(
+      "Aucun numéro de téléphone n'est assigné pour cet endroit",
+      "Voulez-vous accéder aux suggestions de google pour trouver le numéro?",
+      [
+        { text: 'Non', style: 'destructive' },
+        { text: 'Oui', onPress: () => { Linking.openURL(`https:www.google.com/search?q=${place.name}+phone+number`) } },
+      ]
+    )
+  }
+
+  const handleOnPressWeb = () => {
+    Linking.openURL(`https:www.google.com/search?q=${place.name}`)
+  }
+
+
   const handleOnPressMap = async () => {
     // TODO : dynamically feed parameter values
     // Does including a googlePlaceId work ok along with lat & lng?
@@ -314,7 +339,12 @@ const PlaceDetailScreen = (props) => {
                   <View>
                     <Text style={styles.address}>{place.formatted_address}</Text>
                   </View>
-
+                  <View style={styles.phoneRow}>
+                    <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
+                    <View>
+                      <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
+                    </View>
+                  </View>
                   <View>
                     <Text style={styles.submittedBy}>Ajouté par: </Text>
                     <TouchableComponent onPress={() => {
@@ -335,7 +365,7 @@ const PlaceDetailScreen = (props) => {
           </ImageBackground>
         </View>
         <View style={styles.actionsRow}>
-          <TouchableComponent>
+          <TouchableComponent onPress={handleOnPressPhone}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
@@ -355,7 +385,7 @@ const PlaceDetailScreen = (props) => {
               </View>
             </View>
           </TouchableComponent>
-          <TouchableComponent>
+          <TouchableComponent onPress={handleOnPressWeb}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
@@ -449,9 +479,16 @@ const styles = StyleSheet.create({
 
   },
   address: {
-    marginBottom: 20,
     color: 'white',
     maxWidth: '90%',
+  },
+  phoneRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  phone: {
+    color: 'white'
   },
   backArrow: {
     flexDirection: 'row',

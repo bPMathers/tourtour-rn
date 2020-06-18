@@ -26,10 +26,13 @@ const NewPlaceScreen = props => {
   const [imgBase64, setImgBase64] = useState()
   const [lat, setLat] = useState()
   const [lng, setLng] = useState()
+  const [phone, setPhone] = useState('')
   // use one of my cloudinary files instead!
   const [imageUri, setImageUri] = useState('https://res.cloudinary.com/db4mzdmnm/image/upload/v1592273897/no-image-icon-6_zoucqc.png')
   const { data: tokenData } = useQuery(GET_TOKEN);
   const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+
+  // console.log(props.route.params.autoCompletePickedPlace)
 
   useEffect(() => {
     setName(props.route.params?.autoCompletePickedPlace?.name)
@@ -44,6 +47,7 @@ const NewPlaceScreen = props => {
 
       setLat(props.route.params?.autoCompletePickedPlace?.geometry.location.lat)
       setLng(props.route.params?.autoCompletePickedPlace?.geometry.location.lng)
+      setPhone(props.route.params?.autoCompletePickedPlace?.international_phone_number)
     }
 
   }, [props.route.params?.autoCompletePickedPlace])
@@ -83,6 +87,10 @@ const NewPlaceScreen = props => {
     // should sanitize input ?
     setName(text);
   };
+  const phoneChangeHandler = text => {
+    // should sanitize input ?
+    setPhone(text);
+  };
 
   const imageTakenHandler = (image) => {
     setImageUri(image.uri)
@@ -110,7 +118,7 @@ const NewPlaceScreen = props => {
         lng: lng ?? 0,
         placeId: newFormattedAddressAndGooglePlaceId?.placeId ?? '',
         formatted_address: newFormattedAddressAndGooglePlaceId?.formattedAddress ?? '',
-        phone: "",
+        phone: phone ?? '',
       },
       context: {
         headers: {
@@ -136,6 +144,13 @@ const NewPlaceScreen = props => {
           onChangeText={nameChangeHandler}
           value={name}
           placeholder={`Nom du ou de la "${props.route.params.catTitle}" à ajouter`}
+        />
+        <Text style={styles.label}>Téléphone</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={phoneChangeHandler}
+          value={phone}
+          placeholder={`# de tel. du ou de la "${props.route.params.catTitle}" à ajouter`}
         />
         <View style={{ marginBottom: 20 }}>
           <Button color={TourTourColors.primary} title="utiliser Google AutoComplete" onPress={() => {
@@ -175,13 +190,13 @@ const styles = StyleSheet.create({
     color: TourTourColors.accent,
     fontWeight: 'bold',
     fontSize: 18,
-    marginBottom: 15
+    marginBottom: 0
   },
   textInput: {
 
     borderBottomColor: '#ccc',
     borderBottomWidth: 2,
-    marginBottom: 0,
+    marginBottom: 20,
     paddingVertical: 4,
     paddingHorizontal: 2
   }
