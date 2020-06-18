@@ -282,11 +282,12 @@ export default function HomeApp(props) {
   const client = useApolloClient()
   client.onResetStore(() => {
     setIsLoggedIn(false)
-    takeLocation()
+    takeMyLocation()
   })
   const { loading, error, data } = useQuery(GET_TOKEN)
 
   // check if token in device storage
+  // need cleanup function ?
   useEffect(() => {
     const tryLogin = async () => {
       try {
@@ -324,14 +325,15 @@ export default function HomeApp(props) {
     }
   }, [data]);
 
+  // is this kosher or should I use async and a cleanup function?
   useEffect(() => {
-    takeLocation()
+    takeMyLocation()
   }, [])
 
   /**
   * HELPERS
   */
-  const takeLocation = async () => {
+  const takeMyLocation = async () => {
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -339,6 +341,7 @@ export default function HomeApp(props) {
       }
 
       let location = await Location.getCurrentPositionAsync({});
+      // console.log(`Location: ${JSON.stringify(location, undefined, 2)}`)
       let revGeocode = await Location.reverseGeocodeAsync({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,

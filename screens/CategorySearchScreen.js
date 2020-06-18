@@ -11,7 +11,7 @@ import * as Location from 'expo-location';
 
 import { orderByDistance } from '../utils/orderByDistance'
 import { TourTourColors } from '../constants/Colors';
-import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
+import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID, GET_MY_LOCATION } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
@@ -21,53 +21,61 @@ const CategorySearchScreen = (props) => {
    */
 
   const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
-  const { loading: loading2, error: error2, data: searchLocData } = useQuery(GET_SEARCH_LOCATION)
+  const { loading: searchLocLoading, error: searchLocError, data: searchLocData, refetch } = useQuery(GET_SEARCH_LOCATION)
+  const { loading: myLocLoading, error: myLocError, data: myLocData } = useQuery(GET_MY_LOCATION)
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },
   });
   const client = useApolloClient();
-  const [city, setCity] = useState(null);
+  // city is set from cache, so it seems to always be set before component loads, thus never being null or undefined when needed... but keep an eye on this, not 100% sure of data availability flow.
+  const [city, setCity] = useState(searchLocData.searchLocCity);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [listLoading, setListLoading] = useState(true);
-  const [placesForDisplay, setPlacesForDisplay] = useState();
-  const [refLocation, setRefLocation] = useState({});
-  const [dummy, setDummy] = useState();
+  const [placesForDisplay, setPlacesForDisplay] = useState(undefined);
+  const [refLocation, setRefLocation] = useState({
+    lat: searchLocData.searchLocLat,
+    lng: searchLocData.searchLocLng
+  });
 
+  // Update city display name when seacrhLocCity is updated in cache
   useEffect(() => {
     setCity(searchLocData.searchLocCity)
   }, [searchLocData.searchLocCity])
 
+  // console.log(`city: ${city}`)
+  // console.log(`myLocData: ${JSON.stringify(myLocData, undefined, 2)}`)
+  // console.log(`refLocation: ${JSON.stringify(refLocation, undefined, 2)}`)
 
   /**
    * HELPERS
    */
 
-  useEffect(() => {
-    if (data?.places) {
-      setListLoading(true)
-      const distanceOrderedPlaces = orderByDistance(data.places, refLocation)
-      setPlacesForDisplay(placesForDisplay => placesForDisplay = distanceOrderedPlaces)
-      setListLoading(false)
-    }
-  }, [data?.places, refLocation, searchLocData])
-
-
+  // update refLocation when searchLocData is update in cache
   useEffect(() => {
     setRefLocation({
       lat: searchLocData.searchLocLat,
-      lng: searchLocData.searchLocLng,
+      lng: searchLocData.searchLocLng
     })
+    // refetch()
+  }, [searchLocData.searchLocLat])
 
-  }, [searchLocData])
+  // update placesForDisplay when refLocation is updated
+  useEffect(() => {
+    if (data?.places) {
+      const distanceOrderedPlaces = orderByDistance(data.places, refLocation)
+      setPlacesForDisplay(placeForDisplay => placeForDisplay = distanceOrderedPlaces)
+    }
+  }, [data?.places, refLocation])
 
   useEffect(() => {
-    setDummy("dummy")
-  }, [])
+    refetch()
+  }, [props.route?.params?.dummyParam])
 
-  const handleTakeLocation = async () => {
+  // console.log(city)
+
+  const handleUseMyLocation = async () => {
     try {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
@@ -90,6 +98,7 @@ const CategorySearchScreen = (props) => {
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       })
+      refetch()
     } catch {
       console.log('Unable to take location')
     }
@@ -168,11 +177,11 @@ const CategorySearchScreen = (props) => {
                 <TouchableOpacity
                   style={{ ...styles.openButton, backgroundColor: TourTourColors.primary, marginRight: 4 }}
                   onPress={() => {
-                    handleTakeLocation()
+                    handleUseMyLocation()
                     setModalVisible(!modalVisible);
                   }}
                 >
-                  <Text style={styles.textStyle}>Prendre ma location</Text>
+                  <Text style={styles.textStyle}>Utiliser ma location</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
@@ -188,27 +197,42 @@ const CategorySearchScreen = (props) => {
           </View>
         </Modal>
       </View>
-      <View style={{ marginBottom: 30 }}>
+      <View style={{ marginBottom: 60 }}>
         <StatusBar barStyle="light-content" />
-        <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
-            <Text>
-              près de{' '}
-            </Text>
-          </View>
-          <View>{city === "" ? <View><Button title="Choisir Location" onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
-          </View>
-        </View>
-        {city ? <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { setModalVisible(true) }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={styles.locationButtonText}>Changer de Location</Text>
-              <FontAwesome5 name='map-marker-alt' size={18} color='white' />
+        <View style={{
+          backgroundColor: TourTourColors.primary,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5
+        }}>
+          <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
+              <Text>
+                près de{' '}
+              </Text>
             </View>
-          </TouchableOpacity>
-        </View> : null}
-        <FlatList data={placesForDisplay} renderItem={renderGridItem} />
+            <View>{city === "" ? <View><Button title="Choisir Location" onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
+            </View>
+          </View>
+          {city ? <View style={{ alignItems: 'center' }}>
+            <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { setModalVisible(true) }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.locationButtonText}>Changer de Location</Text>
+                <FontAwesome5 name='map-marker-alt' size={18} color='white' />
+              </View>
+            </TouchableOpacity>
+          </View> : null}
+        </View>
+
+        <View style={{ marginHorizontal: 10, marginTop: 15 }}>
+          <FlatList data={placesForDisplay} renderItem={renderGridItem} />
+        </View>
       </View>
     </View>
   );
@@ -217,7 +241,7 @@ const CategorySearchScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
+    // margin: 10,
   },
   modalContainer: {
 

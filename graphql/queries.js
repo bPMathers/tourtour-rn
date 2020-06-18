@@ -238,7 +238,7 @@ const GET_SEARCH_LOCATION = gql`
 }
 `;
 
-const GET_MY_CACHED_LOCATION = gql`
+const GET_MY_LOCATION = gql`
 {
       myLat @client
       myLng @client
@@ -255,7 +255,7 @@ export {
   GET_REVIEWS,
   GET_TOKEN_AND_USER_ID,
   GET_TOKEN,
-  GET_MY_CACHED_LOCATION,
+  GET_MY_LOCATION,
   GET_MY_REVIEWS,
   GET_MY_PHOTOS,
   GET_MY_PLACES,

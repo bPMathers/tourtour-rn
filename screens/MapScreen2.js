@@ -1,17 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'
-import { useApolloClient } from "@apollo/react-hooks";
+import { useApolloClient, useQuery } from "@apollo/react-hooks";
 import * as Location from 'expo-location';
-
-
 import { Ionicons } from '@expo/vector-icons'
+
+import { GET_SEARCH_LOCATION } from '../graphql/queries'
 
 const MapScreen2 = (props) => {
   const client = useApolloClient();
   const [selectedLocation, setSelectedLocation] = useState()
   const [city, setCity] = useState()
   const [mapRgn, setMapRgn] = useState()
+  const { loading: searchLocLoading, error: searchLocError, data: searchLocData, refetch } = useQuery(GET_SEARCH_LOCATION)
 
   props.navigation.setOptions({
     headerRight: () => (
@@ -32,7 +33,6 @@ const MapScreen2 = (props) => {
       return
     }
 
-
     let revGeocode = await Location.reverseGeocodeAsync({
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
@@ -44,10 +44,11 @@ const MapScreen2 = (props) => {
         searchLocCity: `${revGeocode[0].city}, ${revGeocode[0].region}`,
       }
     })
+    // refetch()
 
     props.navigation.navigate({
-      name: 'CategorySearch'
-      // params: { pickedLocation: selectedLocation, city: `${revGeocode[0].city}, ${revGeocode[0].region}` }
+      name: 'CategorySearch',
+      params: { dummyParam: Math.random() }
     })
   }
 
@@ -84,8 +85,8 @@ const MapScreen2 = (props) => {
       provider="google"
       style={styles.map}
       initialRegion={{
-        latitude: 45.523960,
-        longitude: -73.582526,
+        latitude: searchLocData.searchLocLat,
+        longitude: searchLocData.searchLocLng,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       }}
