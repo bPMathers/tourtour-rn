@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import SwipeableRating from 'react-native-swipeable-rating';
@@ -78,61 +78,63 @@ const CreateReviewScreen = (props) => {
    */
 
   return (
-    <View style={styles.container}>
-      <View style={{ marginBottom: 10 }}>
-        <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>Vos impressions sur:</Text>
-      </View>
-      <View style={styles.placeInfo}>
-        <Text style={{ fontWeight: 'bold' }}>{place.name}</Text>
-        <Text>{place.formatted_address}</Text>
-      </View>
-      <View style={styles.ratingContainer}>
-        <View>
-          <SwipeableRating
-            swipeable={true}
-            rating={rating}
-            size={40}
-            xOffset={0}
-            allowHalves
-            color="orange"
-            emptyColor="orange"
-            style={styles.rating}
-            onPress={rating => setRating(rating)}
+    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30} style={styles.container}>
+      <ScrollView>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>Vos impressions sur:</Text>
+        </View>
+        <View style={styles.placeInfo}>
+          <Text style={{ fontWeight: 'bold' }}>{place.name}</Text>
+          <Text>{place.formatted_address}</Text>
+        </View>
+        <View style={styles.ratingContainer}>
+          <View>
+            <SwipeableRating
+              swipeable={true}
+              rating={rating}
+              size={40}
+              xOffset={0}
+              allowHalves
+              color="orange"
+              emptyColor="orange"
+              style={styles.rating}
+              onPress={rating => setRating(rating)}
+            />
+          </View>
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Titre</Text>
+          <TextInput
+            style={styles.nameInput}
+            onChangeText={title => setTitle(title)}
+            value={title}
+            placeholder="Un endroit complètement inusité et hirsute"
+            clearButtonMode="while-editing"
+            color='#444'
+
           />
         </View>
-      </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Titre</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={title => setTitle(title)}
-          value={title}
-          placeholder="Un endroit complètement inusité et hirsute"
-          clearButtonMode="while-editing"
-          color='#444'
+        <View style={{ marginBottom: 30 }}>
+          <Text style={styles.label}>Review</Text>
+          <TextInput
+            style={styles.nameInput}
+            onChangeText={body => setBody(body)}
+            value={body}
+            placeholder="Avec ce mot on explique tout, on pardonne tout, on valide tout, parce que l’on ne cherche jamais à savoir ce qu’il contient. C’est le mot de passe qui permet d’ouvrir les cœurs, les sexes, les sacristies et les communautés humaines. Il couvre d’un voile prétendument désintéressé, voire transcendant, la recherche de la dominance et le prétendu instinct de propriété. "
+            clearButtonMode="while-editing"
+            multiline
+            color='#444'
 
-        />
-      </View>
-      <View style={{ marginBottom: 30 }}>
-        <Text style={styles.label}>Review</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={body => setBody(body)}
-          value={body}
-          placeholder="Avec ce mot on explique tout, on pardonne tout, on valide tout, parce que l’on ne cherche jamais à savoir ce qu’il contient. C’est le mot de passe qui permet d’ouvrir les cœurs, les sexes, les sacristies et les communautés humaines. Il couvre d’un voile prétendument désintéressé, voire transcendant, la recherche de la dominance et le prétendu instinct de propriété. "
-          clearButtonMode="while-editing"
-          multiline
-          color='#444'
-
-        />
-      </View>
-      <View>
-        <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color={TourTourColors.cancel} />
-      </View>
-      <View>
-        <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
-      </View>
-    </View>
+          />
+        </View>
+        <View>
+          <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color={TourTourColors.cancel} />
+        </View>
+        <View>
+          <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 const styles = StyleSheet.create({
