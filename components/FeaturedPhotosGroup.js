@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Image } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { onGestureEvent } from 'react-native-redash'
@@ -38,6 +38,16 @@ const FeaturedPhotosGroup = (props) => {
       userId: selectedPhoto.addedBy.id,
       userName: selectedPhoto.addedBy.name
     })
+  }
+  const handleOnDelete = () => {
+    Alert.alert(
+      'Attention!',
+      "Êtes-vous certain(e) de vouloir supprimer cette photo ?",
+      [
+        { text: 'Annuler', style: 'destructive' },
+        { text: 'Confirmer', onPress: () => { confirmDeletePhoto() } },
+      ]
+    )
   }
 
   const renderGridItem = (itemData) => {
@@ -87,7 +97,6 @@ const FeaturedPhotosGroup = (props) => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalView}>
-
               <View style={{ height: 400, width: Dimensions.get('screen').width - 30 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                   <TouchableOpacity
@@ -100,17 +109,22 @@ const FeaturedPhotosGroup = (props) => {
                   </TouchableOpacity>
                 </View>
                 <ImageBackground source={{ uri: selectedPhoto.url }} style={styles.modalImage}>
-                  <View style={styles.photoModalOverlay}>
-                    <View>
-                      <Text style={styles.addedByModalText}>Ajoutée par: </Text>
-                      <TouchableOpacity onPress={handleOnUserProfileSelect}>
-                        <Text style={{ fontWeight: 'bold', color: 'white' }}>
-                          {selectedPhoto.addedBy.name}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
                 </ImageBackground>
+                <View style={styles.photoInfoAndActions}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.addedByModalText}>Ajoutée par: </Text>
+                    <TouchableOpacity onPress={handleOnUserProfileSelect}>
+                      <Text style={{ fontWeight: 'bold', color: 'white' }}>
+                        {selectedPhoto.addedBy.name}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  {props.loggedInUserId === selectedPhoto.addedBy.id &&
+                    <TouchableOpacity onPress={handleOnDelete}>
+                      <Ionicons name='ios-trash' size={20} color='white' />
+                    </TouchableOpacity>
+                  }
+                </View>
               </View>
             </View>
           </View>
@@ -154,7 +168,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: 'rgba(0, 0, 0, 0.90)',
     justifyContent: 'center'
   },
   modalCloseButton: {
@@ -166,11 +180,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // marginTop: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+    // backgroundColor: 'rgba(0, 0, 0, 0.9)'
   },
   modalView: {
     // flex: 1,
-    margin: 20,
+    marginHorizontal: 10,
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -183,14 +197,19 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  photoModalOverlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+  photoInfoAndActions: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   addedByModalText: {
     color: 'white',
-    fontSize: 18
+    fontSize: 14
 
-  }
+  },
+
 })
 
 export default FeaturedPhotosGroup;

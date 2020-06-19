@@ -57,6 +57,24 @@ const GET_PLACE = gql`
         name
       }
       avgRating
+      reviews {
+        id
+        title
+        body
+        rating
+        author {
+          id
+          name
+          imageUrl
+        }
+        place {
+          id
+          name
+          formatted_address
+        }
+        createdAt
+        updatedAt
+      }
     }
   }
 `

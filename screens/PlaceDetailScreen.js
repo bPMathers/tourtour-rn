@@ -65,7 +65,7 @@ const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
-  const { data: placeData } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
+  const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
 
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
@@ -354,8 +354,8 @@ const PlaceDetailScreen = (props) => {
                       })
                     }}>
                       <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                        Flavien Denree de Choix
-                    </Text>
+                        {place.addedBy.name}
+                      </Text>
                     </TouchableComponent>
                   </View>
                   <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
@@ -416,23 +416,23 @@ const PlaceDetailScreen = (props) => {
             </View>
           </TouchableComponent>
         </View>
-        <FeaturedPhotosGroup place={place} navigation={props.navigation} />
+        <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
         <View style={styles.reviewsHeaderRow}>
 
           <View>
             <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
           </View>
           <View>
-            <StarRating color={TourTourColors.accent} rating={placeData?.place?.avgRating ?? 0} />
+            <StarRating color={TourTourColors.accent} rating={place.avgRating ?? 0} />
             <View>
               <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-                {placeData?.place?.review_count} reviews
+                {place.review_count} reviews
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.reviewsListContainer}>
-          <ReviewsContainer place={place} navigation={props.navigation} />
+          <ReviewsContainer place={place} navigation={props.navigation} reviews={placeData?.reviews} />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
           <Button title='Voir toutes les reviews' color={TourTourColors.accent} onPress={() => {

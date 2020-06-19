@@ -54,6 +54,8 @@ function SettingsStackScreen() {
     <SettingsStack.Navigator
       screenOptions={{
         headerTintColor: 'white',
+        headerStyle: { backgroundColor: TourTourColors.accent },
+        title: 'Réglages'
       }}
     >
       <SettingsStack.Screen

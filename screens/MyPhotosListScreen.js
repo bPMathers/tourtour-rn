@@ -138,9 +138,6 @@ const MyPhotosListScreen = (props) => {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
@@ -157,18 +154,17 @@ const MyPhotosListScreen = (props) => {
               </View>
               <ImageBackground source={{ uri: selectedPhoto.url }} style={styles.modalImage}>
 
-                <View style={styles.photoModalOverlay}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <View>
-                      <Text style={{ color: 'white' }}>Endroit: {selectedPhoto?.place?.name}</Text>
-                    </View>
-                    <TouchableOpacity onPress={handleOnDelete}>
-                      <Ionicons name='ios-trash' size={24} color='white' />
-                    </TouchableOpacity>
-                  </View>
-
-                </View>
               </ImageBackground>
+              <View style={styles.photoInfoAndActions}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <View>
+                    <Text style={{ color: 'white' }}>Photo de "{selectedPhoto?.place?.name}"</Text>
+                  </View>
+                  <TouchableOpacity onPress={handleOnDelete}>
+                    <Ionicons name='ios-trash' size={24} color='white' />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -238,7 +234,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  photoModalOverlay: {
+  photoInfoAndActions: {
     padding: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
