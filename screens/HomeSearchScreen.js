@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
   Text,
-  TextInput,
   View,
-  Button,
   StatusBar,
-  AsyncStorage
+  Animated,
+  Dimensions
 } from 'react-native';
 
 import { useQuery, useApolloClient } from '@apollo/react-hooks';
@@ -17,6 +16,8 @@ import Animation from '../components/Animation';
 
 import { GET_CATEGORIES } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
+import FadeInView from '../components/fadeInView'
+
 
 
 export const HomeSearchScreen = (props) => {
@@ -52,7 +53,7 @@ export const HomeSearchScreen = (props) => {
     );
 
   return (
-    <View style={styles.container}>
+    <FadeInView style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.animationContainer}>
         <Animation />
@@ -78,7 +79,7 @@ export const HomeSearchScreen = (props) => {
           numColumns={2}
         />
       </View>
-    </View>
+    </FadeInView>
   );
 };
 
