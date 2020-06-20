@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -10,9 +10,12 @@ import {
   ImageBackground,
   ScrollView,
   Button,
+  FlatList,
   Alert,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  SafeAreaView,
+  Keyboard
 } from 'react-native';
 import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
@@ -20,20 +23,22 @@ import * as Linking from 'expo-linking';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import TimeAgo from 'react-native-timeago';
+import SwipeableRating from 'react-native-swipeable-rating';
 
-import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS, GET_PLACE } from '../graphql/queries'
+import { TextInput } from 'react-native-paper';
 
 let loggedInUserId;
 
 const ReviewsContainer = ({ place, navigation }) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
-    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 5 },
+    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
   });
 
   if (reviewsLoading) {
@@ -62,8 +67,12 @@ const ReviewsContainer = ({ place, navigation }) => {
 
 
 const PlaceDetailScreen = (props) => {
+  const reviewTextInput = useRef(null)
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const [reviewBody, setReviewBody] = useState('');
+  const [rating, setRating] = useState(3);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
 
@@ -273,6 +282,23 @@ const PlaceDetailScreen = (props) => {
     })
   }
 
+  const handleDictation = () => {
+    Keyboard.dismiss()
+  }
+
+  const renderListItem = (itemData) => {
+    console.log(itemData.item)
+    let TouchableComponent = TouchableOpacity;
+
+    if (Platform.OS === "android" && Platform.Version >= 21) {
+      TouchableComponent = TouchableNativeFeedback;
+    }
+    return (
+      // <ReviewCard review={itemData.item} loggedInUserId={loggedInUserId} navigation={navigation} />
+      <View><Text>allo</Text></View>
+    );
+  }
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -311,6 +337,65 @@ const PlaceDetailScreen = (props) => {
                 </TouchableHighlight>
               </View>
             </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          visible={reviewModalVisible}
+        >
+          <View style={styles.reviewModalContainer}>
+            <SafeAreaView>
+              <View style={styles.reviewModalTopRow}>
+                <View><Text style={{ fontSize: 24, fontWeight: 'bold', color: TourTourColors.accent }}>{place.name}</Text></View>
+                <TouchableOpacity onPress={() => setReviewModalVisible(false)}>
+                  <AntDesign name='close' size={28} color='red' />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.reviewModalRatingRow}>
+                <SwipeableRating
+                  swipeable={true}
+                  rating={rating}
+                  size={40}
+                  xOffset={0}
+                  allowHalves
+                  color="orange"
+                  emptyColor="orange"
+                  style={styles.rating}
+                  onPress={rating => setRating(rating)}
+                />
+              </View>
+              <TextInput
+                ref={reviewTextInput}
+                autoFocus={true}
+                style={styles.reviewModalTextInput}
+                onChangeText={reviewBody => setReviewBody(reviewBody)}
+                value={reviewBody}
+                placeholderTextColor="#532423"
+                placeholder="Avec ce mot on explique tout, on pardonne tout, on valide tout, parce que l’on ne cherche jamais à savoir ce qu’il contient. C’est le mot de passe qui permet d’ouvrir les cœurs, les sexes, les sacristies et les communautés humaines. Il couvre d’un voile prétendument désintéressé, voire transcendant, la recherche de la dominance et le prétendu instinct de propriété. "
+                clearButtonMode="while-editing"
+                multiline
+                color='red'
+                backgroundColor='white'
+
+              />
+
+              <View style={styles.reviewModalActionsRow}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity style={{ marginRight: 7 }} onPress={() => {
+                    reviewTextInput.current.focus()
+                  }}>
+                    <MaterialCommunityIcons name='format-letter-case' size={26} color={TourTourColors.accent} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginRight: 7 }} onPress={handleDictation}>
+                    <MaterialCommunityIcons name='microphone' size={26} color={TourTourColors.accent} />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { }}>
+                  <Text style={styles.locationButtonText}>Soumettre</Text>
+                  <AntDesign name='arrowright' size={18} color='white' />
+                </TouchableOpacity>
+              </View>
+            </SafeAreaView>
           </View>
         </Modal>
       </View>
@@ -405,7 +490,10 @@ const PlaceDetailScreen = (props) => {
               </View>
             </View>
           </TouchableComponent>
-          <TouchableComponent onPress={() => { props.navigation.navigate('CreateReview', { place: place }) }}>
+          <TouchableComponent onPress={() => {
+            // props.navigation.navigate('CreateReview', { place: place }) 
+            setReviewModalVisible(true)
+          }}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <Ionicons style={{ marginLeft: 4 }} name='ios-create' size={25} color={TourTourColors.accent} />
@@ -443,7 +531,7 @@ const PlaceDetailScreen = (props) => {
           }} />
         </View>
       </ScrollView>
-    </View>
+    </View >
 
 
   );
@@ -613,7 +701,44 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  reviewModalContainer: {
+    flex: 1,
+    paddingHorizontal: 10
+  },
+  reviewModalTopRow: {
+    marginTop: 20,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  rating: {
+    flex: 0,
+    marginLeft: 0
+  },
+  reviewModalTextInput: {
+    borderBottomColor: 'gray',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginBottom: 10,
+  },
+  reviewModalActionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  locationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    backgroundColor: TourTourColors.accent,
+    borderRadius: 10,
+    // width: Dimensions.get("screen").width / 2
+  },
+  locationButtonText: {
+    color: '#fff',
+    // textAlign: 'center',
+    paddingHorizontal: 7
+
+  },
 });
 
 
