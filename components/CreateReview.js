@@ -5,7 +5,7 @@ import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
-import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER, GET_PLACE, GET_CAT_PLACES } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_PLACE, GET_CAT_PLACES } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
 
 const CreateReview = (props) => {
@@ -55,19 +55,20 @@ const CreateReview = (props) => {
         }
       },
       refetchQueries: [
-        { query: GET_REVIEWS, variables: { placeId: place.id } },
-        { query: GET_PLACE, variables: { placeId: place.id } },
-        { query: GET_CAT_PLACES, variables: { catId: place.catId } },
-        {
-          query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
-            headers: {
-              Authorization: jwtBearer
-            }
-          },
-        },
+        // { query: GET_REVIEWS, variables: { placeId: place.id } },
+        // { query: GET_PLACE, variables: { placeId: place.id } },
+        // { query: GET_CAT_PLACES, variables: { catId: place.catId } },
+        // {
+        //   query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
+        //     headers: {
+        //       Authorization: jwtBearer
+        //     }
+        //   },
+        // },
       ]
     })
     props.onClose()
+    props.refetchReviews()
   }
 
   const handleDictation = () => {

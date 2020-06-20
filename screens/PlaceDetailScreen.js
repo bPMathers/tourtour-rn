@@ -31,15 +31,8 @@ import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS, GET_PLACE } from '../graphql/queries'
-import { TextInput } from 'react-native-paper';
 
-let loggedInUserId;
-
-const ReviewsContainer = ({ place, navigation }) => {
-  const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
-    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
-  });
-
+const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
   if (reviewsLoading) {
     return (
       <View style={styles.container}>
@@ -70,7 +63,10 @@ const PlaceDetailScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
-  const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
+  // const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
+  const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
+    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
+  });
 
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
@@ -284,6 +280,10 @@ const PlaceDetailScreen = (props) => {
     setReviewModalVisible(false)
   }
 
+  const handleRefetch = () => {
+    refetch()
+  }
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -326,7 +326,7 @@ const PlaceDetailScreen = (props) => {
         </Modal>
         <Modal animationType="slide" visible={reviewModalVisible}>
           <View style={styles.reviewModalContainer}>
-            <CreateReview onClose={handleOnClose} place={place} />
+            <CreateReview onClose={handleOnClose} place={place} refetchReviews={() => { refetch() }} />
           </View>
         </Modal>
       </View>
@@ -437,8 +437,11 @@ const PlaceDetailScreen = (props) => {
         </View>
         <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
         <View style={styles.reviewsHeaderRow}>
-          <View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
+            <TouchableOpacity onPress={() => { refetch() }}>
+              <Ionicons name='md-refresh' size={30} color={TourTourColors.accent} />
+            </TouchableOpacity>
           </View>
           <View>
             <StarRating color={TourTourColors.accent} rating={place.avgRating ?? 0} />
@@ -450,7 +453,14 @@ const PlaceDetailScreen = (props) => {
           </View>
         </View>
         <View style={styles.reviewsListContainer}>
-          <ReviewsContainer place={place} navigation={props.navigation} reviews={placeData?.reviews} />
+          <ReviewsContainer
+            place={place}
+            navigation={props.navigation}
+            reviewsData={reviewsData}
+            reviewsLoading={reviewsLoading}
+            reviewsError={reviewsError}
+            loggedInUserId={loggedInUserId}
+          />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
           <Button title='Voir toutes les reviews' color={TourTourColors.accent} onPress={() => {
@@ -583,6 +593,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: TourTourColors.accent,
+    marginRight: 10
   },
   reviewsListContainer: {
     flex: 1,
