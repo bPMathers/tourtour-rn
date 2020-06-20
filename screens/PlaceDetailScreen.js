@@ -23,10 +23,9 @@ import * as Linking from 'expo-linking';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import TimeAgo from 'react-native-timeago';
-import SwipeableRating from 'react-native-swipeable-rating';
-
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
+import CreateReview from '../components/CreateReview'
 import { TourTourColors } from '../constants/Colors'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
@@ -67,12 +66,9 @@ const ReviewsContainer = ({ place, navigation }) => {
 
 
 const PlaceDetailScreen = (props) => {
-  const reviewTextInput = useRef(null)
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
-  const [reviewBody, setReviewBody] = useState('');
-  const [rating, setRating] = useState(3);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
 
@@ -282,21 +278,10 @@ const PlaceDetailScreen = (props) => {
     })
   }
 
-  const handleDictation = () => {
-    Keyboard.dismiss()
-  }
 
-  const renderListItem = (itemData) => {
-    console.log(itemData.item)
-    let TouchableComponent = TouchableOpacity;
 
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-      TouchableComponent = TouchableNativeFeedback;
-    }
-    return (
-      // <ReviewCard review={itemData.item} loggedInUserId={loggedInUserId} navigation={navigation} />
-      <View><Text>allo</Text></View>
-    );
+  const handleOnClose = () => {
+    setReviewModalVisible(false)
   }
 
   let TouchableComponent = TouchableOpacity;
@@ -339,68 +324,14 @@ const PlaceDetailScreen = (props) => {
             </View>
           </View>
         </Modal>
-        <Modal
-          animationType="slide"
-          visible={reviewModalVisible}
-        >
+        <Modal animationType="slide" visible={reviewModalVisible}>
           <View style={styles.reviewModalContainer}>
-            <SafeAreaView>
-              <View style={styles.reviewModalTopRow}>
-                <View><Text style={{ fontSize: 24, fontWeight: 'bold', color: TourTourColors.accent }}>{place.name}</Text></View>
-                <TouchableOpacity onPress={() => setReviewModalVisible(false)}>
-                  <AntDesign name='close' size={28} color='red' />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.reviewModalRatingRow}>
-                <SwipeableRating
-                  swipeable={true}
-                  rating={rating}
-                  size={40}
-                  xOffset={0}
-                  allowHalves
-                  color="orange"
-                  emptyColor="orange"
-                  style={styles.rating}
-                  onPress={rating => setRating(rating)}
-                />
-              </View>
-              <TextInput
-                ref={reviewTextInput}
-                autoFocus={true}
-                style={styles.reviewModalTextInput}
-                onChangeText={reviewBody => setReviewBody(reviewBody)}
-                value={reviewBody}
-                placeholderTextColor="#532423"
-                placeholder="Avec ce mot on explique tout, on pardonne tout, on valide tout, parce que l’on ne cherche jamais à savoir ce qu’il contient. C’est le mot de passe qui permet d’ouvrir les cœurs, les sexes, les sacristies et les communautés humaines. Il couvre d’un voile prétendument désintéressé, voire transcendant, la recherche de la dominance et le prétendu instinct de propriété. "
-                clearButtonMode="while-editing"
-                multiline
-                color='red'
-                backgroundColor='white'
-
-              />
-
-              <View style={styles.reviewModalActionsRow}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity style={{ marginRight: 7 }} onPress={() => {
-                    reviewTextInput.current.focus()
-                  }}>
-                    <MaterialCommunityIcons name='format-letter-case' size={26} color={TourTourColors.accent} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{ marginRight: 7 }} onPress={handleDictation}>
-                    <MaterialCommunityIcons name='microphone' size={26} color={TourTourColors.accent} />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { }}>
-                  <Text style={styles.locationButtonText}>Soumettre</Text>
-                  <AntDesign name='arrowright' size={18} color='white' />
-                </TouchableOpacity>
-              </View>
-            </SafeAreaView>
+            <CreateReview onClose={handleOnClose} place={place} />
           </View>
         </Modal>
       </View>
       <ScrollView scrollIndicatorInsets={{ right: 1 }}>
-        <StatusBar barStyle="light-content" backgroundColor="#6a51ae" />
+        <StatusBar barStyle={reviewModalVisible ? "dark-content" : "light-content"} backgroundColor="#6a51ae" />
         <View style={styles.placeDetailHeader}>
           <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
             <View style={styles.overlayContentContainer}>
@@ -506,7 +437,6 @@ const PlaceDetailScreen = (props) => {
         </View>
         <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
         <View style={styles.reviewsHeaderRow}>
-
           <View>
             <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
           </View>
@@ -531,7 +461,7 @@ const PlaceDetailScreen = (props) => {
           }} />
         </View>
       </ScrollView>
-    </View >
+    </View>
 
 
   );
@@ -706,39 +636,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10
   },
-  reviewModalTopRow: {
-    marginTop: 20,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  rating: {
-    flex: 0,
-    marginLeft: 0
-  },
-  reviewModalTextInput: {
-    borderBottomColor: 'gray',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginBottom: 10,
-  },
-  reviewModalActionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  locationButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: TourTourColors.accent,
-    borderRadius: 10,
-    // width: Dimensions.get("screen").width / 2
-  },
-  locationButtonText: {
-    color: '#fff',
-    // textAlign: 'center',
-    paddingHorizontal: 7
 
-  },
 });
 
 

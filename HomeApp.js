@@ -28,7 +28,6 @@ import MapScreen from './screens/MapScreen';
 import MapScreen2 from './screens/MapForSearchLocScreen';
 import MapForPlaceUpdateScreen from './screens/MapForPlaceUpdateScreen';
 import GooglePlacesACInput from './components/GooglePlacesACInput';
-import CreateReviewScreen from './screens/CreateReviewScreen';
 import UpdateReviewScreen from './screens/UpdateReviewScreen';
 import UpdateMyReviewScreen from './screens/UpdateMyReviewScreen';
 import UpdateMyPlaceScreen from './screens/UpdateMyPlaceScreen';
@@ -216,15 +215,6 @@ function HomeStackScreen() {
         component={GooglePlacesACInput}
         options={{
           title: "Choisir location",
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
-        }}
-      />
-      <HomeStack.Screen
-        name='CreateReview'
-        component={CreateReviewScreen}
-        options={{
-          title: "Votre Review",
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}

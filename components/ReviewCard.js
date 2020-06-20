@@ -55,9 +55,9 @@ const ReviewCard = (props) => {
           ) : null}
         </View>
       </View>
-      <View style={{ marginBottom: 8 }}>
+      {/*<View style={{ marginBottom: 8 }}>
         <Text style={styles.reviewTitleText}>:: {props.review.title}</Text>
-      </View>
+      </View>*/}
       <View>
         <Text style={styles.reviewBodyText}>{props.review.body}</Text>
       </View>
