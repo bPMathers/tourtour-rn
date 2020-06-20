@@ -9,6 +9,7 @@ import { GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
 import { takeExistingImage, takeNewImage } from '../utils/chooseImage'
 import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
+import FadeInView from '../components/fadeInView'
 
 const UserEditScreen = (props) => {
 
@@ -228,7 +229,7 @@ const UserEditScreen = (props) => {
         </View>
       </Modal>
 
-      <View style={styles.container}>
+      <FadeInView style={styles.container}>
         <View style={styles.userProfileHeader}>
           <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
           <TouchableOpacity onPress={() => { setPhotoModalVisible(true) }} style={{
@@ -385,7 +386,6 @@ const UserEditScreen = (props) => {
               </>
             }
           </View>
-
         </View>
         <View style={styles.rowsContainer}>
           <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
@@ -443,7 +443,7 @@ const UserEditScreen = (props) => {
             </View>
           </TouchableComponent>
         </View>
-      </View>
+      </FadeInView>
     </React.Fragment>
   );
 }

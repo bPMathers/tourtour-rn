@@ -53,7 +53,7 @@ export const HomeSearchScreen = (props) => {
     );
 
   return (
-    <FadeInView style={styles.container}>
+    <FadeInView style={styles.container} fadeInDuration={500}>
       <StatusBar barStyle="light-content" />
       <View style={styles.animationContainer}>
         <Animation />
@@ -72,13 +72,13 @@ export const HomeSearchScreen = (props) => {
           placeholder='Rechercher'
         />
       </View>*/}
-      <View style={{ marginHorizontal: 2, marginBottom: 180 }}>
+      <FadeInView style={{ marginHorizontal: 2, marginBottom: 180 }} fadeInDuration={1000} yTranslate={100}>
         <FlatList
           data={data.categories}
           renderItem={renderGridItem}
           numColumns={2}
         />
-      </View>
+      </FadeInView>
     </FadeInView>
   );
 };
