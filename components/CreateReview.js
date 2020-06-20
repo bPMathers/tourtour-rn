@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, SafeAreaView } from 'react-native';
 import SwipeableRating from 'react-native-swipeable-rating';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
@@ -40,7 +40,11 @@ const CreateReview = (props) => {
     }
   `;
 
-  const [createReview, { data }] = useMutation(CREATE_REVIEW)
+  const [createReview] = useMutation(CREATE_REVIEW, {
+    onCompleted: () => props.refetchReviews()
+  })
+
+
 
   /**
    * HELPERS
@@ -54,21 +58,11 @@ const CreateReview = (props) => {
           Authorization: jwtBearer
         }
       },
-      refetchQueries: [
-        // { query: GET_REVIEWS, variables: { placeId: place.id } },
-        // { query: GET_PLACE, variables: { placeId: place.id } },
-        // { query: GET_CAT_PLACES, variables: { catId: place.catId } },
-        // {
-        //   query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
-        //     headers: {
-        //       Authorization: jwtBearer
-        //     }
-        //   },
-        // },
-      ]
+
+
     })
     props.onClose()
-    props.refetchReviews()
+
   }
 
   const handleDictation = () => {

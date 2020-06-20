@@ -437,12 +437,7 @@ const PlaceDetailScreen = (props) => {
         </View>
         <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
         <View style={styles.reviewsHeaderRow}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
-            <TouchableOpacity onPress={() => { refetch() }}>
-              <Ionicons name='md-refresh' size={30} color={TourTourColors.accent} />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
           <View>
             <StarRating color={TourTourColors.accent} rating={place.avgRating ?? 0} />
             <View>
