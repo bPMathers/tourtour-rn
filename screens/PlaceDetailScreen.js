@@ -326,7 +326,7 @@ const PlaceDetailScreen = (props) => {
         </Modal>
         <Modal animationType="slide" visible={reviewModalVisible}>
           <View style={styles.reviewModalContainer}>
-            <CreateReview onClose={handleOnClose} place={place} refetchReviews={() => { refetch() }} />
+            <CreateReview onClose={handleOnClose} place={place} refetchReviews={() => { refetch() }} loggedInUserId={loggedInUserId} />
           </View>
         </Modal>
       </View>

@@ -1,12 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Keyboard, SafeAreaView, FlatList, Image } from 'react-native';
 import SwipeableRating from 'react-native-swipeable-rating';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import { useNavigation } from '@react-navigation/native'
+import TimeAgo from 'react-native-timeago';
 
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_PLACE, GET_CAT_PLACES } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
+import FadeInView from '../components/FadeInView'
+import StarRating from './StarRating'
 
 const CreateReview = (props) => {
   const place = props.place
@@ -15,12 +19,17 @@ const CreateReview = (props) => {
    */
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
+  const navigation = useNavigation()
 
   const reviewTextInput = useRef(null)
   const [title, setTitle] = useState('');
   const [body, setbody] = useState('');
   const [rating, setRating] = useState(3);
+  const [showReviewsPane, setShowReviewsPane] = useState(false);
 
+  const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
+    variables: { placeId: place.id, orderBy: "updatedAt_DESC" },
+  });
 
   /**
    * GRAPHQL
@@ -67,10 +76,39 @@ const CreateReview = (props) => {
 
   const handleDictation = () => {
     Keyboard.dismiss()
+    setShowReviewsPane(false)
   }
 
   const handleReviewsList = () => {
     Keyboard.dismiss()
+    setShowReviewsPane(true)
+  }
+
+  const renderListItem = ({ item }) => {
+
+    return (
+      <View style={styles.reviewCard}>
+        <View style={styles.reviewHeader}>
+          <View style={styles.reviewHeaderRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ marginRight: 5 }}>
+                <Image style={styles.tinyUserProfilePic} source={{ uri: item.author.imageUrl }} />
+              </View>
+              <View>
+                <View>
+                  <Text style={styles.authorName}>{item.author.name}</Text>
+                </View>
+                <StarRating rating={item.rating} color='white' />
+                <TimeAgo style={styles.timeAgoText} time={item.updatedAt} />
+              </View>
+            </View>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.reviewBodyText}>{item.body}</Text>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -114,6 +152,7 @@ const CreateReview = (props) => {
       <View style={styles.reviewModalActionsRow}>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={{ marginRight: 7 }} onPress={() => {
+            setShowReviewsPane(false)
             reviewTextInput.current.focus()
           }}>
             <MaterialCommunityIcons name='format-letter-case' size={26} color={TourTourColors.accent} />
@@ -130,6 +169,11 @@ const CreateReview = (props) => {
           <AntDesign name='arrowright' size={18} color='white' />
         </TouchableOpacity>
       </View>
+      {showReviewsPane && <FadeInView style={{ marginTop: 10 }}>
+        {reviewsLoading ? <View style={styles.container}>
+          <Text>Loading...</Text></View> : <FlatList data={reviewsData.reviews} renderItem={renderListItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+        }
+      </FadeInView>}
     </SafeAreaView>
   );
 }
@@ -170,6 +214,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7
 
   },
+  reviewCard: {
+    flex: 1,
+    backgroundColor: TourTourColors.accent,
+    padding: 10,
+    borderRadius: 10
+  },
+  authorName: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold'
+  },
+  reviewHeader: {
+    marginBottom: 10
+  },
+  reviewHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  reviewTitleText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  reviewBodyText: {
+    color: 'white',
+    fontSize: 16
+  },
+  tinyUserProfilePic: {
+    width: 50,
+    height: 50,
+    borderColor: 'white',
+    borderWidth: 1,
+    borderRadius: 50
+  },
+  timeAgoText: {
+    color: 'white',
+    fontSize: 12
+  }
 })
 
 export default CreateReview;

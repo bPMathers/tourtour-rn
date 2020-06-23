@@ -16,7 +16,7 @@ import Animation from '../components/Animation';
 
 import { GET_CATEGORIES } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
-import FadeInView from '../components/fadeInView'
+import FadeInView from '../components/FadeInView'
 
 
 

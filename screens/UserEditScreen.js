@@ -9,7 +9,7 @@ import { GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
 import { takeExistingImage, takeNewImage } from '../utils/chooseImage'
 import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
-import FadeInView from '../components/fadeInView'
+import FadeInView from '../components/FadeInView'
 
 const UserEditScreen = (props) => {
 
