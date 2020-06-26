@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, ActivityIndicator, TextInput, Modal } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -132,7 +132,7 @@ const ReviewsListScreen = (props) => {
         </TouchableOpacity>
       </View>
       {reviewsLoading ? <View style={styles.container}>
-        <Text>Loading...</Text></View> : <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+        <ActivityIndicator size="large" color={TourTourColors.accent} /></View> : <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
       }
     </View>
   );

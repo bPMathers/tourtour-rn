@@ -14,7 +14,7 @@ import {
   Alert,
   Modal,
   TouchableHighlight,
-  SafeAreaView,
+  ActivityIndicator,
   Keyboard
 } from 'react-native';
 import { showLocation } from 'react-native-map-link'
@@ -35,8 +35,8 @@ import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS, GET_PLACE 
 const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
   if (reviewsLoading) {
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   }
@@ -477,6 +477,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  metaStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   placeDetailHeader: {
     height: 300,

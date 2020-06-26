@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert, ActivityIndicator } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from "@apollo/react-hooks";
@@ -146,13 +146,13 @@ const CategorySearchScreen = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -242,6 +242,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // margin: 10,
+  },
+  metaStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
   modalContainer: {
 

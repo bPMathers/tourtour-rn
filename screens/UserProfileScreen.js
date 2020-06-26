@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -64,13 +64,13 @@ const UserProfileScreen = (props) => {
 
     if (loading)
         return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
+            <View style={styles.metaStateContainer}>
+                <ActivityIndicator size="large" color={TourTourColors.accent} />
             </View>
         );
     if (error)
         return (
-            <View style={styles.container}>
+            <View style={styles.metaStateContainer}>
                 <Text>Error...</Text>
             </View>
         );
@@ -228,6 +228,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center'
+    },
+    metaStateContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     userImg: {
         height: 144,

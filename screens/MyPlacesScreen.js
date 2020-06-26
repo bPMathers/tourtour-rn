@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 
 import MyPlacesPreviewListItem from '../components/MyPlacesPreviewListItem'
 import { GET_MY_PLACES, GET_TOKEN } from '../graphql/queries'
+import { TourTourColors } from '../constants/Colors'
+
 
 const MyPlacesScreen = (props) => {
   const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
@@ -26,13 +28,13 @@ const MyPlacesScreen = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -48,7 +50,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 10
-  }
+  },
+  metaStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 })
 
 export default MyPlacesScreen;

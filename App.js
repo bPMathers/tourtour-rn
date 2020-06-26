@@ -18,6 +18,7 @@ export default function App(props) {
   const client = new ApolloClient({
     //local IP adress  may change. find a way to fetch it dynamically?
     uri: 'https://frozen-caverns-07163.herokuapp.com/',
+    // uri: 'http://192.168.100.142:4000/',
     cache,
     resolvers: {
 

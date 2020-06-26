@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   FlatList,
   StyleSheet,
   Text,
   View,
   StatusBar,
-  Animated,
-  Dimensions
+  ActivityIndicator
 } from 'react-native';
 
-import { useQuery, useApolloClient } from '@apollo/react-hooks';
-import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@apollo/react-hooks';
 import CategoryGridTile from '../components/CategoryGridTile';
 import Animation from '../components/Animation';
 
@@ -41,13 +39,13 @@ export const HomeSearchScreen = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -86,8 +84,12 @@ export const HomeSearchScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    // backgroundColor: '#f5e4d4',
+  },
+  metaStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
   animationContainer: {
     backgroundColor: '#fff',

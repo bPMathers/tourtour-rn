@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -86,7 +86,7 @@ const MyReviewsListScreen = (props) => {
   if (reviewsLoading)
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (reviewsError)
