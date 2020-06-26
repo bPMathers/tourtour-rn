@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
     padding: 8,
-    paddingBottom: 400
+    paddingBottom: 200
     // marginVertical: 200
   },
 });
