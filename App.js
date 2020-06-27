@@ -5,7 +5,7 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import useCachedResources from './hooks/useCachedResources';
 
-import HomeApp from './HomeApp'
+import MainNavigation from './navigation/MainNavigation'
 import Translations from './constants/Translations'
 
 // Set the key-value pairs for the different languages you want to support.
@@ -59,7 +59,7 @@ export default function App(props) {
   } else {
     return (
       <ApolloProvider client={client}>
-        <HomeApp {...props} />
+        <MainNavigation {...props} />
       </ApolloProvider>
     );
   }

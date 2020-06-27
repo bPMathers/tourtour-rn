@@ -12,38 +12,37 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
 import * as Location from 'expo-location';
 import * as Linking from 'expo-linking';
-import useCachedResources from './hooks/useCachedResources';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
+import useCachedResources from '../hooks/useCachedResources';
+import LinkingConfiguration from '../navigation/LinkingConfiguration';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import i18n from 'i18n-js';
 
-
-import { TourTourColors } from './constants/Colors';
-import HomeSearchScreen from './screens/HomeSearchScreen';
-import CategorySearchScreen from './screens/CategorySearchScreen';
-import PlaceDetailScreen from './screens/PlaceDetailScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
-import AddPlaceScreen from './screens/AddPlaceScreen';
-import MapScreen from './screens/MapScreen';
-import MapScreen2 from './screens/MapForSearchLocScreen';
-import MapForPlaceUpdateScreen from './screens/MapForPlaceUpdateScreen';
-import GooglePlacesACInput from './components/GooglePlacesACInput';
-import UpdateReviewScreen from './screens/UpdateReviewScreen';
-import UpdateMyReviewScreen from './screens/UpdateMyReviewScreen';
-import UpdateMyPlaceScreen from './screens/UpdateMyPlaceScreen';
-import AuthScreen from './screens/AuthScreen';
-import UserEditScreen from './screens/UserEditScreen';
-import SettingsScreen from './screens/SettingsScreen';
-import MyReviewsListScreen from './screens/MyReviewsListScreen';
-import MyPhotosListScreen from './screens/MyPhotosListScreen';
-import UserPlacesListScreen from './screens/UserPlacesListScreen';
-import MyPlacesScreen from './screens/MyPlacesScreen';
-import UserPhotosListScreen from './screens/UserPhotosListScreen';
-import UserReviewsListScreen from './screens/UserReviewsListScreen';
-import { GET_TOKEN } from './graphql/queries'
-import ReviewsListScreen from './screens/ReviewsListScreen';
+import { TourTourColors } from '../constants/Colors';
+import HomeSearchScreen from '../screens/HomeSearchScreen';
+import CategorySearchScreen from '../screens/CategorySearchScreen';
+import PlaceDetailScreen from '../screens/PlaceDetailScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import AddPlaceScreen from '../screens/AddPlaceScreen';
+import MapScreen from '../screens/MapScreen';
+import MapScreen2 from '../screens/MapForSearchLocScreen';
+import MapForPlaceUpdateScreen from '../screens/MapForPlaceUpdateScreen';
+import GooglePlacesACInput from '../components/GooglePlacesACInput';
+import UpdateReviewScreen from '../screens/UpdateReviewScreen';
+import UpdateMyReviewScreen from '../screens/UpdateMyReviewScreen';
+import UpdateMyPlaceScreen from '../screens/UpdateMyPlaceScreen';
+import AuthScreen from '../screens/AuthScreen';
+import UserEditScreen from '../screens/UserEditScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import MyReviewsListScreen from '../screens/MyReviewsListScreen';
+import MyPhotosListScreen from '../screens/MyPhotosListScreen';
+import UserPlacesListScreen from '../screens/UserPlacesListScreen';
+import MyPlacesScreen from '../screens/MyPlacesScreen';
+import UserPhotosListScreen from '../screens/UserPhotosListScreen';
+import UserReviewsListScreen from '../screens/UserReviewsListScreen';
+import { GET_TOKEN } from '../graphql/queries'
+import ReviewsListScreen from '../screens/ReviewsListScreen';
 
 const HomeStack = createStackNavigator();
 const UserStack = createStackNavigator();
@@ -354,7 +353,6 @@ export default function HomeApp(props) {
       Alert.alert(
         i18n.t('Warning'),
         i18n.t('LocationWarning'),
-
         [{ text: i18n.t('ChangeSettings'), onPress: () => { Linking.openURL('app-settings:') } }]
       );
     }
@@ -365,7 +363,6 @@ export default function HomeApp(props) {
       //This file is on my laptop only, find how to bundle with app
       imageUrl: "https://res.cloudinary.com/db4mzdmnm/image/upload/v1592273897/no-image-icon-6_zoucqc.png",
       imageBase64: null,
-
     }
   })
 
@@ -380,7 +377,6 @@ export default function HomeApp(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle='dark-content' />}
         <NavigationContainer linking={LinkingConfiguration}>
-
           {!isLoggedIn ? (
             <HomeStack.Navigator
               // initialRouteName='Startup'
