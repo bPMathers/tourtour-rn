@@ -301,7 +301,7 @@ const PlaceDetailScreen = (props) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View style={{ flexDirection: 'column' }}>
+              <View>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleTakeNewPictureForUpload}

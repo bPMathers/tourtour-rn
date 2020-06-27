@@ -198,31 +198,27 @@ const UserEditScreen = (props) => {
         transparent={true}
         visible={photoModalVisible}
         onBackdropPress={() => setPhotoModalVisible(false)}
-      // onRequestClose={() => {
-      //   Alert.alert("Modal has been closed.");
-      // }}
       >
         <View style={styles.centeredView}>
           <View style={styles.photoModalView}>
-            <Text style={styles.modalText}></Text>
-            <View style={{ flexDirection: 'row' }}>
+            <View>
               <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "red", marginRight: 4 }}
-                onPress={() => setPhotoModalVisible(false)}
-              >
-                <Text style={styles.textStyle}>Annuler</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3", marginRight: 4 }}
+                style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                 onPress={handleChangeForNewPicture}
               >
                 <Text style={styles.textStyle}>Nouvelle Photo</Text>
               </TouchableHighlight>
               <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                 onPress={handleChangeForExistingPicture}
               >
                 <Text style={styles.textStyle}>Photo déjà existante</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ ...styles.openButton, backgroundColor: "red" }}
+                onPress={() => setPhotoModalVisible(false)}
+              >
+                <Text style={styles.textStyle}>Annuler</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -533,11 +529,9 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   centeredView: {
-    // flex: 1,
     height: '100%',
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.7)'
   },
   photoModalView: {
@@ -545,8 +539,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    width: '95%',
-    // marginHorizontal: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
