@@ -57,8 +57,8 @@ const LocationPickerForUpdatePlace = (props) => {
     const result = await Permissions.askAsync(Permissions.LOCATION);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant location permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('LocationPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -122,7 +122,7 @@ const LocationPickerForUpdatePlace = (props) => {
       </MapPreview>
       <View style={styles.actions}>
         <Button
-          title={i18n.t('TakeMyLocation')}
+          title={i18n.t('UseMyLocation')}
           color={TourTourColors.primary}
           onPress={getLocationHandler}
         />

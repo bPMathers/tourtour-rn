@@ -182,11 +182,11 @@ const UpdateReviewScreen = (props) => {
       <View>
         <Button title="Supprimer" onPress={() => {
           Alert.alert(
-            'Attention!',
-            "Êtes-vous certain(e) de vouloir supprimer ce review ?",
+            `${i18n.t('Warning')}!`,
+            i18n.t('ReviewDeleteConfirmAlert'),
             [
-              { text: 'Annuler', style: 'destructive' },
-              { text: 'Confirmer', onPress: () => { onDeleteHandler() } },
+              { text: i18n.t('Cancel'), style: 'destructive' },
+              { text: i18n.t('Confirm'), onPress: () => { onDeleteHandler() } },
             ]
           )
         }} color='#F65E3C' />

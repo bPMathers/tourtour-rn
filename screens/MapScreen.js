@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'
 import { useApolloClient } from "@apollo/react-hooks";
+import i18n from 'i18n-js'
 
 import { Ionicons } from '@expo/vector-icons'
 
@@ -22,7 +23,7 @@ const MapScreen = (props) => {
     if (!selectedLocation) {
       Alert.alert(
         'Doyoyoy!',
-        'Svp choisir un endroit avant de sauvegarder',
+        i18n.t('PleaseChooseLocation'),
         [{ text: 'Okay' }]
       );
       return
@@ -48,9 +49,9 @@ const MapScreen = (props) => {
     })
   }
 
-  const handleOnRegionChangeComplete = (region) => {
-    setMapRgn(region)
-  }
+  // const handleOnRegionChangeComplete = (region) => {
+  //   setMapRgn(region)
+  // }
 
   let markerCoordinates
 
@@ -72,9 +73,10 @@ const MapScreen = (props) => {
         longitudeDelta: 0.0421
       }}
       onPress={selectLocationHandler}
-      onRegionChangeComplete={handleOnRegionChangeComplete}>
+    // onRegionChangeComplete={handleOnRegionChangeComplete}
+    >
       {markerCoordinates && <Marker title="Endroit Choisi" coordinate={markerCoordinates}></Marker>}
-    </MapView >
+    </MapView>
   );
 }
 

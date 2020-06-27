@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
 import { getReverseGeocodingInfo } from '../utils/getReverseGeocodingInfo'
@@ -212,19 +213,19 @@ const UpdateMyPlaceScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <Text style={styles.label}>Nom</Text>
+        <Text style={styles.label}>{i18n.t('Name')}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={nameChangeHandler}
           value={name}
-          placeholder={`Entrer nom`}
+        // placeholder={`Entrer nom`}
         />
-        <Text style={styles.label}>Téléphone</Text>
+        <Text style={styles.label}>{i18n.t('Telephone')}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={phoneChangeHandler}
           value={phone}
-          placeholder={`Entrer # de tel`}
+        // placeholder={`Entrer # de tel`}
         />
         <ImagePickerForUpdatePlace onImageTaken={imageTakenHandler} initialImgUrl={place.imageUrl} />
         <LocationPickerForUpdatePlace
@@ -235,7 +236,7 @@ const UpdateMyPlaceScreen = props => {
         />
         <View style={{ marginBottom: 20 }}>
           <Button
-            title="Mettre à jour"
+            title={i18n.t('Update')}
             color={TourTourColors.accent}
             onPress={() => { updatePlaceHandler(imgBase64, { lat, lng }) }}
           />
@@ -243,15 +244,15 @@ const UpdateMyPlaceScreen = props => {
         <View style={{ marginBottom: 20 }}>
 
           <Button
-            title="Supprimer"
+            title={i18n.t('Delete')}
             color='red'
             onPress={() => {
               Alert.alert(
-                'Attention!',
-                "Êtes-vous certain(e) de vouloir supprimer cet endroit ?",
+                `${i18n.t('Warning')}!`,
+                i18n.t('PlaceDeleteConfirmAlert'),
                 [
-                  { text: 'Annuler', style: 'destructive' },
-                  { text: 'Confirmer', onPress: () => { onDeleteHandler() } },
+                  { text: i18n.t('Cancel'), style: 'destructive' },
+                  { text: i18n.t('Confirm'), onPress: () => { onDeleteHandler() } },
                 ]
               )
             }}

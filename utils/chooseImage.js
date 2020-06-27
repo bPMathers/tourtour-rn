@@ -1,12 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import i18n from 'i18n-js'
 
 const verifyCameraRollPermissions = async () => {
   const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   if (result.status !== 'granted') {
     Alert.alert(
-      'Insufficient permissions!',
-      'You need to grant camera permissions to use this app.',
+      `${i18n.t('InsufficientPermissions')}!`,
+      i18n.t('CameraPermissionsAlert'),
       [{ text: 'Okay' }]
     );
     return false;
@@ -18,8 +19,8 @@ const verifyCameraPermissions = async () => {
   const result = await Permissions.askAsync(Permissions.CAMERA);
   if (result.status !== 'granted') {
     Alert.alert(
-      'Insufficient permissions!',
-      'You need to grant camera permissions to use this app.',
+      `${i18n.t('InsufficientPermissions')}!`,
+      i18n.t('CameraPermissionsAlert'),
       [{ text: 'Okay' }]
     );
     return false;

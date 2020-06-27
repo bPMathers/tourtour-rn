@@ -24,18 +24,11 @@ const MapForPlaceUpdateScreen = (props) => {
     if (!selectedLocation) {
       Alert.alert(
         'Doyoyoy!',
-        'Svp choisir un endroit avant de sauvegarder',
+        i18n.t('PleaseChooseLocation'),
         [{ text: 'Okay' }]
       );
       return
     }
-
-    // client.writeData({
-    //   data: {
-    //     lat: selectedLocation.lat,
-    //     lng: selectedLocation.lng,
-    //   }
-    // })
 
     props.navigation.navigate({
       name: 'UpdateMyPlace',

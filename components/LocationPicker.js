@@ -45,8 +45,8 @@ const LocationPicker = (props) => {
     const result = await Permissions.askAsync(Permissions.LOCATION);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant location permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('LocationPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -77,7 +77,7 @@ const LocationPicker = (props) => {
       console.log(err)
       Alert.alert(
         'Could not fetch location!',
-        'Please try again later or pick a location on the map.',
+        'Svp choisir un endroit avant de sauvegarder',
         [{ text: 'Okay' }]
       );
     }

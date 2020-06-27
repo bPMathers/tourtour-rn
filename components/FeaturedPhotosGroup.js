@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { onGestureEvent } from 'react-native-redash'
+import i18n from 'i18n-js'
 
 import { Ionicons, AntDesign } from '@expo/vector-icons'
 
@@ -41,11 +41,11 @@ const FeaturedPhotosGroup = (props) => {
   }
   const handleOnDelete = () => {
     Alert.alert(
-      'Attention!',
-      "Êtes-vous certain(e) de vouloir supprimer cette photo ?",
+      `${i18n.t('Warning')}!`,
+      i18n.t('PhotoDeleteConfirmAlert'),
       [
-        { text: 'Annuler', style: 'destructive' },
-        { text: 'Confirmer', onPress: () => { confirmDeletePhoto() } },
+        { text: i18n.t('Cancel'), style: 'destructive' },
+        { text: i18n.t('Confirm'), onPress: () => { confirmDeletePhoto() } },
       ]
     )
   }
@@ -91,9 +91,6 @@ const FeaturedPhotosGroup = (props) => {
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalView}>
@@ -144,15 +141,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   gridItem: {
-    // flex: 1,
-    // // borderWidth: 1,
-    // // borderColor: 'white',
-    // height: 120,
-    // margin: 2,
-    // borderRadius: 5,
-    // // elevation: 5,
-    // overflow: Platform.OS === "android" ? "hidden" : "hidden",
-
     backgroundColor: 'white',
     height: 150,
     width: Dimensions.get('screen').width / 2 - 15
@@ -175,15 +163,11 @@ const styles = StyleSheet.create({
   },
 
   centeredView: {
-    // flex: 1,
     height: '100%',
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 0,
-    // backgroundColor: 'rgba(0, 0, 0, 0.9)'
   },
   modalView: {
-    // flex: 1,
     marginHorizontal: 10,
     borderRadius: 20,
     padding: 35,

@@ -20,8 +20,8 @@ const ImgPicker = props => {
     const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant camera permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('CameraPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -33,8 +33,8 @@ const ImgPicker = props => {
     const result = await Permissions.askAsync(Permissions.CAMERA);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant camera permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('CameraPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -92,9 +92,6 @@ const ImgPicker = props => {
           transparent={true}
           visible={modalVisible}
           onBackdropPress={() => setModalVisible(false)}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>

@@ -4,6 +4,7 @@ import MapView, { Marker } from 'react-native-maps'
 import { useApolloClient, useQuery } from "@apollo/react-hooks";
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons'
+import i18n from 'i18n-js'
 
 import { GET_SEARCH_LOCATION } from '../graphql/queries'
 
@@ -27,7 +28,7 @@ const MapScreen2 = (props) => {
     if (!selectedLocation) {
       Alert.alert(
         'Doyoyoy!',
-        'Svp choisir un endroit avant de sauvegarder',
+        i18n.t('PleaseChooseLocation'),
         [{ text: 'Okay' }]
       );
       return

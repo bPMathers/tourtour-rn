@@ -4,6 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
+import i18n from 'i18n-js'
 
 import { GET_USER_PHOTOS, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
@@ -69,11 +70,11 @@ const UserPhotosListScreen = (props) => {
 
   const handleOnDelete = () => {
     Alert.alert(
-      'Attention!',
-      "Êtes-vous certain(e) de vouloir supprimer cette photo ?",
+      `${i18n.t('Warning')}!`,
+      i18n.t('PhotoDeleteConfirmAlert'),
       [
-        { text: 'Annuler', style: 'destructive' },
-        { text: 'Confirmer', onPress: () => { confirmDeletePhoto() } },
+        { text: i18n.t('Cancel'), style: 'destructive' },
+        { text: i18n.t('Confirm'), onPress: () => { confirmDeletePhoto() } },
       ]
     )
   }
@@ -122,9 +123,6 @@ const UserPhotosListScreen = (props) => {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>

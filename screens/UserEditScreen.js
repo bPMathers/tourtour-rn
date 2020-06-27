@@ -277,10 +277,10 @@ const UserEditScreen = (props) => {
                 <TouchableOpacity onPress={() => {
                   Alert.alert(
                     `${userName}!`,
-                    `Êtes-vous certain(e) de vouloir changer votre nom pour: ${nameForUpdate}?`,
+                    `${i18n.t('NameChangeAlert')}${nameForUpdate}?`,
                     [
-                      { text: 'Annuler', style: 'destructive' },
-                      { text: 'Confirmer', onPress: () => { handleSaveName() } },
+                      { text: i18n.t('Cancel'), style: 'destructive' },
+                      { text: i18n.t('Confirm'), onPress: () => { handleSaveName() } },
                     ]
                   )
                 }} style={{

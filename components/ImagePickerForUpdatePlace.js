@@ -27,8 +27,8 @@ const ImgPickerForUpdatePlace = props => {
     const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant camera permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('CameraPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -40,8 +40,8 @@ const ImgPickerForUpdatePlace = props => {
     const result = await Permissions.askAsync(Permissions.CAMERA);
     if (result.status !== 'granted') {
       Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant camera permissions to use this app.',
+        `${i18n.t('InsufficientPermissions')}!`,
+        i18n.t('CameraPermissionsAlert'),
         [{ text: 'Okay' }]
       );
       return false;
@@ -104,9 +104,6 @@ const ImgPickerForUpdatePlace = props => {
           transparent={true}
           visible={modalVisible}
           onBackdropPress={() => setModalVisible(false)}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -115,19 +112,19 @@ const ImgPickerForUpdatePlace = props => {
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleTakeNewPictureForUpload}
                 >
-                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                  <Text style={styles.textStyle}>{i18n.t('NewPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleUploadExistingPicture}
                 >
-                  <Text style={styles.textStyle}>Photo déjà existante</Text>
+                  <Text style={styles.textStyle}>{i18n.t('ExistingPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "red" }}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.textStyle}>Annuler</Text>
+                  <Text style={styles.textStyle}>{i18n.t('Cancel')}</Text>
                 </TouchableHighlight>
               </View>
             </View>

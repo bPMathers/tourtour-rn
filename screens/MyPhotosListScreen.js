@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Dimensions, Modal, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
-import { FontAwesome, FontAwesome5, AntDesign, Ionicons } from '@expo/vector-icons'
-import TimeAgo from 'react-native-timeago';
+import { AntDesign, Ionicons } from '@expo/vector-icons'
+import i18n from 'i18n-js'
+
 
 import { GET_MY_PHOTOS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
@@ -76,8 +77,8 @@ const MyPhotosListScreen = (props) => {
 
   const handleOnDelete = () => {
     Alert.alert(
-      'Attention!',
-      "Êtes-vous certain(e) de vouloir supprimer cette photo ?",
+      `${i18n.t('Warning')}!`,
+      i18n.t('PhotoDeleteConfirmAlert'),
       [
         { text: 'Annuler', style: 'destructive' },
         { text: 'Confirmer', onPress: () => { confirmDeletePhoto() } },
