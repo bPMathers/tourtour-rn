@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacit
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
 
@@ -99,8 +100,8 @@ const UserProfileScreen = (props) => {
             <View style={styles.actionsRow}>
                 <TouchableComponent onPress={() => {
                     Alert.alert(
-                        `Attention!`,
-                        `L'option "Messagerie" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        `${i18n.t('Warning')}!`,
+                        i18n.t('MessageWarning'),
                         [
                             { text: 'Ok' },
                         ]
@@ -117,8 +118,8 @@ const UserProfileScreen = (props) => {
                 </TouchableComponent>
                 <TouchableComponent onPress={() => {
                     Alert.alert(
-                        `Attention!`,
-                        `L'option "Suivre" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        `${i18n.t('Warning')}!`,
+                        i18n.t('FollowWarning'),
                         [
                             { text: 'Ok' },
                         ]
@@ -129,7 +130,7 @@ const UserProfileScreen = (props) => {
                             <SimpleLineIcons name='user-follow' size={20} color={TourTourColors.accent} />
                         </View>
                         <View>
-                            <Text style={styles.actionTitle}>Suivre</Text>
+                            <Text style={styles.actionTitle}>{i18n.t('Follow')}</Text>
                         </View>
                     </View>
                 </TouchableComponent>
@@ -137,8 +138,8 @@ const UserProfileScreen = (props) => {
             <View style={styles.rowsContainer}>
                 <TouchableComponent onPress={() => {
                     Alert.alert(
-                        `Attention!`,
-                        `L'option "Activité récente" n'est pas encore disponible. Insérer lien vers site de Tourtour`,
+                        `${i18n.t('Warning')}!`,
+                        i18n.t('RecentActivityWarning'),
                         [
                             { text: 'Ok' },
                         ]
@@ -150,7 +151,7 @@ const UserProfileScreen = (props) => {
                                 <Feather name='activity' size={24} color='#333' />
                             </View>
                             <View>
-                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Activité récente</Text>
+                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('RecentActivity')}</Text>
                             </View>
                             <View>
                                 <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}></Text>

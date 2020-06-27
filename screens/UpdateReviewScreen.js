@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
@@ -117,7 +118,7 @@ const UpdateReviewScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 10 }}>
-        <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>Mettre à jour vos impressions sur:</Text>
+        <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>{i18n.t('YourImpressions')}:</Text>
       </View>
       <View style={styles.placeInfo}>
         <Text style={{ fontWeight: 'bold' }}>{place.name}</Text>
@@ -164,19 +165,19 @@ const UpdateReviewScreen = (props) => {
         />
       </View>
       <View>
-        <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
+        <Button title={i18n.t('Cancel')} onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
       </View>
       <View>
-        <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
+        <Button title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.primary} />
       </View>
       <View>
-        <Button title="Supprimer" onPress={() => {
+        <Button title={i18n.t('Delete')} onPress={() => {
           Alert.alert(
-            'Attention!',
-            "Êtes-vous certain(e) de vouloir supprimer ce review ?",
+            `${i18n.t('Warning')}!`,
+            i18n.t('ReviewDeleteConfirmAlert'),
             [
-              { text: 'Annuler', style: 'destructive' },
-              { text: 'Confirmer', onPress: () => { onDeleteHandler() } },
+              { text: i18n.t('Cancel'), style: 'destructive' },
+              { text: i18n.t('Confirm'), onPress: () => { onDeleteHandler() } },
             ]
           )
         }} color='#F65E3C' />

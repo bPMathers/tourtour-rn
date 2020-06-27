@@ -17,6 +17,8 @@ import LinkingConfiguration from './navigation/LinkingConfiguration';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import i18n from 'i18n-js';
+
 
 import { TourTourColors } from './constants/Colors';
 import HomeSearchScreen from './screens/HomeSearchScreen';
@@ -430,14 +432,14 @@ export default function HomeApp(props) {
                 }
                 }
               >
-                <Tab.Screen options={{ title: "Trouver" }} name="Home" component={HomeStackScreen} />
-                <Tab.Screen options={{ title: "Mon profil" }} name="User" component={UserStackScreen} />
-                <Tab.Screen options={{ title: "Réglages" }} name="Settings" component={SettingsStackScreen} />
+                <Tab.Screen options={{ title: i18n.t('Find') }} name="Home" component={HomeStackScreen} />
+                <Tab.Screen options={{ title: i18n.t('MyProfile') }} name="User" component={UserStackScreen} />
+                <Tab.Screen options={{ title: i18n.t('Settings') }} name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )
           }
         </NavigationContainer>
-      </View >
+      </View>
     );
   }
 }

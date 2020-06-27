@@ -8,6 +8,8 @@ import {
     TouchableNativeFeedback,
     ImageBackground
 } from "react-native";
+import i18n from 'i18n-js';
+
 
 const CategoryGridTile = (props) => {
     let TouchableComponent = TouchableOpacity;
@@ -22,7 +24,7 @@ const CategoryGridTile = (props) => {
                 <ImageBackground source={{ uri: props.imgUrl }} style={styles.image}>
                     <View style={styles.container}>
                         <Text style={styles.title} numberOfLines={2}>
-                            {props.title}{" "}
+                            {i18n.t(props.title)}
                         </Text>
                     </View>
                 </ImageBackground>

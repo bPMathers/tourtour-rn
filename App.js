@@ -1,16 +1,24 @@
 import React, { useEffect } from 'react';
 import ApolloClient, { gql, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
-
-
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
 import useCachedResources from './hooks/useCachedResources';
 
 import HomeApp from './HomeApp'
+import Translations from './constants/Translations'
+
+// Set the key-value pairs for the different languages you want to support.
+i18n.translations = Translations
+// Set the locale once at the beginning of your app.
+i18n.locale = Localization.locale;
+// When a value is missing from a language it'll fallback to another language with the key present.
+i18n.fallbacks = true;
 
 
-let moment = require('moment'); //load moment module to set local language
-require('moment/locale/fr'); //for import moment local language file during the application build
-moment.locale('fr');//set moment local language to zh-cn
+let moment = require('moment'); // Load moment module to set local language
+require('moment/locale/fr'); // Import moment local language file (other than english) during the application build
+moment.locale(Localization.locale); // Set moment local language
 
 const cache = new InMemoryCache
 export default function App(props) {

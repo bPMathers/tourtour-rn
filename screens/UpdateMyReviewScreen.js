@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
@@ -176,7 +177,7 @@ const UpdateReviewScreen = (props) => {
         <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
       </View>
       <View>
-        <Button title="Soumettre" onPress={onSubmitHandler} color={TourTourColors.primary} />
+        <Button title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.primary} />
       </View>
       <View>
         <Button title="Supprimer" onPress={() => {

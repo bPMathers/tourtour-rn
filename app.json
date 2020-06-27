@@ -2,6 +2,7 @@
   "expo": {
     "name": "Tour Tour",
     "slug": "tourtour-rn",
+    "description": "An app to help touring artists share their favorites spots.",
     "platforms": [
       "ios",
       "android",
@@ -27,7 +28,8 @@
       "infoPlist": {
         "LSApplicationQueriesSchemes": [
           "comgooglemaps"
-        ]
+        ],
+        "CFBundleAllowMixedLocalizations": true
       }
     },
     "web": {

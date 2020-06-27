@@ -6,6 +6,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { useNavigation } from '@react-navigation/native'
 import TimeAgo from 'react-native-timeago';
+import i18n from 'i18n-js'
 
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_PLACE, GET_CAT_PLACES } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
@@ -165,7 +166,7 @@ const CreateReview = (props) => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.submitButton} color={TourTourColors.accent} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Soumettre</Text>
+          <Text style={styles.submitButtonText}>{i18n.t('Submit')}</Text>
           <AntDesign name='arrowright' size={18} color='white' />
         </TouchableOpacity>
       </View>

@@ -24,6 +24,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import TimeAgo from 'react-native-timeago';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import i18n from 'i18n-js'
 
 import CreateReview from '../components/CreateReview'
 import { TourTourColors } from '../constants/Colors'
@@ -239,11 +240,11 @@ const PlaceDetailScreen = (props) => {
 
   const handleNoPlacePhone = () => {
     Alert.alert(
-      "Aucun numéro de téléphone n'est assigné pour cet endroit",
-      "Voulez-vous accéder aux suggestions de google pour trouver le numéro?",
+      i18n.t('NoPhone'),
+      i18n.t('NoPhoneSearch'),
       [
-        { text: 'Non', style: 'destructive' },
-        { text: 'Oui', onPress: () => { Linking.openURL(`https:www.google.com/search?q=${place.name}+phone+number`) } },
+        { text: i18n.t('no'), style: 'destructive' },
+        { text: i18n.t('yes'), onPress: () => { Linking.openURL(`https:www.google.com/search?q=${place.name}+phone+number`) } },
       ]
     )
   }
@@ -306,19 +307,19 @@ const PlaceDetailScreen = (props) => {
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleTakeNewPictureForUpload}
                 >
-                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                  <Text style={styles.textStyle}>{i18n.t('NewPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleUploadExistingPicture}
                 >
-                  <Text style={styles.textStyle}>Photo déjà existante</Text>
+                  <Text style={styles.textStyle}>{i18n.t('ExistingPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "red" }}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.textStyle}>Annuler</Text>
+                  <Text style={styles.textStyle}>{i18n.t('Cancel')}</Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -362,7 +363,7 @@ const PlaceDetailScreen = (props) => {
                     </View>
                   </View>
                   <View>
-                    <Text style={styles.submittedBy}>Ajouté par: </Text>
+                    <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
                     <TouchableComponent onPress={() => {
                       props.navigation.navigate('UserProfile', {
                         userId: place.addedBy.id,
@@ -387,7 +388,7 @@ const PlaceDetailScreen = (props) => {
                 <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
               </View>
               <View>
-                <Text style={styles.actionTitle}>Appeler</Text>
+                <Text style={styles.actionTitle}>{i18n.t('Call')}</Text>
               </View>
             </View>
           </TouchableComponent>
@@ -397,7 +398,7 @@ const PlaceDetailScreen = (props) => {
                 <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
               </View>
               <View>
-                <Text style={styles.actionTitle}>Carte</Text>
+                <Text style={styles.actionTitle}>{i18n.t('Map')}</Text>
               </View>
             </View>
           </TouchableComponent>
@@ -407,7 +408,7 @@ const PlaceDetailScreen = (props) => {
                 <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
               </View>
               <View>
-                <Text style={styles.actionTitle}>Site Web</Text>
+                <Text style={styles.actionTitle}>{i18n.t('Website')}</Text>
               </View>
             </View>
           </TouchableComponent>
@@ -458,7 +459,7 @@ const PlaceDetailScreen = (props) => {
           />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
-          <Button title='Voir toutes les reviews' color={TourTourColors.accent} onPress={() => {
+          <Button title={i18n.t('SeeAllReviews')} color={TourTourColors.accent} onPress={() => {
             props.navigation.navigate('ReviewsList', {
               placeId: place.id,
               loggedInUserId: loggedInUserId

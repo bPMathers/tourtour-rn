@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert, ActivityIndicator } from 'react-native';
-import { gql } from 'apollo-boost';
+import i18n from 'i18n-js';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from "@apollo/react-hooks";
 
@@ -173,7 +173,7 @@ const CategorySearchScreen = (props) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
 
-              <View style={{ justifyContent: 'space-around', height: 100 }}>
+              <View style={{ justifyContent: 'space-around', height: 150 }}>
                 <TouchableOpacity
                   style={{ ...styles.openButton, backgroundColor: TourTourColors.primary, marginRight: 4 }}
                   onPress={() => {
@@ -181,7 +181,7 @@ const CategorySearchScreen = (props) => {
                     setModalVisible(!modalVisible);
                   }}
                 >
-                  <Text style={styles.textStyle}>Utiliser ma location</Text>
+                  <Text style={styles.textStyle}>{i18n.t('UseMyLocation')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
@@ -190,7 +190,15 @@ const CategorySearchScreen = (props) => {
                     setModalVisible(!modalVisible);
                   }}
                 >
-                  <Text style={styles.textStyle}>Choisir sur la carte</Text>
+                  <Text style={styles.textStyle}>{i18n.t('ChooseOnMap')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ ...styles.openButton, backgroundColor: 'red' }}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                  <Text style={styles.textStyle}>{i18n.t('Cancel')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -212,18 +220,18 @@ const CategorySearchScreen = (props) => {
         }}>
           <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontWeight: 'bold' }}>{props.route.params.categoryTitle} </Text>
+              <Text style={{ fontWeight: 'bold' }}>{i18n.t(props.route.params.categoryTitle)} </Text>
               <Text>
-                près de{' '}
+                {`${i18n.t('near')} `}
               </Text>
             </View>
-            <View>{city === "" ? <View><Button title="Choisir Location" onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
+            <View>{city === "" ? <View><Button title={i18n.t('changeLocation')} onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
             </View>
           </View>
           {city ? <View style={{ alignItems: 'center' }}>
             <TouchableOpacity style={styles.locationButton} color={TourTourColors.accent} onPress={() => { setModalVisible(true) }}>
               <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={styles.locationButtonText}>Changer de Location</Text>
+                <Text style={styles.locationButtonText}>{i18n.t('changeLocation')}</Text>
                 <FontAwesome5 name='map-marker-alt' size={18} color='white' />
               </View>
             </TouchableOpacity>

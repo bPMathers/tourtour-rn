@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacit
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
-
 import { TourTourColors } from '../constants/Colors'
 import { takeExistingImage, takeNewImage } from '../utils/chooseImage'
 import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
@@ -397,7 +397,7 @@ const UserEditScreen = (props) => {
                   <Ionicons name='ios-images' size={26} color='#333' />
                 </View>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes places</Text>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('MyPlaces')}</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
@@ -415,7 +415,7 @@ const UserEditScreen = (props) => {
                   <MaterialCommunityIcons name='star-box' size={28} color='#333' />
                 </View>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes reviews</Text>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('MyReviews')}</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
@@ -433,7 +433,7 @@ const UserEditScreen = (props) => {
                   <Ionicons name='ios-camera' size={28} color='#333' />
                 </View>
                 <View>
-                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Mes photos</Text>
+                  <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('MyPhotos')}</Text>
                 </View>
                 <View>
                   <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>

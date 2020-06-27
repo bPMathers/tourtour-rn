@@ -9,6 +9,8 @@ import {
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';
 import { useNavigation } from '@react-navigation/native'
+import i18n from 'i18n-js';
+
 
 import StarRating from './StarRating'
 
@@ -66,7 +68,7 @@ const PlacePreviewListItem = (props) => {
               </View>
               <View style={styles.leftBottomGroup}>
                 <View>
-                  <Text style={styles.submittedBy}>Ajouté par: </Text>
+                  <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
                   <TouchableComponent onPress={props.onSelectUserProfile}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
                       {place.addedBy.name}
@@ -88,7 +90,11 @@ const PlacePreviewListItem = (props) => {
               <View>
                 <View style={styles.rightRow3}>
 
-                  <TouchableComponent onPress={props.onSelectPlace}>
+                  <TouchableComponent onPress={() => {
+                    navigation.navigate('PlaceDetail', {
+                      place: place
+                    })
+                  }}>
                     <Ionicons
                       style={styles.starIcon}
                       name='md-arrow-forward'

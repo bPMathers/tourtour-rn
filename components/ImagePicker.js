@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Button, Image, Text, StyleSheet, Alert, TouchableOpacity, Modal, TouchableHighlight } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import i18n from 'i18n-js'
+
 import { TourTourColors } from '../constants/Colors';
 
 const ImgPicker = props => {
@@ -101,19 +103,19 @@ const ImgPicker = props => {
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleTakeNewPictureForUpload}
                 >
-                  <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                  <Text style={styles.textStyle}>{i18n.t('NewPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                   onPress={handleUploadExistingPicture}
                 >
-                  <Text style={styles.textStyle}>Photo déjà existante</Text>
+                  <Text style={styles.textStyle}>{i18n.t('ExistingPhoto')}</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "red" }}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.textStyle}>Annuler</Text>
+                  <Text style={styles.textStyle}>{i18n.t('Cancel')}</Text>
                 </TouchableHighlight>
               </View>
             </View>
