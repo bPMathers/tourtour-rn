@@ -9,6 +9,14 @@ const Translations = {
     MyProfile: 'My Profile',
     Settings: 'Settings',
 
+    // Page names
+    UpdateReview: 'Update Review',
+    UpdatePlace: 'Update Place',
+    ChooseLocation: 'ChooseLocation',
+    Categories: 'Categories',
+    AddPlace: 'Add Place',
+
+
     // Category Names
     NatureSpots: 'Nature Spots',
     CheapMotels: 'Cheap Motels',
@@ -93,6 +101,14 @@ const Translations = {
     Find: 'Trouver',
     MyProfile: 'Mon Profil',
     Settings: 'Réglages',
+
+    // Page names
+    UpdateReview: 'Mettre à jour',
+    UpdatePlace: 'Mettre à jour',
+    ChooseLocation: 'Choisir Location',
+    Categories: 'Catégories',
+    AddPlace: 'Ajouter un endroit',
+
 
     // Category Names
     NatureSpots: 'Spots Nature',

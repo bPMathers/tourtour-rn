@@ -8,6 +8,7 @@ import useCachedResources from './hooks/useCachedResources';
 import MainNavigation from './navigation/MainNavigation'
 import Translations from './constants/Translations'
 
+// ---- i18n setup ----
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = Translations
 // Set the locale once at the beginning of your app.
@@ -15,12 +16,13 @@ i18n.locale = Localization.locale;
 // When a value is missing from a language it'll fallback to another language with the key present.
 i18n.fallbacks = true;
 
-
+// ---- momentjs setup ----
 let moment = require('moment'); // Load moment module to set local language
 require('moment/locale/fr'); // Import moment local language file (other than english) during the application build
 moment.locale(Localization.locale); // Set moment local language
 
 const cache = new InMemoryCache
+
 export default function App(props) {
 
   const client = new ApolloClient({
@@ -28,18 +30,7 @@ export default function App(props) {
     uri: 'https://frozen-caverns-07163.herokuapp.com/',
     // uri: 'http://192.168.100.142:4000/',
     cache,
-    resolvers: {
-
-    },
-    // How could we acces token to set this auth header to the context so we don't have to add it on every mutation / query?
-    // request: (operation) => {
-    //   const token = cachedData.token
-    //   operation.setContext({
-    //     headers: {
-    //       authorization: token ? `Bearer ${token}` : ''
-    //     }
-    //   })
-    // }
+    resolvers: {},
   });
 
   client.writeData({

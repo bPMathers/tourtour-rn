@@ -55,7 +55,7 @@ function SettingsStackScreen() {
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: { backgroundColor: TourTourColors.accent },
-        title: 'Réglages'
+        title: i18n.t('Settings')
       }}
     >
       <SettingsStack.Screen
@@ -78,42 +78,41 @@ function UserStackScreen() {
       <UserStack.Screen
         name='UserEdit'
         component={UserEditScreen}
-        options={{ title: 'Mon Profil' }}
+        options={{ title: i18n.t('MyProfile') }}
 
       />
       <UserStack.Screen
         name='MyReviews'
         component={MyReviewsListScreen}
-        options={{ title: 'Mes Reviews' }}
+        options={{ title: i18n.t('MyReviews') }}
       />
       <UserStack.Screen
         name='UpdateMyReview'
         component={UpdateMyReviewScreen}
-        options={{ title: 'Modifier Review' }}
+        options={{ title: i18n.t('UpdateReview') }}
       />
       <UserStack.Screen
         name='MyPhotos'
         component={MyPhotosListScreen}
-        options={{ title: 'Mes Photos' }}
+        options={{ title: i18n.t('MyPhotos') }}
       />
       <UserStack.Screen
         name='MyPlaces'
         component={MyPlacesScreen}
-        options={{ title: 'Mes Places' }}
+        options={{ title: i18n.t('MyPlaces') }}
       />
       <UserStack.Screen
         name='UpdateMyPlace'
         component={UpdateMyPlaceScreen}
         options={{
-          title: 'Update MyPlace',
+          title: i18n.t('UpdatePlace'),
         }}
       />
       <UserStack.Screen
         name='MapForPlaceUpdate'
         component={MapForPlaceUpdateScreen}
         options={{
-          title: "Choisir location",
-          // headerShown: false,
+          title: i18n.t('ChooseLocation'),
         }}
       />
     </UserStack.Navigator>
@@ -133,7 +132,7 @@ function HomeStackScreen() {
         name='HomeSearch'
         component={HomeSearchScreen}
         options={{
-          title: 'Catégories',
+          title: i18n.t('Categories'),
           headerShown: false
         }
         }
@@ -180,7 +179,7 @@ function HomeStackScreen() {
         component={UserPlacesListScreen}
         options={({ route }) => ({
           // title: route.params.userName,
-          title: "ChangeMe",
+          title: i18n.t('MyPlaces'),
           headerStyle: { backgroundColor: TourTourColors.accent },
         })}
       />
@@ -188,7 +187,7 @@ function HomeStackScreen() {
         name='AddPlace'
         component={AddPlaceScreen}
         options={{
-          title: "Ajouter un endroit",
+          title: i18n.t('AddPlace'),
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -197,7 +196,7 @@ function HomeStackScreen() {
         name='Map'
         component={MapScreen}
         options={{
-          title: "Choisir location",
+          title: i18n.t('ChooseLocation'),
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -206,7 +205,7 @@ function HomeStackScreen() {
         name='MapForSearchLoc'
         component={MapScreen2}
         options={{
-          title: "Choisir location",
+          title: i18n.t('ChooseLocation'),
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -215,7 +214,7 @@ function HomeStackScreen() {
         name='GoogleAC'
         component={GooglePlacesACInput}
         options={{
-          title: "Choisir location",
+          title: i18n.t('ChooseLocation'),
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -224,7 +223,7 @@ function HomeStackScreen() {
         name='UpdateReview'
         component={UpdateReviewScreen}
         options={{
-          title: "Votre Review",
+          title: "Review",
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -233,7 +232,7 @@ function HomeStackScreen() {
         name='UserReviews'
         component={UserReviewsListScreen}
         options={{
-          title: "Change This",
+          title: "Reviews",
           headerStyle: { backgroundColor: TourTourColors.accent },
           // headerShown: false,
         }}
@@ -251,14 +250,14 @@ function HomeStackScreen() {
         name='UpdateMyPlace'
         component={UpdateMyPlaceScreen}
         options={{
-          title: 'Update MyPlace',
+          title: i18n.t('UpdatePlace'),
         }}
       />
       <UserStack.Screen
         name='MapForPlaceUpdate'
         component={MapForPlaceUpdateScreen}
         options={{
-          title: "Choisir location",
+          title: i18n.t('ChooseLocation'),
           // headerShown: false,
         }}
       />
