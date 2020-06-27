@@ -12,6 +12,7 @@ import * as Permissions from 'expo-permissions';
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost'
+import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors';
 import MapPreview from './MapPreview';
@@ -94,17 +95,17 @@ const LocationPicker = (props) => {
         {isFetching ? (
           <ActivityIndicator size="large" color={TourTourColors.primary} />
         ) : (
-            <Text>Aucune location choisie.</Text>
+            <Text>{i18n.t('NoChosenLocation')}</Text>
           )}
       </MapPreview>
       <View style={styles.actions}>
         <Button
-          title="Prendre ma location"
+          title={i18n.t('UseMyLocation')}
           color={TourTourColors.primary}
           onPress={getLocationHandler}
         />
         <Button
-          title="Choisir sur Carte"
+          title={i18n.t('ChooseOnMap')}
           color={TourTourColors.primary}
           onPress={pickOnMapHandler}
         />

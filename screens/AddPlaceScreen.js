@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
 import { getReverseGeocodingInfo } from '../utils/getReverseGeocodingInfo'
@@ -138,22 +139,22 @@ const NewPlaceScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <Text style={styles.label}>Nom</Text>
+        <Text style={styles.label}>{i18n.t('Name')}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={nameChangeHandler}
           value={name}
-          placeholder={`Nom du ou de la "${props.route.params.catTitle}" à ajouter`}
+        // placeholder={`Nom du ou de la "${props.route.params.catTitle}" à ajouter`}
         />
-        <Text style={styles.label}>Téléphone</Text>
+        <Text style={styles.label}>{i18n.t('Telephone')}</Text>
         <TextInput
           style={styles.textInput}
           onChangeText={phoneChangeHandler}
           value={phone}
-          placeholder={`# de tel. du ou de la "${props.route.params.catTitle}" à ajouter`}
+        // placeholder={`# de tel. du ou de la "${props.route.params.catTitle}" à ajouter`}
         />
         <View style={{ marginBottom: 20 }}>
-          <Button color={TourTourColors.primary} title="utiliser Google AutoComplete" onPress={() => {
+          <Button color={TourTourColors.primary} title={i18n.t('UseGoogleAc')} onPress={() => {
             props.navigation.navigate('GoogleAC')
           }}></Button>
         </View>
@@ -164,7 +165,7 @@ const NewPlaceScreen = props => {
           onLocationTaken={locationTakenHandler}
         />
         <Button
-          title="Sauvegarder"
+          title={i18n.t('Save')}
           color={TourTourColors.accent}
           onPress={() => { savePlaceHandler(imgBase64, { lat, lng }) }}
         />

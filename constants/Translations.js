@@ -1,5 +1,9 @@
 const Translations = {
   en: {
+    // HomeApp
+    LocationWarning: 'App will not work without geolocalization permissions activated',
+    ChangeSettings: 'Change Settings',
+
     // Tab Bar Navigation
     Find: 'Find',
     MyProfile: 'My Profile',
@@ -28,6 +32,14 @@ const Translations = {
     Warning: 'Warning',
     Confirm: 'Confirm',
     Logout: 'Logout',
+    Save: 'Save',
+
+    // Add Place
+    Name: 'Name',
+    Telephone: 'Telephone',
+    UseGoogleAc: 'Use Google Auto-Complete',
+    TakePicture: 'Take Picture',
+    NoChosenLocation: 'No Chosen Location',
 
     // PlaceDetail
     Call: 'Call',
@@ -59,7 +71,14 @@ const Translations = {
     UseMyLocation: 'Use My Location',
     ChooseOnMap: 'Choose On Map',
   },
+
+
+
   fr: {
+    // Home App
+    LocationWarning: "L'application ne fonctionnera pas si vous ne l'autorisez pas à prendre votre location. Changez vos réglages ou quittez l'application",
+    ChangeSettings: 'Modifier mes réglages',
+
     // Tab Bar Navigation
     Find: 'Trouver',
     MyProfile: 'Mon Profil',
@@ -85,6 +104,15 @@ const Translations = {
     Warning: 'Attention',
     Confirm: 'Confirmer',
     Logout: 'Déconnexion',
+    Save: 'Sauvegarder',
+
+    // Add Place
+    Name: 'Nom',
+    Telephone: 'Téléphone',
+    UseGoogleAc: 'Utiliser Google Auto-Complete',
+    TakePicture: 'Prendre Photo',
+    NoChosenLocation: 'Aucune location choisie.',
+
 
 
     // PlaceDetail

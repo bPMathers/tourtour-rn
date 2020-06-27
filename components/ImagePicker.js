@@ -128,7 +128,7 @@ const ImgPicker = props => {
         </TouchableOpacity>
         <View style={{ marginBottom: 15 }}>
           <Button
-            title="Prendre Photo"
+            title={i18n.t('TakePicture')}
             color={TourTourColors.primary}
             onPress={() => { setModalVisible(true) }}
           />

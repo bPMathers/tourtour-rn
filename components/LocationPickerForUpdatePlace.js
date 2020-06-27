@@ -14,6 +14,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { gql } from 'apollo-boost'
 
@@ -121,12 +122,12 @@ const LocationPickerForUpdatePlace = (props) => {
       </MapPreview>
       <View style={styles.actions}>
         <Button
-          title="Prendre ma location"
+          title={i18n.t('TakeMyLocation')}
           color={TourTourColors.primary}
           onPress={getLocationHandler}
         />
         <Button
-          title="Choisir sur Carte"
+          title={i18n.t('ChooseOnMap')}
           color={TourTourColors.primary}
           onPress={pickOnMapHandler}
         />

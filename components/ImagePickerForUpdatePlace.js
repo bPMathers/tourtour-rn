@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { useApolloClient } from "@apollo/react-hooks";
 import { useQuery } from '@apollo/react-hooks';
+import i18n from 'i18n-js'
 
 import { GET_CACHED_IMG_URI } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
@@ -139,7 +140,7 @@ const ImgPickerForUpdatePlace = props => {
         </TouchableOpacity>
         <View style={{ marginBottom: 15 }}>
           <Button
-            title="Prendre Photo"
+            title={i18n.t('TakePicture')}
             color={TourTourColors.primary}
             onPress={() => { setModalVisible(true) }}
           />

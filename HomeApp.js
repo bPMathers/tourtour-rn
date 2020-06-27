@@ -352,9 +352,10 @@ export default function HomeApp(props) {
       })
     } catch {
       Alert.alert(
-        'Attention!',
-        "L'application ne fonctionnera pas si vous ne l'autorisez pas à prendre votre location. Changez vos réglages ou quittez l'application",
-        [{ text: 'Changer mes réglages', onPress: () => { Linking.openURL('app-settings:') } }]
+        i18n.t('Warning'),
+        i18n.t('LocationWarning'),
+
+        [{ text: i18n.t('ChangeSettings'), onPress: () => { Linking.openURL('app-settings:') } }]
       );
     }
   }
