@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Alert, ActivityIndicator } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import i18n from 'i18n-js'
@@ -73,13 +73,13 @@ const FeaturedPhotosGroup = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -139,6 +139,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white'
+  },
+  metaStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   gridItem: {
     backgroundColor: 'white',

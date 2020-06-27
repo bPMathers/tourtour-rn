@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem'
@@ -25,13 +25,13 @@ const MyPlacesScreen = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -47,7 +47,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 10
-  }
+  },
+  metaStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 })
 
 export default MyPlacesScreen;
