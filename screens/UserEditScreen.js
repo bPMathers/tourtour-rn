@@ -20,7 +20,7 @@ const UserEditScreen = (props) => {
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
-  const { loading, error, data } = useQuery(GET_USER, {
+  const { loading, error, data, refetch } = useQuery(GET_USER, {
     variables: {
       userId: loggedInUserId,
     },
@@ -59,7 +59,9 @@ const UserEditScreen = (props) => {
       }
   `;
 
-  const [updatePicture] = useMutation(UPDATE_PICTURE)
+  const [updatePicture] = useMutation(UPDATE_PICTURE, {
+    onCompleted: () => refetch()
+  })
 
   const UPDATE_NAME = gql`
     mutation($name: String!) {
@@ -74,7 +76,9 @@ const UserEditScreen = (props) => {
       }
   `;
 
-  const [updateName] = useMutation(UPDATE_NAME)
+  const [updateName] = useMutation(UPDATE_NAME, {
+    onCompleted: () => refetch()
+  })
 
   const UPDATE_STATUS = gql`
     mutation($status: String!) {
@@ -90,7 +94,9 @@ const UserEditScreen = (props) => {
       }
   `;
 
-  const [updateStatus] = useMutation(UPDATE_STATUS)
+  const [updateStatus] = useMutation(UPDATE_STATUS, {
+    onCompleted: () => refetch()
+  })
 
   /**
    * HELPERS 
@@ -458,7 +464,6 @@ const styles = StyleSheet.create({
     height: 144,
     width: 144,
     marginTop: 30,
-    marginBottom: 20,
     borderRadius: 72,
     borderColor: TourTourColors.accent,
     borderWidth: 2,

@@ -14,6 +14,7 @@ const UserProfileScreen = (props) => {
         id
         name
         imageUrl
+        status
         places {
             id
         }
@@ -87,10 +88,13 @@ const UserProfileScreen = (props) => {
                     {data.user.name}
                 </Text>
             </View>
-            <View style={styles.userCity}>
+            <View style={{ marginBottom: 10 }}>
                 <Text>
                     Montréal, QC
                 </Text>
+            </View>
+            <View style={styles.userStatusContainer}>
+                <Text style={styles.userStatus}>{data.user.status}</Text>
             </View>
             <View style={styles.actionsRow}>
                 <TouchableComponent onPress={() => {
@@ -250,6 +254,15 @@ const styles = StyleSheet.create({
     userName: {
         fontSize: 24,
         fontWeight: 'bold'
+    },
+    userStatusContainer: {
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        width: '90%'
+    },
+    userStatus: {
+        textAlign: 'center'
     },
     actionsRow: {
         width: '70%',
