@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -180,13 +180,13 @@ const UserEditScreen = (props) => {
 
   if (loading)
     return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
+      <View style={styles.metaStateContainer}>
+        <ActivityIndicator size="large" color={TourTourColors.accent} />
       </View>
     );
   if (error)
     return (
-      <View style={styles.container}>
+      <View style={styles.metaStateContainer}>
         <Text>Error...</Text>
       </View>
     );
@@ -452,6 +452,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center'
+  },
+  metaStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   userImg: {
     height: 144,
