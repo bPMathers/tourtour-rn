@@ -40,7 +40,10 @@ const ReviewCard = ({ itemData }) => {
         </View>
       </View>
       <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth }}>
-        <Text style={{ color: 'white' }}>Place: <Text style={{ fontWeight: 'bold' }}>{itemData.item.place.name}</Text></Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ color: 'white' }}>Place: </Text>
+          <TouchableOpacity onPress={() => { }}><Text style={{ fontWeight: 'bold', color: 'white' }}>{itemData.item.place.name}</Text></TouchableOpacity>
+        </View>
       </View>
       <View style={{ marginBottom: 8 }}>
         <Text style={styles.reviewTitleText}>{itemData.item.title}</Text>
