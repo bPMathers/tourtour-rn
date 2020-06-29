@@ -28,6 +28,7 @@ import i18n from 'i18n-js'
 
 import CreateReview from '../components/CreateReview'
 import { TourTourColors } from '../constants/Colors'
+import CustomButton from '../components/CustomButton'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
@@ -459,7 +460,7 @@ const PlaceDetailScreen = (props) => {
           />
         </View>
         <View style={styles.moreReviewsButtonContainer}>
-          <Button title={i18n.t('SeeAllReviews')} color={TourTourColors.accent} onPress={() => {
+          <CustomButton width='50%' title={i18n.t('SeeAllReviews')} color={TourTourColors.primary} onPress={() => {
             props.navigation.navigate('ReviewsList', {
               placeId: place.id,
               loggedInUserId: loggedInUserId
@@ -604,7 +605,8 @@ const styles = StyleSheet.create({
     marginVertical: 5
   },
   moreReviewsButtonContainer: {
-    marginBottom: 40
+    marginBottom: 40,
+    alignItems: 'center'
   },
   centeredView: {
     // flex: 1,

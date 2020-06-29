@@ -212,19 +212,19 @@ const UserEditScreen = (props) => {
                 style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                 onPress={handleChangeForNewPicture}
               >
-                <Text style={styles.textStyle}>Nouvelle Photo</Text>
+                <Text style={styles.textStyle}>{i18n.t('NewPhoto')}</Text>
               </TouchableHighlight>
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#2196F3", marginBottom: 15 }}
                 onPress={handleChangeForExistingPicture}
               >
-                <Text style={styles.textStyle}>Photo déjà existante</Text>
+                <Text style={styles.textStyle}>{i18n.t('ExistingPhoto')}</Text>
               </TouchableHighlight>
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "red" }}
                 onPress={() => setPhotoModalVisible(false)}
               >
-                <Text style={styles.textStyle}>Annuler</Text>
+                <Text style={styles.textStyle}>{i18n.t('Cancel')}</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -271,7 +271,7 @@ const UserEditScreen = (props) => {
                   style={styles.nameChangeInput}
                   onChangeText={nameChangeHandler}
                   value={nameForUpdate}
-                  placeholder={`Votre nouveau nom`}
+                  placeholder={i18n.t('YourNewName')}
                   clearTextOnFocus
                 />
                 <TouchableOpacity onPress={() => {
@@ -347,7 +347,7 @@ const UserEditScreen = (props) => {
                   style={styles.statusChangeInput}
                   onChangeText={statusChangeHandler}
                   value={statusForUpdate}
-                  placeholder={`Votre nouveau statut`}
+                  placeholder={i18n.t('YourNewStatus')}
                   clearTextOnFocus
                   multiline={true}
                 />

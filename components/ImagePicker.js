@@ -5,6 +5,7 @@ import * as Permissions from 'expo-permissions';
 import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors';
+import CustomButton from './CustomButton'
 
 const ImgPicker = props => {
   /**
@@ -124,9 +125,8 @@ const ImgPicker = props => {
           <Image style={styles.image} source={{ uri: props.imageUri }} />
         </TouchableOpacity>
         <View style={{ marginBottom: 15 }}>
-          <Button
+          <CustomButton
             title={i18n.t('TakePicture')}
-            color={TourTourColors.primary}
             onPress={() => { setModalVisible(true) }}
           />
         </View>
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1
+    borderColor: TourTourColors.accent,
+    borderWidth: 3
   },
   image: {
     width: '100%',

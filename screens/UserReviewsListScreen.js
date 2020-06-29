@@ -39,8 +39,8 @@ const ReviewCard = ({ itemData }) => {
           </View>
         </View>
       </View>
-      <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: 1 }}>
-        <Text style={{ color: 'white' }}>Review de {itemData.item.author.name} sur: {itemData.item.place.name}</Text>
+      <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth }}>
+        <Text style={{ color: 'white' }}>Place: <Text style={{ fontWeight: 'bold' }}>{itemData.item.place.name}</Text></Text>
       </View>
       <View style={{ marginBottom: 8 }}>
         <Text style={styles.reviewTitleText}>{itemData.item.title}</Text>

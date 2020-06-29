@@ -204,15 +204,16 @@ const styles = StyleSheet.create({
   submitButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     backgroundColor: TourTourColors.accent,
-    borderRadius: 10,
+    borderRadius: 20,
     // width: Dimensions.get("screen").width / 2
   },
   submitButtonText: {
     color: '#fff',
     // textAlign: 'center',
-    paddingHorizontal: 7
+    paddingRight: 7,
+    fontWeight: 'bold'
 
   },
   reviewCard: {

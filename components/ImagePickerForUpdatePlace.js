@@ -8,6 +8,7 @@ import i18n from 'i18n-js'
 
 import { GET_CACHED_IMG_URI } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors';
+import CustomButton from './CustomButton'
 
 const ImgPickerForUpdatePlace = props => {
   /**
@@ -136,9 +137,8 @@ const ImgPickerForUpdatePlace = props => {
           <Image style={styles.image} source={{ uri: imgUrl }} />
         </TouchableOpacity>
         <View style={{ marginBottom: 15 }}>
-          <Button
+          <CustomButton
             title={i18n.t('TakePicture')}
-            color={TourTourColors.primary}
             onPress={() => { setModalVisible(true) }}
           />
         </View>
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#ccc',
-    borderWidth: 1
+    borderColor: TourTourColors.accent,
+    borderWidth: 3
   },
   image: {
     width: '100%',

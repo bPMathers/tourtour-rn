@@ -80,8 +80,8 @@ const MyPhotosListScreen = (props) => {
       `${i18n.t('Warning')}!`,
       i18n.t('PhotoDeleteConfirmAlert'),
       [
-        { text: 'Annuler', style: 'destructive' },
-        { text: 'Confirmer', onPress: () => { confirmDeletePhoto() } },
+        { text: i18n.t('Cancel'), style: 'destructive' },
+        { text: i18n.t('Confirm'), onPress: () => { confirmDeletePhoto() } },
       ]
     )
   }

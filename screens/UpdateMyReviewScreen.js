@@ -5,6 +5,7 @@ import { gql } from 'apollo-boost'
 import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
+import CustomButton from '../components/CustomButton'
 import SwipeableRating from 'react-native-swipeable-rating';
 import { GET_MY_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_USER } from '../graphql/queries'
 
@@ -173,14 +174,14 @@ const UpdateReviewScreen = (props) => {
 
         />
       </View>
+      {/*<View>
+        <CustomButton title="Annuler" onPress={() => { props.navigation.goBack() }} />
+      </View>*/}
       <View>
-        <Button title="Annuler" onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
+        <CustomButton title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.positive} />
       </View>
       <View>
-        <Button title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.primary} />
-      </View>
-      <View>
-        <Button title="Supprimer" onPress={() => {
+        <CustomButton title={i18n.t('Delete')} onPress={() => {
           Alert.alert(
             `${i18n.t('Warning')}!`,
             i18n.t('ReviewDeleteConfirmAlert'),
@@ -189,7 +190,7 @@ const UpdateReviewScreen = (props) => {
               { text: i18n.t('Confirm'), onPress: () => { onDeleteHandler() } },
             ]
           )
-        }} color='#F65E3C' />
+        }} color={TourTourColors.cancel} />
       </View>
     </View>
   );

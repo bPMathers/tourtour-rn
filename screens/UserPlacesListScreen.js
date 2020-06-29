@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 
+import { TourTourColors } from '../constants/Colors'
 import PlacePreviewListItem from '../components/PlacePreviewListItem'
 import { GET_MY_PLACES, GET_TOKEN } from '../graphql/queries'
 

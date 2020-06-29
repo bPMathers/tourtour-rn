@@ -17,6 +17,7 @@ import LocationPicker from '../components/LocationPicker'
 import { TourTourColors } from '../constants/Colors';
 import ImagePicker from '../components/ImagePicker';
 import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN } from '../graphql/queries'
+import CustomButton from '../components/CustomButton';
 
 const NewPlaceScreen = props => {
   /**
@@ -33,7 +34,6 @@ const NewPlaceScreen = props => {
   const { data: tokenData } = useQuery(GET_TOKEN);
   const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
 
-  // console.log(props.route.params.autoCompletePickedPlace)
 
   useEffect(() => {
     setName(props.route.params?.autoCompletePickedPlace?.name)
@@ -53,7 +53,13 @@ const NewPlaceScreen = props => {
 
   }, [props.route.params?.autoCompletePickedPlace])
 
+  useEffect(() => {
+    // setLocationForMapPreview(props.route?.params?.pickedLocationOnMap)
+    // setLocHasChanged(true)
+    setLat(props.route.params.pickedLocationOnMap?.lat)
+    setLng(props.route.params.pickedLocationOnMap?.lng)
 
+  }, [props.route.params.pickedLocationOnMap])
 
   /**
    * GRAPHQL 
@@ -78,18 +84,16 @@ const NewPlaceScreen = props => {
     }
   `;
 
-  const [addPlace, { data }] = useMutation(ADD_PLACE)
+  const [addPlace] = useMutation(ADD_PLACE)
 
   /**
    * HELPERS
    */
 
   const nameChangeHandler = text => {
-    // should sanitize input ?
     setName(text);
   };
   const phoneChangeHandler = text => {
-    // should sanitize input ?
     setPhone(text);
   };
 
@@ -154,9 +158,9 @@ const NewPlaceScreen = props => {
         // placeholder={`# de tel. du ou de la "${props.route.params.catTitle}" à ajouter`}
         />
         <View style={{ marginBottom: 20 }}>
-          <Button color={TourTourColors.primary} title={i18n.t('UseGoogleAc')} onPress={() => {
+          <CustomButton title={i18n.t('UseGoogleAc')} onPress={() => {
             props.navigation.navigate('GoogleAC')
-          }}></Button>
+          }}></CustomButton>
         </View>
         <ImagePicker onImageTaken={imageTakenHandler} imageUri={imageUri} />
         <LocationPicker
@@ -164,9 +168,9 @@ const NewPlaceScreen = props => {
           route={props.route}
           onLocationTaken={locationTakenHandler}
         />
-        <Button
+        <CustomButton
           title={i18n.t('Save')}
-          color={TourTourColors.accent}
+          color='#06eeaa'
           onPress={() => { savePlaceHandler(imgBase64, { lat, lng }) }}
         />
       </View>

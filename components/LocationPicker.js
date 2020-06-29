@@ -16,6 +16,7 @@ import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors';
 import MapPreview from './MapPreview';
+import CustomButton from './CustomButton'
 
 const LocationPicker = (props) => {
   const navigation = useNavigation()
@@ -99,15 +100,15 @@ const LocationPicker = (props) => {
           )}
       </MapPreview>
       <View style={styles.actions}>
-        <Button
+        <CustomButton
           title={i18n.t('UseMyLocation')}
-          color={TourTourColors.primary}
           onPress={getLocationHandler}
+          width='45%'
         />
-        <Button
+        <CustomButton
           title={i18n.t('ChooseOnMap')}
-          color={TourTourColors.primary}
           onPress={pickOnMapHandler}
+          width='45%'
         />
       </View>
     </View>
@@ -116,14 +117,15 @@ const LocationPicker = (props) => {
 
 const styles = StyleSheet.create({
   locationPicker: {
-    marginBottom: 15
+    marginBottom: 0
   },
   mapPreview: {
-    marginBottom: 0,
+    marginBottom: 10,
     width: '100%',
     height: 300,
-    borderColor: '#ccc',
-    borderWidth: 1
+    borderColor: TourTourColors.accent,
+    // borderRadius: 10,
+    borderWidth: 3
   },
   actions: {
     flexDirection: 'row',

@@ -16,6 +16,7 @@ import { getCloudinaryUrl } from '../utils/getCloudinaryUrl'
 import { getReverseGeocodingInfo } from '../utils/getReverseGeocodingInfo'
 import LocationPickerForUpdatePlace from '../components/LocationPickerForUpdatePlace'
 import { TourTourColors } from '../constants/Colors';
+import CustomButton from '../components/CustomButton'
 import ImagePickerForUpdatePlace from '../components/ImagePickerForUpdatePlace';
 import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN, GET_PLACE, GET_MY_PLACES, GET_USER, GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 
@@ -234,16 +235,16 @@ const UpdateMyPlaceScreen = props => {
           onTakeNewLocation={locationReTakenHandler}
           locationForMapPreview={locationForMapPreview}
         />
-        <View style={{ marginBottom: 20 }}>
-          <Button
+        <View style={{ marginBottom: 0 }}>
+          <CustomButton
             title={i18n.t('Update')}
-            color={TourTourColors.accent}
+            color='#06eeaa'
             onPress={() => { updatePlaceHandler(imgBase64, { lat, lng }) }}
           />
         </View>
         <View style={{ marginBottom: 20 }}>
 
-          <Button
+          <CustomButton
             title={i18n.t('Delete')}
             color='red'
             onPress={() => {

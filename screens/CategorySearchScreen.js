@@ -269,14 +269,19 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 5,
     backgroundColor: TourTourColors.accent,
-    borderRadius: 10,
-    width: Dimensions.get("screen").width / 2
+    borderRadius: 20,
+    width: Dimensions.get("screen").width / 2,
+    shadowColor: '#000',
+    shadowOffset: { height: 5, width: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10
   },
   locationButtonText: {
     color: '#fff',
     // textAlign: 'center',
     paddingLeft: 10,
     paddingRight: 10,
+    fontWeight: 'bold'
 
   },
   centeredView: {

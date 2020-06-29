@@ -20,6 +20,7 @@ import { gql } from 'apollo-boost'
 
 import { TourTourColors } from '../constants/Colors';
 import MapPreview from './MapPreview';
+import CustomButton from './CustomButton';
 
 const LocationPickerForUpdatePlace = (props) => {
   const client = useApolloClient();
@@ -121,15 +122,15 @@ const LocationPickerForUpdatePlace = (props) => {
           )}
       </MapPreview>
       <View style={styles.actions}>
-        <Button
+        <CustomButton
           title={i18n.t('UseMyLocation')}
-          color={TourTourColors.primary}
           onPress={getLocationHandler}
+          width='45%'
         />
-        <Button
+        <CustomButton
           title={i18n.t('ChooseOnMap')}
-          color={TourTourColors.primary}
           onPress={pickOnMapHandler}
+          width='45%'
         />
       </View>
     </View>
@@ -144,8 +145,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: '100%',
     height: 300,
-    borderColor: '#ccc',
-    borderWidth: 1
+    borderColor: TourTourColors.accent,
+    borderWidth: 3
   },
   actions: {
     flexDirection: 'row',

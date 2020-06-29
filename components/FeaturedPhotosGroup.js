@@ -109,7 +109,7 @@ const FeaturedPhotosGroup = (props) => {
                 </ImageBackground>
                 <View style={styles.photoInfoAndActions}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.addedByModalText}>Ajoutée par: </Text>
+                    <Text style={styles.addedByModalText}>{i18n.t('addedBy')}: </Text>
                     <TouchableOpacity onPress={handleOnUserProfileSelect}>
                       <Text style={{ fontWeight: 'bold', color: 'white' }}>
                         {selectedPhoto.addedBy.name}

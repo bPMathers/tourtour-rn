@@ -25,6 +25,7 @@ const cache = new InMemoryCache
 
 export default function App(props) {
 
+  // Could we use Apollo Link Context to set JWT token on the context of each request ?
   const client = new ApolloClient({
     //local IP adress  may change. find a way to fetch it dynamically?
     uri: 'https://frozen-caverns-07163.herokuapp.com/',

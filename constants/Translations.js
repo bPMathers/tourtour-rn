@@ -83,6 +83,8 @@ const Translations = {
     MyReviews: 'My Reviews',
     MyPhotos: 'My Photos',
     NameChangeAlert: 'Are you sure you want to change your name for: ',
+    YourNewName: 'Your New Name',
+    YourNewStatus: 'Your New Status',
 
     // Location
     UseMyLocation: 'Use My Location',
@@ -173,6 +175,8 @@ const Translations = {
     MyReviews: 'Mes reviews',
     MyPhotos: 'Mes photos',
     NameChangeAlert: 'Êtes-vous certain(e) de vouloir changer votre nom pour: ',
+    YourNewName: 'Votre nouveau nom',
+    YourNewStatus: 'Votre nouveau statut',
 
     // Location
     UseMyLocation: 'Utiliser ma location',

@@ -7,6 +7,7 @@ import i18n from 'i18n-js'
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
 import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_MY_REVIEWS, GET_USER } from '../graphql/queries'
+import CustomButton from '../components/CustomButton';
 
 
 const UpdateReviewScreen = (props) => {
@@ -164,14 +165,14 @@ const UpdateReviewScreen = (props) => {
 
         />
       </View>
-      <View>
+      {/*<View>
         <Button title={i18n.t('Cancel')} onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
+      </View>*/}
+      <View>
+        <CustomButton title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.positive} />
       </View>
       <View>
-        <Button title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.primary} />
-      </View>
-      <View>
-        <Button title={i18n.t('Delete')} onPress={() => {
+        <CustomButton title={i18n.t('Delete')} onPress={() => {
           Alert.alert(
             `${i18n.t('Warning')}!`,
             i18n.t('ReviewDeleteConfirmAlert'),
@@ -180,7 +181,7 @@ const UpdateReviewScreen = (props) => {
               { text: i18n.t('Confirm'), onPress: () => { onDeleteHandler() } },
             ]
           )
-        }} color='#F65E3C' />
+        }} color={TourTourColors.cancel} />
       </View>
     </View>
   );
