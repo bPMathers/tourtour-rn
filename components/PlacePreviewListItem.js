@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  Platform,
+  TouchableNativeFeedback
 } from 'react-native';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';

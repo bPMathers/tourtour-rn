@@ -4,6 +4,12 @@ const Translations = {
     LocationWarning: 'App will not work without geolocalization permissions activated',
     ChangeSettings: 'Change Settings',
 
+    // Auth Screen
+    Login: 'Login',
+    SignUp: 'SignUp',
+    Password: 'Password',
+    BadCredsError: 'Wrong username and/or password',
+
     // Tab Bar Navigation
     Find: 'Find',
     MyProfile: 'My Profile',
@@ -44,6 +50,7 @@ const Translations = {
     Update: 'Update',
     Back: 'Back',
     Select: 'Select',
+    Or: 'or',
 
     // Add / Edit Place
     Name: 'Name',
@@ -101,6 +108,12 @@ const Translations = {
     LocationWarning: "L'application ne fonctionnera pas si vous ne l'autorisez pas à prendre votre location. Changez vos réglages ou quittez l'application",
     ChangeSettings: 'Modifier mes réglages',
 
+    // Auth Screen
+    Login: 'Se connecter',
+    SignUp: 'Créer un compte',
+    Password: 'Mot de passe',
+    BadCredsError: "Mauvais nom d'usager et/ou mot de passe",
+
     // Tab Bar Navigation
     Find: 'Trouver',
     MyProfile: 'Mon Profil',
@@ -138,6 +151,8 @@ const Translations = {
     Update: 'Mettre à jour',
     Back: 'Retour',
     Select: 'Choisir',
+    Or: 'ou',
+
 
     // Add / Edit Place
     Name: 'Nom',

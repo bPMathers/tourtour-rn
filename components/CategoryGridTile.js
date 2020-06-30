@@ -20,7 +20,7 @@ const CategoryGridTile = (props) => {
 
     return (
         <View style={styles.gridItem}>
-            <TouchableComponent style={{ flex: 1 }} onPress={props.onSelect}>
+            <TouchableOpacity style={{ flex: 1 }} onPress={props.onSelect}>
                 <ImageBackground source={{ uri: props.imgUrl }} style={styles.image}>
                     <View style={styles.container}>
                         <Text style={styles.title} numberOfLines={2}>
@@ -28,7 +28,7 @@ const CategoryGridTile = (props) => {
                         </Text>
                     </View>
                 </ImageBackground>
-            </TouchableComponent>
+            </TouchableOpacity>
         </View>
     );
 };

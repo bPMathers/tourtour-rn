@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, KeyboardAvoidingView, View, TextInput, Text, Button, AsyncStorage } from 'react-native';
+import { ScrollView, StyleSheet, KeyboardAvoidingView, View, TextInput, Text, Button, AsyncStorage, Platform } from 'react-native';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
-
+import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
+import CustomButton from '../components/CustomButton'
 
 const AuthScreen = (props) => {
   /**
@@ -140,7 +141,7 @@ const AuthScreen = (props) => {
       return (
         <View>
           {error.graphQLErrors.map(({ message }, i) => (
-            <Text style={styles.errorMsgs} key={i}>{message}</Text>
+            <Text style={styles.errorMsgs} key={i}>{i18n.t(message)}</Text>
           ))}
         </View>
 
@@ -152,7 +153,7 @@ const AuthScreen = (props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={50}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'position'} keyboardVerticalOffset={Platform.OS === 'android' ? 0 : 50}>
         {isSigningUp &&
           <View>
             <Text style={styles.label}>Nom</Text>
@@ -176,7 +177,7 @@ const AuthScreen = (props) => {
             clearButtonMode='while-editing'
           />
         </View>
-        <Text style={styles.label}>Mot de passe</Text>
+        <Text style={styles.label}>{i18n.t('Password')}</Text>
         <TextInput
           style={styles.formInput}
           secureTextEntry={true}
@@ -186,17 +187,22 @@ const AuthScreen = (props) => {
         <ErrorContainer />
         {!isSigningUp &&
           <View>
-            <Button title="Se connecter" onPress={handleLoginSubmit} color='white' />
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: 'white' }}>ou</Text></View>
-            <Button title="Créer un compte" onPress={handleSignUp} color='white' />
+            <CustomButton title={i18n.t('Login')} onPress={handleLoginSubmit} color={TourTourColors.primary} />
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: 'white' }}>{i18n.t('Or')}</Text></View>
+            <CustomButton title={i18n.t('SignUp')} onPress={handleSignUp} color={TourTourColors.primary} />
           </View>}
         {isSigningUp &&
           <View>
-            <View>
-              <Button title="Soumettre" onPress={handleConfirmSignUp} color='white' />
+            <View style={{ marginVertical: 10 }}>
+              <CustomButton
+                title={i18n.t('Submit')}
+                onPress={handleConfirmSignUp}
+                color={TourTourColors.positive}
+
+              />
             </View>
             <View>
-              <Button title="Annuler" onPress={() => setIsSigningUp(false)} color='white' />
+              <CustomButton title={i18n.t('Cancel')} onPress={() => setIsSigningUp(false)} color={TourTourColors.cancel} />
             </View>
           </View>}
       </KeyboardAvoidingView>

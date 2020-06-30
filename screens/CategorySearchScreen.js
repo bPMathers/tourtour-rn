@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, StatusBar, TouchableOpacity, Dimensions, Modal, Alert, ActivityIndicator, Platform } from 'react-native';
 import i18n from 'i18n-js';
 import { useQuery } from '@apollo/react-hooks';
 import { useApolloClient } from "@apollo/react-hooks";
@@ -10,6 +10,7 @@ import * as Location from 'expo-location';
 
 import { orderByDistance } from '../utils/orderByDistance'
 import { TourTourColors } from '../constants/Colors';
+import CustomButton from '../components/CustomButton'
 import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID, GET_MY_LOCATION } from '../graphql/queries'
 
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
@@ -224,7 +225,7 @@ const CategorySearchScreen = (props) => {
                 {`${i18n.t('near')} `}
               </Text>
             </View>
-            <View>{city === "" ? <View><Button title={i18n.t('changeLocation')} onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
+            <View>{city === "" ? <View><CustomButton title={i18n.t('changeLocation')} onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
             </View>
           </View>
           {city ? <View style={{ alignItems: 'center' }}>
