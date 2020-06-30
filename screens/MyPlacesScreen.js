@@ -9,7 +9,7 @@ import { TourTourColors } from '../constants/Colors'
 
 const MyPlacesScreen = (props) => {
   const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN);
-  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  const jwtBearer = "".concat("Bearer ", tokenData?.token).replace(/\"/g, "")
   const { data: myPlacesData, loading, error } = useQuery(GET_MY_PLACES, {
     context: {
       headers: {

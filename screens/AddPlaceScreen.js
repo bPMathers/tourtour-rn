@@ -32,7 +32,7 @@ const NewPlaceScreen = props => {
   // use one of my cloudinary files instead!
   const [imageUri, setImageUri] = useState('https://res.cloudinary.com/db4mzdmnm/image/upload/v1592273897/no-image-icon-6_zoucqc.png')
   const { data: tokenData } = useQuery(GET_TOKEN);
-  const jwtBearer = "".concat("Bearer ", tokenData.token).replace(/\"/g, "")
+  const jwtBearer = "".concat("Bearer ", tokenData?.token).replace(/\"/g, "")
 
 
   useEffect(() => {

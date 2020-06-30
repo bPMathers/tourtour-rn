@@ -43,6 +43,7 @@ const Translations = {
     Save: 'Save',
     Update: 'Update',
     Back: 'Back',
+    Select: 'Select',
 
     // Add / Edit Place
     Name: 'Name',
@@ -136,6 +137,7 @@ const Translations = {
     Save: 'Sauvegarder',
     Update: 'Mettre à jour',
     Back: 'Retour',
+    Select: 'Choisir',
 
     // Add / Edit Place
     Name: 'Nom',
