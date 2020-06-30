@@ -2,7 +2,8 @@ const tintColor = '#2f95dc';
 
 export const TourTourColors = {
   primary: '#A3D6FF',
-  accent: '#0065B8',
+  // primary: '#1778F2',
+  accent: '#1778F2',
   cancel: '#F65E3C',
   positive: '#06EEAA'
 }
