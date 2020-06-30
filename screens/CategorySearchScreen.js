@@ -134,7 +134,7 @@ const CategorySearchScreen = (props) => {
   const renderGridItem = (itemData) => {
     return (
       <PlacePreviewListItem
-        loggedInUserId={tokenAndIdData.userId}
+        loggedInUserId={tokenAndIdData?.userId}
         place={itemData.item}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
