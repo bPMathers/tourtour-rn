@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ImageBackground,
   Platform,
-  TouchableNativeFeedback
 } from 'react-native';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import TimeAgo from 'react-native-timeago';
@@ -21,15 +20,9 @@ const PlacePreviewListItem = (props) => {
   const { place } = props
   const navigation = useNavigation()
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
-
   return (
     <View style={styles.placePreviewListItem}>
-      <TouchableComponent style={{ flex: 1 }} onPress={() => {
+      <TouchableOpacity style={{ flex: 1 }} onPress={() => {
         navigation.navigate('PlaceDetail', {
           place: place
         })
@@ -40,7 +33,7 @@ const PlacePreviewListItem = (props) => {
               <View style={styles.leftTopGroup}>
                 <View style={styles.leftRow1}>
                   {props.loggedInUserId === props.place.addedBy.id &&
-                    <TouchableComponent style={{ marginRight: 10 }} onPress={() => {
+                    <TouchableOpacity style={{ marginRight: 10 }} onPress={() => {
                       navigation.navigate('UpdateMyPlace', {
                         place: place
                       })
@@ -51,7 +44,7 @@ const PlacePreviewListItem = (props) => {
                         size={20}
                         color='white'
                       />
-                    </TouchableComponent>}
+                    </TouchableOpacity>}
                   <View>
                     <Text style={styles.name}>{place.name}</Text>
                   </View>
@@ -71,11 +64,11 @@ const PlacePreviewListItem = (props) => {
               <View style={styles.leftBottomGroup}>
                 <View>
                   <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                  <TouchableComponent onPress={props.onSelectUserProfile}>
+                  <TouchableOpacity onPress={props.onSelectUserProfile}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
                       {place.addedBy.name}
                     </Text>
-                  </TouchableComponent>
+                  </TouchableOpacity>
                 </View>
                 <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
               </View>
@@ -92,7 +85,7 @@ const PlacePreviewListItem = (props) => {
               <View>
                 <View style={styles.rightRow3}>
 
-                  <TouchableComponent onPress={() => {
+                  <TouchableOpacity onPress={() => {
                     navigation.navigate('PlaceDetail', {
                       place: place
                     })
@@ -103,13 +96,13 @@ const PlacePreviewListItem = (props) => {
                       size={24}
                       color='white'
                     />
-                  </TouchableComponent>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
           </View>
         </ImageBackground>
-      </TouchableComponent>
+      </TouchableOpacity>
     </View>
   );
 };

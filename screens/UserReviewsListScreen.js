@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, Image } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -11,28 +11,21 @@ import { useNavigation } from '@react-navigation/native';
 
 const ReviewCard = ({ itemData }) => {
   const navigation = useNavigation()
-  // const loggedInUserId = itemData.item.author.id
-
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
 
   return (
     <View style={styles.reviewCard}>
       <View style={styles.reviewHeader}>
         <View style={styles.reviewHeaderRow}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableComponent onPress={() => { navigation.goBack() }}>
+            <TouchableOpacity onPress={() => { navigation.goBack() }}>
               <View style={{ marginRight: 5 }}>
                 <Image style={styles.tinyUserProfilePic} source={{ uri: itemData.item.author.imageUrl }} />
               </View>
-            </TouchableComponent>
+            </TouchableOpacity>
             <View>
-              <TouchableComponent onPress={() => { navigation.goBack() }}>
+              <TouchableOpacity onPress={() => { navigation.goBack() }}>
                 <Text style={styles.authorName}>{itemData.item.author.name}</Text>
-              </TouchableComponent>
+              </TouchableOpacity>
               <StarRating rating={itemData.item.rating} color='white' />
               <TimeAgo style={styles.timeAgoText} time={itemData.item.updatedAt} />
             </View>
@@ -57,11 +50,6 @@ const ReviewCard = ({ itemData }) => {
 
 const renderGridItem = (itemData) => {
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
   return (
     <ReviewCard itemData={itemData} />
   );

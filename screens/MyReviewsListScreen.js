@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -12,39 +12,33 @@ import { useNavigation } from '@react-navigation/native';
 const MyReviewsCard = ({ itemData }) => {
   const navigation = useNavigation()
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
-
   return (
     <View style={styles.reviewCard}>
       <View style={styles.reviewHeader}>
         <View style={styles.reviewHeaderRow}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableComponent onPress={() => { }}>
+            <TouchableOpacity onPress={() => { }}>
               <View style={{ marginRight: 5 }}>
                 <Image style={styles.tinyUserProfilePic} source={{ uri: itemData.item.author.imageUrl }} />
               </View>
-            </TouchableComponent>
+            </TouchableOpacity>
             <View>
-              <TouchableComponent onPress={() => { }}>
+              <TouchableOpacity onPress={() => { }}>
                 <Text style={styles.authorName}>{itemData.item.author.name}</Text>
-              </TouchableComponent>
+              </TouchableOpacity>
               <StarRating rating={itemData.item.rating} color='white' />
               {/*<Text style={styles.timeAgoText}>2h ago</Text>*/}
               <TimeAgo style={styles.timeAgoText} time={itemData.item.updatedAt} />
             </View>
           </View>
           <View>
-            <TouchableComponent onPress={() => {
+            <TouchableOpacity onPress={() => {
               navigation.navigate('UpdateMyReview', {
                 review: itemData.item
               })
             }}>
               <FontAwesome5 name='pencil-alt' color='white' size={18} />
-            </TouchableComponent>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -63,11 +57,6 @@ const MyReviewsCard = ({ itemData }) => {
 
 const renderGridItem = (itemData) => {
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
   return (
     <MyReviewsCard itemData={itemData} />
   );

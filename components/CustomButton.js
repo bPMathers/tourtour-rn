@@ -18,7 +18,8 @@ const CustomButton = (props) => {
       shadowOpacity: 0.15,
       shadowRadius: 5,
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      elevation: 7
     },
     customButtonText: {
       color: '#fff',

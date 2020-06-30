@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, TouchableHighlight, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Modal, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -177,12 +177,6 @@ const UserEditScreen = (props) => {
   /**
    * RETURN 
    */
-
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
 
   if (loading)
     return (
@@ -390,7 +384,7 @@ const UserEditScreen = (props) => {
           </View>
         </View>
         <View style={styles.rowsContainer}>
-          <TouchableComponent onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
+          <TouchableOpacity onPress={() => { props.navigation.navigate('MyPlaces', { userToken: jwtBearer }) }}>
             <View style={styles.row}>
               <View style={styles.rowLeftGroup}>
                 <View style={styles.rowIconBox}>
@@ -407,8 +401,8 @@ const UserEditScreen = (props) => {
                 <Ionicons name='ios-arrow-forward' size={20} color='#333' />
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={() => { props.navigation.navigate('MyReviews', { userToken: jwtBearer }) }}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { props.navigation.navigate('MyReviews', { userToken: jwtBearer }) }}>
             <View style={styles.row}>
               <View style={styles.rowLeftGroup}>
                 <View style={styles.rowIconBox}>
@@ -425,8 +419,8 @@ const UserEditScreen = (props) => {
                 <Ionicons name='ios-arrow-forward' size={20} color='#333' />
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={() => { props.navigation.navigate('MyPhotos', { userToken: jwtBearer }) }}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { props.navigation.navigate('MyPhotos', { userToken: jwtBearer }) }}>
             <View style={{ ...styles.row, ...styles.lastRow }}>
               <View style={styles.rowLeftGroup}>
                 <View style={styles.rowIconBox}>
@@ -443,7 +437,7 @@ const UserEditScreen = (props) => {
                 <Ionicons name='ios-arrow-forward' size={20} color='#333' />
               </View>
             </View>
-          </TouchableComponent>
+          </TouchableOpacity>
         </View>
       </FadeInView>
     </React.Fragment>

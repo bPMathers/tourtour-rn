@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, ActivityIndicator, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, ActivityIndicator, TextInput, Modal } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
@@ -14,11 +14,6 @@ let loggedInUserId;
 let navigation;
 const renderGridItem = (itemData) => {
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
   return (
     <ReviewCard review={itemData.item} loggedInUserId={loggedInUserId} navigation={navigation} />
   );

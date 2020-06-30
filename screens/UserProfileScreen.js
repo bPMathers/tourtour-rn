@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableNativeFeedback, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -58,12 +58,6 @@ const UserProfileScreen = (props) => {
     });
     // console.log(data.user.name)
 
-    let TouchableComponent = TouchableOpacity;
-
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-        TouchableComponent = TouchableNativeFeedback;
-    }
-
     if (loading)
         return (
             <View style={styles.metaStateContainer}>
@@ -78,161 +72,165 @@ const UserProfileScreen = (props) => {
         );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.userProfileHeader}>
-                <View>
-                    <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.userProfileHeader}>
+                    <View>
+                        <Image style={styles.userImg} source={{ uri: data.user.imageUrl }} />
+                    </View>
+                </View>
+                <View style={styles.userNameContainer}>
+                    <Text style={styles.userName}>
+                        {data.user.name}
+                    </Text>
+                </View>
+                <View style={{ marginBottom: 10 }}>
+                    <Text>
+                        Montréal, QC
+                </Text>
+                </View>
+                <View style={styles.userStatusContainer}>
+                    <Text style={styles.userStatus}>{data.user.status}</Text>
+                </View>
+                <View style={styles.actionsRow}>
+                    <TouchableOpacity onPress={() => {
+                        Alert.alert(
+                            `${i18n.t('Warning')}!`,
+                            i18n.t('MessageWarning'),
+                            [
+                                { text: 'Ok' },
+                            ]
+                        )
+                    }}>
+                        <View style={styles.actionGroup}>
+                            <View style={styles.actionButton}>
+                                <AntDesign name='message1' size={18} color={TourTourColors.accent} />
+                            </View>
+                            <View>
+                                <Text style={styles.actionTitle}>Message</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        Alert.alert(
+                            `${i18n.t('Warning')}!`,
+                            i18n.t('FollowWarning'),
+                            [
+                                { text: 'Ok' },
+                            ]
+                        )
+                    }}>
+                        <View style={styles.actionGroup}>
+                            <View style={styles.actionButton}>
+                                <SimpleLineIcons name='user-follow' size={20} color={TourTourColors.accent} />
+                            </View>
+                            <View>
+                                <Text style={styles.actionTitle}>{i18n.t('Follow')}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.rowsContainer}>
+                    <TouchableOpacity onPress={() => {
+                        Alert.alert(
+                            `${i18n.t('Warning')}!`,
+                            i18n.t('RecentActivityWarning'),
+                            [
+                                { text: 'Ok' },
+                            ]
+                        )
+                    }}>
+                        <View style={styles.row}>
+                            <View style={styles.rowLeftGroup}>
+                                <View style={styles.rowIconBox}>
+                                    <Feather name='activity' size={24} color='#333' />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('RecentActivity')}</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}></Text>
+                                </View>
+                            </View>
+                            <View style={styles.forwardArrow}>
+                                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        props.navigation.navigate('UserPlaces')
+                    }}>
+                        <View style={styles.row}>
+                            <View style={styles.rowLeftGroup}>
+                                <View style={styles.rowIconBox}>
+                                    <Ionicons name='ios-images' size={26} color='#333' />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Places</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
+                                </View>
+                            </View>
+                            <View style={styles.forwardArrow}>
+                                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        props.navigation.navigate('UserReviews', { reviews: data.user.reviews })
+                    }}>
+                        <View style={styles.row}>
+                            <View style={styles.rowLeftGroup}>
+                                <View style={styles.rowIconBox}>
+                                    <MaterialCommunityIcons name='star-box' size={28} color='#333' />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Reviews</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
+                                </View>
+                            </View>
+                            <View style={styles.forwardArrow}>
+                                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        props.navigation.navigate('UserPhotos', {
+                            photos: data.user.photos
+                        })
+                    }}>
+                        <View style={{ ...styles.row, ...styles.lastRow }}>
+                            <View style={styles.rowLeftGroup}>
+                                <View style={styles.rowIconBox}>
+                                    <Ionicons name='ios-camera' size={28} color='#333' />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Photos</Text>
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
+                                </View>
+                            </View>
+                            <View style={styles.forwardArrow}>
+                                <Ionicons name='ios-arrow-forward' size={20} color='#333' />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.userNameContainer}>
-                <Text style={styles.userName}>
-                    {data.user.name}
-                </Text>
-            </View>
-            <View style={{ marginBottom: 10 }}>
-                <Text>
-                    Montréal, QC
-                </Text>
-            </View>
-            <View style={styles.userStatusContainer}>
-                <Text style={styles.userStatus}>{data.user.status}</Text>
-            </View>
-            <View style={styles.actionsRow}>
-                <TouchableComponent onPress={() => {
-                    Alert.alert(
-                        `${i18n.t('Warning')}!`,
-                        i18n.t('MessageWarning'),
-                        [
-                            { text: 'Ok' },
-                        ]
-                    )
-                }}>
-                    <View style={styles.actionGroup}>
-                        <View style={styles.actionButton}>
-                            <AntDesign name='message1' size={18} color={TourTourColors.accent} />
-                        </View>
-                        <View>
-                            <Text style={styles.actionTitle}>Message</Text>
-                        </View>
-                    </View>
-                </TouchableComponent>
-                <TouchableComponent onPress={() => {
-                    Alert.alert(
-                        `${i18n.t('Warning')}!`,
-                        i18n.t('FollowWarning'),
-                        [
-                            { text: 'Ok' },
-                        ]
-                    )
-                }}>
-                    <View style={styles.actionGroup}>
-                        <View style={styles.actionButton}>
-                            <SimpleLineIcons name='user-follow' size={20} color={TourTourColors.accent} />
-                        </View>
-                        <View>
-                            <Text style={styles.actionTitle}>{i18n.t('Follow')}</Text>
-                        </View>
-                    </View>
-                </TouchableComponent>
-            </View>
-            <View style={styles.rowsContainer}>
-                <TouchableComponent onPress={() => {
-                    Alert.alert(
-                        `${i18n.t('Warning')}!`,
-                        i18n.t('RecentActivityWarning'),
-                        [
-                            { text: 'Ok' },
-                        ]
-                    )
-                }}>
-                    <View style={styles.row}>
-                        <View style={styles.rowLeftGroup}>
-                            <View style={styles.rowIconBox}>
-                                <Feather name='activity' size={24} color='#333' />
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>{i18n.t('RecentActivity')}</Text>
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}></Text>
-                            </View>
-                        </View>
-                        <View style={styles.forwardArrow}>
-                            <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-                        </View>
-                    </View>
-                </TouchableComponent>
-                <TouchableComponent onPress={() => {
-                    props.navigation.navigate('UserPlaces')
-                }}>
-                    <View style={styles.row}>
-                        <View style={styles.rowLeftGroup}>
-                            <View style={styles.rowIconBox}>
-                                <Ionicons name='ios-images' size={26} color='#333' />
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Places</Text>
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.places.length})</Text>
-                            </View>
-                        </View>
-                        <View style={styles.forwardArrow}>
-                            <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-                        </View>
-                    </View>
-                </TouchableComponent>
-                <TouchableComponent onPress={() => {
-                    props.navigation.navigate('UserReviews', { reviews: data.user.reviews })
-                }}>
-                    <View style={styles.row}>
-                        <View style={styles.rowLeftGroup}>
-                            <View style={styles.rowIconBox}>
-                                <MaterialCommunityIcons name='star-box' size={28} color='#333' />
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Reviews</Text>
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.reviews.length})</Text>
-                            </View>
-                        </View>
-                        <View style={styles.forwardArrow}>
-                            <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-                        </View>
-                    </View>
-                </TouchableComponent>
-                <TouchableComponent onPress={() => {
-                    props.navigation.navigate('UserPhotos', {
-                        photos: data.user.photos
-                    })
-                }}>
-                    <View style={{ ...styles.row, ...styles.lastRow }}>
-                        <View style={styles.rowLeftGroup}>
-                            <View style={styles.rowIconBox}>
-                                <Ionicons name='ios-camera' size={28} color='#333' />
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 16, color: '#333', fontWeight: 'bold' }}>Photos</Text>
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 12, color: '#333', fontWeight: 'bold' }}> ({data.user.photos.length})</Text>
-                            </View>
-                        </View>
-                        <View style={styles.forwardArrow}>
-                            <Ionicons name='ios-arrow-forward' size={20} color='#333' />
-                        </View>
-                    </View>
-                </TouchableComponent>
-            </View>
-        </View>
+        </ScrollView>
+
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 30
     },
     metaStateContainer: {
         flex: 1,

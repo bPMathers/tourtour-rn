@@ -216,7 +216,7 @@ const CategorySearchScreen = (props) => {
           },
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
-          elevation: 5
+          elevation: 7
         }}>
           <View style={{ justifyContent: 'center', flexDirection: 'row', marginTop: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Modal, Dimensions, TouchableOpacity, ImageBackground, Alert, ActivityIndicator } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import i18n from 'i18n-js'
@@ -51,14 +51,10 @@ const FeaturedPhotosGroup = (props) => {
   }
 
   const renderGridItem = (itemData) => {
-    let TouchableComponent = TouchableOpacity;
 
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-      TouchableComponent = TouchableNativeFeedback;
-    }
     return (
       <View style={styles.gridItem}>
-        <TouchableComponent style={{ flex: 1 }} onPress={() => {
+        <TouchableOpacity style={{ flex: 1 }} onPress={() => {
           setSelectedPhoto(itemData.item)
           setModalVisible(true)
 
@@ -66,7 +62,7 @@ const FeaturedPhotosGroup = (props) => {
           <ImageBackground source={{ uri: itemData.item.url }} style={styles.image}>
 
           </ImageBackground>
-        </TouchableComponent>
+        </TouchableOpacity>
       </View>
     );
   };

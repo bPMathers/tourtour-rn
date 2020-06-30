@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import i18n from 'i18n-js'
@@ -119,7 +119,10 @@ const UpdateReviewScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 10 }}>
-        <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>{i18n.t('YourImpressions')}:</Text>
+        <Text style={{
+          color: TourTourColors.accent,
+          fontWeight: 'bold'
+        }}>{i18n.t('YourImpressions')}:</Text>
       </View>
       <View style={styles.placeInfo}>
         <Text style={{ fontWeight: 'bold' }}>{place.name}</Text>
@@ -140,34 +143,16 @@ const UpdateReviewScreen = (props) => {
           />
         </View>
       </View>
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Titre</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={title => setTitle(title)}
-          value={title}
-          placeholder="Un endroit complètement inusité et hirsute"
-          clearButtonMode="while-editing"
-          color='#444'
-
-        />
-      </View>
       <View style={{ marginBottom: 30 }}>
         <Text style={styles.label}>Review</Text>
         <TextInput
           style={styles.nameInput}
           onChangeText={body => setBody(body)}
           value={body}
-          placeholder="Avec ce mot on explique tout, on pardonne tout, on valide tout, parce que l’on ne cherche jamais à savoir ce qu’il contient. C’est le mot de passe qui permet d’ouvrir les cœurs, les sexes, les sacristies et les communautés humaines. Il couvre d’un voile prétendument désintéressé, voire transcendant, la recherche de la dominance et le prétendu instinct de propriété. "
           clearButtonMode="while-editing"
           multiline
-          color='#444'
-
         />
       </View>
-      {/*<View>
-        <Button title={i18n.t('Cancel')} onPress={() => { props.navigation.goBack() }} color='#F65E3C' />
-      </View>*/}
       <View>
         <CustomButton title={i18n.t('Submit')} onPress={onSubmitHandler} color={TourTourColors.positive} />
       </View>
@@ -211,8 +196,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   nameInput: {
-
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#cccccc',
     borderBottomWidth: 2,
     marginBottom: 0,
     paddingVertical: 4,

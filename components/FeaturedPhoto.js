@@ -5,25 +5,19 @@ import {
     Text,
     StyleSheet,
     Platform,
-    TouchableNativeFeedback,
     ImageBackground,
     Dimensions
 } from "react-native";
 
 const FeaturedPhoto = (props) => {
-    let TouchableComponent = TouchableOpacity;
-
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-        TouchableComponent = TouchableNativeFeedback;
-    }
 
     return (
         <View style={styles.gridItem}>
-            <TouchableComponent style={{ flex: 1 }} onPress={props.onSelect}>
+            <TouchableOpacity style={{ flex: 1 }} onPress={props.onSelect}>
                 <ImageBackground source={{ uri: props.imgUrl }} style={styles.image}>
 
                 </ImageBackground>
-            </TouchableComponent>
+            </TouchableOpacity>
         </View>
     );
 };

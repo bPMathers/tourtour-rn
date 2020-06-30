@@ -6,7 +6,6 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableNativeFeedback,
   ImageBackground,
   ScrollView,
   Button,
@@ -298,13 +297,6 @@ const PlaceDetailScreen = (props) => {
 
   });
 
-
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
-
   return (
     <View>
       <View style={styles.modalContainer}>
@@ -350,7 +342,7 @@ const PlaceDetailScreen = (props) => {
         <View style={styles.placeDetailHeader}>
           <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
             <View style={styles.overlayContentContainer}>
-              {/*<TouchableComponent onPress={() => { props.navigation.goBack() }}>
+              {/*<TouchableOpacity onPress={() => { props.navigation.goBack() }}>
                 <View style={styles.topGroup}>
                   <View style={styles.backArrow}>
                     <Ionicons
@@ -361,7 +353,7 @@ const PlaceDetailScreen = (props) => {
                     />
                   </View>
                 </View>
-              </TouchableComponent>*/}
+              </TouchableOpacity>*/}
               <View style={{ flexDirection: 'row' }}>
                 <View style={styles.bottomGroup}>
                   <View>
@@ -378,7 +370,7 @@ const PlaceDetailScreen = (props) => {
                   </View>
                   <View>
                     <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                    <TouchableComponent onPress={() => {
+                    <TouchableOpacity onPress={() => {
                       props.navigation.navigate('UserProfile', {
                         userId: place.addedBy.id,
                         userName: place.addedBy.name
@@ -387,7 +379,7 @@ const PlaceDetailScreen = (props) => {
                       <Text style={{ color: 'white', fontWeight: 'bold' }}>
                         {place.addedBy.name}
                       </Text>
-                    </TouchableComponent>
+                    </TouchableOpacity>
                   </View>
                   <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
                 </View>
@@ -396,7 +388,7 @@ const PlaceDetailScreen = (props) => {
           </ImageBackground>
         </View>
         <View style={styles.actionsRow}>
-          <TouchableComponent onPress={handleOnPressPhone}>
+          <TouchableOpacity onPress={handleOnPressPhone}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <FontAwesome name='phone' size={22} color={TourTourColors.accent} />
@@ -405,8 +397,8 @@ const PlaceDetailScreen = (props) => {
                 <Text style={styles.actionTitle}>{i18n.t('Call')}</Text>
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={handleOnPressMap}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOnPressMap}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <FontAwesome5 name='map-marker-alt' size={18} color={TourTourColors.accent} />
@@ -415,8 +407,8 @@ const PlaceDetailScreen = (props) => {
                 <Text style={styles.actionTitle}>{i18n.t('Map')}</Text>
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={handleOnPressWeb}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOnPressWeb}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <MaterialCommunityIcons name='web' size={26} color={TourTourColors.accent} />
@@ -425,8 +417,8 @@ const PlaceDetailScreen = (props) => {
                 <Text style={styles.actionTitle}>{i18n.t('Website')}</Text>
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={() => { setModalVisible(true) }}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { setModalVisible(true) }}>
             <View style={styles.actionGroup}>
               <View style={styles.actionButton}>
                 <MaterialCommunityIcons name='camera-enhance' size={25} color={TourTourColors.accent} />
@@ -435,8 +427,8 @@ const PlaceDetailScreen = (props) => {
                 <Text style={styles.actionTitle}>Photo</Text>
               </View>
             </View>
-          </TouchableComponent>
-          <TouchableComponent onPress={() => {
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {
             // props.navigation.navigate('CreateReview', { place: place }) 
             setReviewModalVisible(true)
           }}>
@@ -448,7 +440,7 @@ const PlaceDetailScreen = (props) => {
                 <Text style={styles.actionTitle}>Review</Text>
               </View>
             </View>
-          </TouchableComponent>
+          </TouchableOpacity>
         </View>
         <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
         <View style={styles.reviewsHeaderRow}>

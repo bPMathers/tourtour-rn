@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, TouchableNativeFeedback, ImageBackground, Dimensions, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, ImageBackground, Dimensions, Modal, Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
@@ -12,12 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const MyPhotoCard = ({ itemData }) => {
   const navigation = useNavigation()
-
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
 
   return (
     <View style={styles.gridItem}>
@@ -59,19 +53,14 @@ const MyPhotosListScreen = (props) => {
 
   const renderGridItem = (itemData) => {
 
-    let TouchableComponent = TouchableOpacity;
-
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-      TouchableComponent = TouchableNativeFeedback;
-    }
     return (
-      <TouchableComponent onPress={() => {
+      <TouchableOpacity onPress={() => {
         setSelectedPhoto(itemData.item)
         setModalVisible(true)
 
       }}>
         <MyPhotoCard itemData={itemData} />
-      </TouchableComponent>
+      </TouchableOpacity>
     );
   }
 

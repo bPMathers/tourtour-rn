@@ -5,18 +5,12 @@ import {
     Text,
     StyleSheet,
     Platform,
-    TouchableNativeFeedback,
     ImageBackground
 } from "react-native";
 import i18n from 'i18n-js';
 
 
 const CategoryGridTile = (props) => {
-    let TouchableComponent = TouchableOpacity;
-
-    if (Platform.OS === "android" && Platform.Version >= 21) {
-        TouchableComponent = TouchableNativeFeedback;
-    }
 
     return (
         <View style={styles.gridItem}>

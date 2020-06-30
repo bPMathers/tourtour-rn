@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons'
 import TimeAgo from 'react-native-timeago';
 
@@ -24,34 +24,29 @@ const ReviewCard = (props) => {
     })
   }
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === "android" && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
   return (
     <View style={styles.reviewCard}>
       <View style={styles.reviewHeader}>
         <View style={styles.reviewHeaderRow}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableComponent onPress={handleOnUserProfileSelect}>
+            <TouchableOpacity onPress={handleOnUserProfileSelect}>
               <View style={{ marginRight: 5 }}>
                 <Image style={styles.tinyUserProfilePic} source={{ uri: props.review.author.imageUrl }} />
               </View>
-            </TouchableComponent>
+            </TouchableOpacity>
             <View>
-              <TouchableComponent onPress={handleOnUserProfileSelect}>
+              <TouchableOpacity onPress={handleOnUserProfileSelect}>
                 <Text style={styles.authorName}>{props.review.author.name}</Text>
-              </TouchableComponent>
+              </TouchableOpacity>
               <StarRating rating={props.review.rating} color='white' />
               {/*<Text style={styles.timeAgoText}>2h ago</Text>*/}
               <TimeAgo style={styles.timeAgoText} time={props.review.updatedAt} />
             </View>
           </View>
           {loggedInUserId === props.review.author.id ? (
-            <TouchableComponent onPress={handleEditPress}>
+            <TouchableOpacity onPress={handleEditPress}>
               <FontAwesome5 name='pencil-alt' color='white' size={18} />
-            </TouchableComponent>
+            </TouchableOpacity>
           ) : null}
         </View>
       </View>

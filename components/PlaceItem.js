@@ -7,19 +7,13 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableNativeFeedback,
 } from 'react-native';
 
 const PlaceItem = (props) => {
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
 
   return (
     <View style={styles.placeItem}>
-      <TouchableComponent style={{ flex: 1 }} onPress={props.onSelect}>
+      <TouchableOpacity style={{ flex: 1 }} onPress={props.onSelect}>
         <View
           style={{ ...styles.container, ...{ backgroundColor: props.color } }}
         >
@@ -27,7 +21,7 @@ const PlaceItem = (props) => {
             {props.title}{' '}
           </Text>
         </View>
-      </TouchableComponent>
+      </TouchableOpacity>
     </View>
   );
 };

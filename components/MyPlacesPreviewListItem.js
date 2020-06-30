@@ -18,12 +18,6 @@ const MyPlacesPreviewListItem = (props) => {
   const { place } = props
   const navigation = useNavigation()
 
-  let TouchableComponent = TouchableOpacity;
-
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComponent = TouchableNativeFeedback;
-  }
-
   return (
     <View style={styles.placePreviewListItem}>
       <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
@@ -50,11 +44,11 @@ const MyPlacesPreviewListItem = (props) => {
             <View style={styles.leftBottomGroup}>
               <View>
                 <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                <TouchableComponent onPress={() => { }}>
+                <TouchableOpacity onPress={() => { }}>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>
                     {place.addedBy.name}
                   </Text>
-                </TouchableComponent>
+                </TouchableOpacity>
               </View>
               <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
             </View>
@@ -71,7 +65,7 @@ const MyPlacesPreviewListItem = (props) => {
             <View>
               <View style={styles.rightRow3}>
                 {place.addedBy.id &&
-                  <TouchableComponent onPress={() => {
+                  <TouchableOpacity onPress={() => {
                     navigation.navigate('UpdateMyPlace', {
                       place: place
                     })
@@ -82,7 +76,7 @@ const MyPlacesPreviewListItem = (props) => {
                       size={24}
                       color='white'
                     />
-                  </TouchableComponent>}
+                  </TouchableOpacity>}
               </View>
             </View>
           </View>
