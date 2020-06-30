@@ -45,9 +45,6 @@ const MyReviewsCard = ({ itemData }) => {
       <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: 1 }}>
         <Text style={{ color: 'white' }}>Mon Review sur: {itemData.item.place.name}</Text>
       </View>
-      <View style={{ marginBottom: 8 }}>
-        <Text style={styles.reviewTitleText}>Titre: {itemData.item.title}</Text>
-      </View>
       <View>
         <Text style={styles.reviewBodyText}>Contenu: {itemData.item.body}</Text>
       </View>
@@ -116,11 +113,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-  },
-  reviewTitleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   reviewBodyText: {
     color: 'white',

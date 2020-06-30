@@ -25,7 +25,6 @@ const UpdateReviewScreen = (props) => {
    */
 
   const [rating, setRating] = useState(review.rating)
-  const [title, setTitle] = useState(review.title);
   const [body, setBody] = useState(review.body);
 
   /**
@@ -33,11 +32,10 @@ const UpdateReviewScreen = (props) => {
    */
 
   const UPDATE_REVIEW = gql`
-    mutation($title: String!, $body: String!, $rating: Float!, $id: ID!) {
+    mutation($body: String!, $rating: Float!, $id: ID!) {
     updateReview(
       id: $id
       data: {
-        title: $title
         body: $body
         rating: $rating
       }) {
@@ -65,7 +63,7 @@ const UpdateReviewScreen = (props) => {
   const onSubmitHandler = () => {
     // Send mutation & refetch place 
     updateReview({
-      variables: { title: title, body: body, placeId: place.id, rating: rating, id: review.id },
+      variables: { body: body, placeId: place.id, rating: rating, id: review.id },
       refetchQueries: [{ query: GET_REVIEWS, variables: { placeId: place.id } }],
       context: {
         headers: {

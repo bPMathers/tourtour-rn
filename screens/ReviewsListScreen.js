@@ -236,11 +236,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  reviewTitleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+
   reviewBodyText: {
     color: 'white',
     fontSize: 16

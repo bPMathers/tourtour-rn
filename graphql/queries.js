@@ -59,7 +59,6 @@ const GET_PLACE = gql`
       avgRating
       reviews {
         id
-        title
         body
         rating
         author {
@@ -121,7 +120,6 @@ const GET_REVIEWS = gql`
   query($placeId: String, $searchQuery: String $orderBy: ReviewOrderByInput, $first: Int) {
     reviews(query: $placeId, searchQuery: $searchQuery orderBy: $orderBy, first: $first) {
       id
-      title
       body
       rating
       author {
@@ -143,7 +141,6 @@ const GET_MY_REVIEWS = gql`
   query {
     myReviews {
       id
-      title
       body
       rating
       author {
