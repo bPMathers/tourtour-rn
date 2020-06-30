@@ -3,18 +3,16 @@ import { View, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useApolloClient } from "@apollo/react-hooks";
-import * as Location from 'expo-location';
+import i18n from 'i18n-js'
 
-
-
+import CustomButton from './CustomButton'
 import { googleApiKey } from '../env'
-
 
 const GooglePlacesACInput = (props) => {
   const client = useApolloClient();
 
   const [pickedPlace, setPickedPlace] = React.useState()
-  const [geocodedLoc, setGeocodedLoc] = React.useState()
+  // const [geocodedLoc, setGeocodedLoc] = React.useState()
 
   return (
     <View style={styles.container}>
@@ -54,7 +52,7 @@ const GooglePlacesACInput = (props) => {
           },
         }}
       />
-      <Button title="Choisir" onPress={() => {
+      <CustomButton title={i18n.t('Select')} onPress={() => {
         props.navigation.navigate('AddPlace', { autoCompletePickedPlace: pickedPlace })
       }} />
     </View>
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#ecf0f1',
     padding: 8,
-    paddingBottom: 200
+    paddingBottom: 100
     // marginVertical: 200
   },
 });
