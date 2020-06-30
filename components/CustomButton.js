@@ -14,9 +14,9 @@ const CustomButton = (props) => {
       // width: Dimensions.get("screen").width / 2
       width: props.width ?? '100%',
       shadowColor: '#000',
-      shadowOffset: { height: 5, width: 5 },
-      shadowOpacity: 0.3,
-      shadowRadius: 10,
+      shadowOffset: { height: 5, width: 2 },
+      shadowOpacity: 0.15,
+      shadowRadius: 5,
       alignItems: 'center',
       justifyContent: 'center'
     },

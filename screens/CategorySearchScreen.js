@@ -8,7 +8,6 @@ import { FontAwesome5, AntDesign } from '@expo/vector-icons'
 import * as Location from 'expo-location';
 
 
-
 import { orderByDistance } from '../utils/orderByDistance'
 import { TourTourColors } from '../constants/Colors';
 import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID, GET_MY_LOCATION } from '../graphql/queries'
@@ -123,6 +122,9 @@ const CategorySearchScreen = (props) => {
         <AntDesign name='plus' size={24} color='white' />
       </TouchableOpacity>
     ),
+    title: i18n.t(`${props.route.params.categoryTitle}`),
+    headerStyle: { backgroundColor: TourTourColors.accent }
+
   });
 
   /**

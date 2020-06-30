@@ -69,10 +69,8 @@ const PlaceDetailScreen = (props) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
   });
-
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
-
 
   const GET_PHOTOS = gql`
     query($placeId: String) {
@@ -286,6 +284,21 @@ const PlaceDetailScreen = (props) => {
     refetch()
   }
 
+  const handleScroll = (e) => {
+    setScrollY(e.nativeEvent.contentOffset.y)
+  }
+
+  /**
+   * NAV
+   */
+
+  props.navigation.setOptions({
+    title: '',
+    headerBackTitle: i18n.t('Back'),
+
+  });
+
+
   let TouchableComponent = TouchableOpacity;
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -337,7 +350,7 @@ const PlaceDetailScreen = (props) => {
         <View style={styles.placeDetailHeader}>
           <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
             <View style={styles.overlayContentContainer}>
-              <TouchableComponent onPress={() => { props.navigation.goBack() }}>
+              {/*<TouchableComponent onPress={() => { props.navigation.goBack() }}>
                 <View style={styles.topGroup}>
                   <View style={styles.backArrow}>
                     <Ionicons
@@ -348,7 +361,7 @@ const PlaceDetailScreen = (props) => {
                     />
                   </View>
                 </View>
-              </TouchableComponent>
+              </TouchableComponent>*/}
               <View style={{ flexDirection: 'row' }}>
                 <View style={styles.bottomGroup}>
                   <View>
@@ -486,14 +499,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   placeDetailHeader: {
-    height: 300,
+    height: 200,
     width: '100%',
     backgroundColor: '#ddd',
     overflow: 'hidden',
     // marginHorizontal: 10,
   },
   overlayContentContainer: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     height: '100%',
     padding: 10,
     backgroundColor: 'rgba(0,0,0,.7)',

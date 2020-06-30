@@ -140,47 +140,36 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name='CategorySearch'
         component={CategorySearchScreen}
-        options={({ route }) => ({
-          title: route.params.categoryTitle,
-          headerStyle: { backgroundColor: TourTourColors.accent }
-        })}
+
       />
       <HomeStack.Screen
         name='PlaceDetail'
         component={PlaceDetailScreen}
-        options={({ route }) => ({
-          title: route.params.name,
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          headerShown: false,
-
-        })}
+      // options={({ route }) => ({
+      //   // title: route.params.name,
+      // })}
       />
 
       <HomeStack.Screen
         name='UserProfile'
         component={UserProfileScreen}
         options={({ route }) => ({
-          // title: route.params.userName,
           title: route.params.userName,
-          headerStyle: { backgroundColor: TourTourColors.accent },
+          headerBackTitle: i18n.t('Back')
         })}
       />
       <HomeStack.Screen
         name='UserPhotos'
         component={UserPhotosListScreen}
         options={({ route }) => ({
-          // title: route.params.userName,
           title: route.params.userName,
-          headerStyle: { backgroundColor: TourTourColors.accent },
         })}
       />
       <HomeStack.Screen
         name='UserPlaces'
         component={UserPlacesListScreen}
         options={({ route }) => ({
-          // title: route.params.userName,
           title: i18n.t('MyPlaces'),
-          headerStyle: { backgroundColor: TourTourColors.accent },
         })}
       />
       <HomeStack.Screen
@@ -188,8 +177,6 @@ function HomeStackScreen() {
         component={AddPlaceScreen}
         options={{
           title: i18n.t('AddPlace'),
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -197,8 +184,6 @@ function HomeStackScreen() {
         component={MapScreen}
         options={{
           title: i18n.t('ChooseLocation'),
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -206,8 +191,6 @@ function HomeStackScreen() {
         component={MapScreen2}
         options={{
           title: i18n.t('ChooseLocation'),
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -215,8 +198,6 @@ function HomeStackScreen() {
         component={GooglePlacesACInput}
         options={{
           title: i18n.t('ChooseLocation'),
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -224,8 +205,6 @@ function HomeStackScreen() {
         component={UpdateReviewScreen}
         options={{
           title: "Review",
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -233,8 +212,6 @@ function HomeStackScreen() {
         component={UserReviewsListScreen}
         options={{
           title: "Reviews",
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <HomeStack.Screen
@@ -242,8 +219,6 @@ function HomeStackScreen() {
         component={ReviewsListScreen}
         options={{
           title: "Reviews",
-          headerStyle: { backgroundColor: TourTourColors.accent },
-          // headerShown: false,
         }}
       />
       <UserStack.Screen
@@ -258,7 +233,6 @@ function HomeStackScreen() {
         component={MapForPlaceUpdateScreen}
         options={{
           title: i18n.t('ChooseLocation'),
-          // headerShown: false,
         }}
       />
     </HomeStack.Navigator>
@@ -413,7 +387,6 @@ export default function HomeApp(props) {
                       iconName = focused ? 'ios-settings' : 'ios-settings';
                     }
 
-                    // You can return any component that you like here!
                     return <Ionicons name={iconName} size={size} color={color} />
                   }
                 })}

@@ -42,6 +42,7 @@ const Translations = {
     Logout: 'Logout',
     Save: 'Save',
     Update: 'Update',
+    Back: 'Back',
 
     // Add / Edit Place
     Name: 'Name',
@@ -117,7 +118,7 @@ const Translations = {
     CheapMotels: 'Motels Cheaps',
     PreShowSnack: 'Snack Pre-Show',
     DrinkableCoffee: 'Café Buvable',
-    PostShowsnack: 'Sanck après show',
+    PostShowsnack: 'Snack après show',
     Breakfast: 'Déjeuner',
 
     // Misc
@@ -134,6 +135,7 @@ const Translations = {
     Logout: 'Déconnexion',
     Save: 'Sauvegarder',
     Update: 'Mettre à jour',
+    Back: 'Retour',
 
     // Add / Edit Place
     Name: 'Nom',
