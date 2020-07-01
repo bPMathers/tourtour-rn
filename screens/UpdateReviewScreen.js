@@ -6,12 +6,12 @@ import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
-import { GET_REVIEWS, GET_TOKEN, GET_TOKEN_AND_USER_ID, GET_MY_REVIEWS, GET_USER } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_MY_REVIEWS, GET_USER, GET_PLACES } from '../graphql/queries'
 import CustomButton from '../components/CustomButton';
 
 
 const UpdateReviewScreen = (props) => {
-  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData.token).replace(/\"/g, "")
   /**
    * VARIABLES
@@ -32,19 +32,20 @@ const UpdateReviewScreen = (props) => {
    */
 
   const UPDATE_REVIEW = gql`
-    mutation($body: String!, $rating: Float!, $id: ID!) {
+    mutation($body: String!, $placeId: String!, $rating: Float!, $id: ID!) {
     updateReview(
       id: $id
       data: {
         body: $body
         rating: $rating
+        placeId: $placeId
       }) {
       id
       }
     }
   `;
 
-  const [updateReview, { data }] = useMutation(UPDATE_REVIEW)
+  const [updateReview] = useMutation(UPDATE_REVIEW)
 
   const DELETE_REVIEW = gql`
     mutation($id: ID!) {
@@ -64,7 +65,10 @@ const UpdateReviewScreen = (props) => {
     // Send mutation & refetch place 
     updateReview({
       variables: { body: body, placeId: place.id, rating: rating, id: review.id },
-      refetchQueries: [{ query: GET_REVIEWS, variables: { placeId: place.id } }],
+      refetchQueries: [
+        { query: GET_REVIEWS, variables: { placeId: place.id } },
+        // { query: GET_PLACES, variables: { placeId: place.category.id } },
+      ],
       context: {
         headers: {
           Authorization: jwtBearer

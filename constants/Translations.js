@@ -28,7 +28,7 @@ const Translations = {
     CheapMotels: 'Cheap Motels',
     PreShowSnack: 'Pre-Show Snack',
     DrinkableCoffee: 'Drinkable Coffee',
-    PostShowsnack: 'Post-Show Snack',
+    PostShowSnack: 'Post-Show Snack',
     Breakfast: 'Breakfast',
     DiveBars: 'Dive Bars',
     Karaoke: 'Karaoke',

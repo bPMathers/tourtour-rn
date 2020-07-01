@@ -23,7 +23,6 @@ const CreateReview = (props) => {
   const navigation = useNavigation()
 
   const reviewTextInput = useRef(null)
-  const [title, setTitle] = useState('');
   const [body, setbody] = useState('');
   const [rating, setRating] = useState(3);
   const [showReviewsPane, setShowReviewsPane] = useState(false);
@@ -37,10 +36,9 @@ const CreateReview = (props) => {
    */
 
   const CREATE_REVIEW = gql`
-    mutation($title: String!, $body: String!, $placeId: String!, $rating: Float!) {
+    mutation($body: String!, $placeId: String!, $rating: Float!) {
     createReview(
       data: {
-        title: $title
         body: $body
         placeId: $placeId
         rating: $rating
@@ -62,7 +60,7 @@ const CreateReview = (props) => {
 
   const handleSubmit = () => {
     createReview({
-      variables: { title: title, body: body, placeId: place.id, rating: rating },
+      variables: { body: body, placeId: place.id, rating: rating },
       context: {
         headers: {
           Authorization: jwtBearer
@@ -235,11 +233,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  reviewTitleText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+
   reviewBodyText: {
     color: 'white',
     fontSize: 16
