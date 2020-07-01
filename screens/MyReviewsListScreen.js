@@ -17,13 +17,13 @@ const MyReviewsCard = ({ itemData }) => {
       <View style={styles.reviewHeader}>
         <View style={styles.reviewHeaderRow}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => { navigation.goBack() }}>
               <View style={{ marginRight: 5 }}>
                 <Image style={styles.tinyUserProfilePic} source={{ uri: itemData.item.author.imageUrl }} />
               </View>
             </TouchableOpacity>
             <View>
-              <TouchableOpacity onPress={() => { }}>
+              <TouchableOpacity onPress={() => { navigation.goBack() }}>
                 <Text style={styles.authorName}>{itemData.item.author.name}</Text>
               </TouchableOpacity>
               <StarRating rating={itemData.item.rating} color='white' />
@@ -43,7 +43,7 @@ const MyReviewsCard = ({ itemData }) => {
         </View>
       </View>
       <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: 1 }}>
-        <Text style={{ color: 'white' }}>Mon Review sur: {itemData.item.place.name}</Text>
+        <Text style={{ color: 'white' }}>Place: {itemData.item.place.name}</Text>
       </View>
       <View>
         <Text style={styles.reviewBodyText}>Contenu: {itemData.item.body}</Text>

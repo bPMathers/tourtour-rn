@@ -44,11 +44,11 @@ const MyPlacesPreviewListItem = (props) => {
             <View style={styles.leftBottomGroup}>
               <View>
                 <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                <TouchableOpacity onPress={() => { }}>
+                <View>
                   <Text style={{ color: 'white', fontWeight: 'bold' }}>
                     {place.addedBy.name}
                   </Text>
-                </TouchableOpacity>
+                </View>
               </View>
               <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
             </View>

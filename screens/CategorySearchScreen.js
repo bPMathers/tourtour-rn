@@ -225,7 +225,7 @@ const CategorySearchScreen = (props) => {
                 {`${i18n.t('near')} `}
               </Text>
             </View>
-            <View>{city === "" ? <View><CustomButton title={i18n.t('changeLocation')} onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
+            <View>{city === "" ? <View><CustomButton title={i18n.t('ChooseLocation')} onPress={() => { setModalVisible(true) }} /></View> : <Text style={{ fontWeight: 'bold' }}>{city}</Text>}
             </View>
           </View>
           {city ? <View style={{ alignItems: 'center' }}>

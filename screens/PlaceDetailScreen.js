@@ -1,20 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   View,
   StatusBar,
   Text,
   StyleSheet,
-  Platform,
   ImageBackground,
   ScrollView,
-  Button,
-  FlatList,
   Alert,
   Modal,
   TouchableHighlight,
   ActivityIndicator,
-  Keyboard
 } from 'react-native';
 import { showLocation } from 'react-native-map-link'
 import * as ImagePicker from 'expo-image-picker'
@@ -31,7 +27,7 @@ import CustomButton from '../components/CustomButton'
 import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
-import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS, GET_PLACE } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS } from '../graphql/queries'
 import FadeInView from '../components/FadeInView';
 
 const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
@@ -65,13 +61,17 @@ const PlaceDetailScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
+  const loggedInUserId = tokenAndIdData?.userId
+
+  /**
+   * GRAPHQL
+   */
+
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
-  // const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
   });
-  const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
-  const loggedInUserId = tokenAndIdData?.userId
 
   const GET_PHOTOS = gql`
     query($placeId: String, $orderBy: PhotoOrderByInput) {
@@ -111,7 +111,7 @@ const PlaceDetailScreen = (props) => {
     }
   `;
 
-  const [addPhoto, { data }] = useMutation(ADD_PHOTO, {
+  const [addPhoto] = useMutation(ADD_PHOTO, {
     onCompleted: () => {
       setPhotoUploading(false)
       refetchPhotos()
@@ -128,6 +128,10 @@ const PlaceDetailScreen = (props) => {
   const [deletePhoto] = useMutation(DELETE_PHOTO, {
     onCompleted: () => refetchPhotos()
   })
+
+  /**
+   * HELPERS
+   */
 
   const openImagePickerAsync = async () => {
     const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -299,18 +303,8 @@ const PlaceDetailScreen = (props) => {
     })
   }
 
-
-
   const handleOnClose = () => {
     setReviewModalVisible(false)
-  }
-
-  const handleRefetch = () => {
-    refetch()
-  }
-
-  const handleScroll = (e) => {
-    setScrollY(e.nativeEvent.contentOffset.y)
   }
 
   const handleConfirmDeletePhoto = (selectedPhotoId) => {
@@ -333,6 +327,10 @@ const PlaceDetailScreen = (props) => {
     headerBackTitle: i18n.t('Back'),
 
   });
+
+  /**
+   * RETURN
+   */
 
   return (
     <View>
@@ -535,7 +533,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#ddd',
     overflow: 'hidden',
-    // marginHorizontal: 10,
   },
   overlayContentContainer: {
     justifyContent: 'flex-end',
@@ -596,11 +593,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
   },
-  reviewCount: {
-    color: 'white',
-    fontSize: 12,
-    marginBottom: 10
-  },
   submittedBy: {
     color: 'white',
     fontSize: 12,
@@ -612,7 +604,6 @@ const styles = StyleSheet.create({
   },
   actionGroup: {
     alignItems: 'center',
-    // width: 100
   },
   actionButton: {
     width: 40,
@@ -654,11 +645,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   centeredView: {
-    // flex: 1,
     height: '100%',
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.7)'
   },
   modalView: {
@@ -685,10 +674,6 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center"
   },
   reviewModalContainer: {
