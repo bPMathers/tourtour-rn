@@ -21,67 +21,74 @@ const MyPlacesPreviewListItem = (props) => {
   return (
     <View style={styles.placePreviewListItem}>
       <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
-        <View style={styles.overlayContentContainer}>
-          <View style={styles.leftColumn}>
-            <View style={styles.leftTopGroup}>
-              <View style={styles.leftRow1}>
-                <View>
-                  <Text style={styles.name}>{place.name}</Text>
+        <TouchableOpacity onPress={() => {
+          navigation.navigate('PlaceDetail', {
+            placeId: place.id
+          })
+        }}>
+          <View style={styles.overlayContentContainer}>
+            <View style={styles.leftColumn}>
+              <View style={styles.leftTopGroup}>
+                <View style={styles.leftRow1}>
+                  <View>
+                    <Text style={styles.name}>{place.name}</Text>
+                  </View>
+                </View>
+                <View style={styles.leftRow2}>
+                  <View>
+                    <Text style={styles.location}>{place.formatted_address}</Text>
+                  </View>
+                </View>
+                <View style={styles.leftRow3}>
+                  <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
+                  <View>
+                    <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
+                  </View>
                 </View>
               </View>
-              <View style={styles.leftRow2}>
+              <View style={styles.leftBottomGroup}>
                 <View>
-                  <Text style={styles.location}>{place.formatted_address}</Text>
+                  <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
+                  <View>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                      {i18n.t('You')}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.leftRow3}>
-                <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
-                <View>
-                  <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
-                </View>
+                <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
               </View>
             </View>
-            <View style={styles.leftBottomGroup}>
+            <View style={styles.rightColumn}>
               <View>
-                <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                <View>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                    {place.addedBy.name}
-                  </Text>
+                <View style={styles.rightRow1}>
+                  <StarRating color='white' rating={place.avgRating} />
+                </View>
+                <View style={styles.rightRow2}>
+                  <Text style={styles.reviewCount}>{place.review_count} reviews</Text>
                 </View>
               </View>
-              <TimeAgo time={place.createdAt} style={{ color: 'white', fontSize: 12 }} />
-            </View>
-          </View>
-          <View style={styles.rightColumn}>
-            <View>
-              <View style={styles.rightRow1}>
-                <StarRating color='white' rating={place.avgRating} />
-              </View>
-              <View style={styles.rightRow2}>
-                <Text style={styles.reviewCount}>{place.review_count} reviews</Text>
-              </View>
-            </View>
-            <View>
-              <View style={styles.rightRow3}>
-                {place.addedBy.id &&
-                  <TouchableOpacity onPress={() => {
-                    navigation.navigate('UpdateMyPlace', {
-                      place: place
-                    })
-                  }}>
-                    <FontAwesome5
-                      style={styles.starIcon}
-                      name='pencil-alt'
-                      size={24}
-                      color='white'
-                    />
-                  </TouchableOpacity>}
+              <View>
+                <View style={styles.rightRow3}>
+                  {place.addedBy.id &&
+                    <TouchableOpacity onPress={() => {
+                      navigation.navigate('UpdateMyPlace', {
+                        place: place
+                      })
+                    }}>
+                      <FontAwesome5
+                        style={styles.starIcon}
+                        name='pencil-alt'
+                        size={24}
+                        color='white'
+                      />
+                    </TouchableOpacity>}
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </ImageBackground>
+
     </View>
   );
 };

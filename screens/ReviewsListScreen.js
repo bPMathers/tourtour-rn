@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Platform, TouchableOpacity, ActivityIndicator, TextInput, Modal } from 'react-native';
 import { useQuery } from '@apollo/react-hooks'
-import { Feather, Ionicons } from '@expo/vector-icons'
-import TimeAgo from 'react-native-timeago';
+import { Ionicons } from '@expo/vector-icons'
+import i18n from 'i18n-js'
 
 import { GET_REVIEWS } from '../graphql/queries'
 import { TourTourColors } from '../constants/Colors'
 import ReviewCard from '../components/ReviewCard'
-import StarRating from '../components/StarRating'
 import { useNavigation } from '@react-navigation/native';
 
 let loggedInUserId;
@@ -39,7 +38,7 @@ const ReviewsListScreen = (props) => {
       }
     },
   });
-  const [reviewsForDisplay, setReviewsForDisplay] = useState(reviewsData?.reviews);
+  // const [reviewsForDisplay, setReviewsForDisplay] = useState(reviewsData?.reviews);
   loggedInUserId = props.route.params.loggedInUserId
 
 
@@ -127,7 +126,13 @@ const ReviewsListScreen = (props) => {
         </TouchableOpacity>
       </View>
       {reviewsLoading ? <View style={styles.container}>
-        <ActivityIndicator size="large" color={TourTourColors.accent} /></View> : <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+        <ActivityIndicator size="large" color={TourTourColors.accent} /></View> :
+        <>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+            <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>{i18n.t('ReviewsFor')}:  {reviewsData.reviews[0].place.name}</Text>
+          </View>
+          <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
+        </>
       }
     </View>
   );

@@ -42,9 +42,13 @@ const MyReviewsCard = ({ itemData }) => {
           </View>
         </View>
       </View>
-      <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: 1 }}>
-        <Text style={{ color: 'white' }}>Place: {itemData.item.place.name}</Text>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('PlaceDetail', {
+        placeId: itemData.item.place.id
+      })}>
+        <View style={{ marginBottom: 8, borderBottomColor: 'white', borderBottomWidth: 1 }}>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>{itemData.item.place.name}</Text>
+        </View>
+      </TouchableOpacity>
       <View>
         <Text style={styles.reviewBodyText}>Contenu: {itemData.item.body}</Text>
       </View>

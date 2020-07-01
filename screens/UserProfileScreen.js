@@ -22,7 +22,6 @@ const UserProfileScreen = (props) => {
         reviews {
             id
             rating
-            title 
             body
             author {
                 id

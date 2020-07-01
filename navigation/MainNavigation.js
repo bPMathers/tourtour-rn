@@ -116,6 +116,17 @@ function UserStackScreen() {
           gestureEnabled: false
         }}
       />
+      <UserStack.Screen
+        name='PlaceDetail'
+        component={PlaceDetailScreen}
+      />
+      <UserStack.Screen
+        name='ReviewsList'
+        component={ReviewsListScreen}
+        options={{
+          title: "Reviews",
+        }}
+      />
     </UserStack.Navigator>
   )
 }
@@ -146,9 +157,6 @@ function HomeStackScreen() {
       <HomeStack.Screen
         name='PlaceDetail'
         component={PlaceDetailScreen}
-      // options={({ route }) => ({
-      //   // title: route.params.name,
-      // })}
       />
 
       <HomeStack.Screen

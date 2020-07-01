@@ -51,6 +51,7 @@ const Translations = {
     Back: 'Back',
     Select: 'Select',
     Or: 'or',
+    You: 'You',
 
     // Add / Edit Place
     Name: 'Name',
@@ -72,6 +73,7 @@ const Translations = {
     Map: 'Map',
     Website: 'Website',
     SeeAllReviews: 'See All Reviews',
+    ReviewsFor: 'Reviews for',
 
     // Review Update
     YourImpressions: 'Update your opinion on',
@@ -152,6 +154,7 @@ const Translations = {
     Back: 'Retour',
     Select: 'Choisir',
     Or: 'ou',
+    You: 'Vous',
 
 
     // Add / Edit Place
@@ -174,6 +177,7 @@ const Translations = {
     Map: 'Carte',
     Website: 'Site Web',
     SeeAllReviews: 'Voir toutes les reviews',
+    ReviewsFor: 'Reviews sur',
 
     // Review Update
     YourImpressions: 'Mettre à jour vos impressions sur',

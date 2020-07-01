@@ -24,7 +24,7 @@ const PlacePreviewListItem = (props) => {
     <View style={styles.placePreviewListItem}>
       <TouchableOpacity style={{ flex: 1 }} onPress={() => {
         navigation.navigate('PlaceDetail', {
-          place: place
+          placeId: place.id
         })
       }}>
         <ImageBackground source={{ uri: place.imageUrl }} style={styles.image}>
@@ -87,7 +87,7 @@ const PlacePreviewListItem = (props) => {
 
                   <TouchableOpacity onPress={() => {
                     navigation.navigate('PlaceDetail', {
-                      place: place
+                      placeId: place.id
                     })
                   }}>
                     <Ionicons

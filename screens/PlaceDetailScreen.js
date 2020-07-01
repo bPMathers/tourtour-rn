@@ -29,6 +29,7 @@ import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS } from '../graphql/queries'
 import FadeInView from '../components/FadeInView';
+import { useRoute } from '@react-navigation/native';
 
 const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
   if (reviewsLoading) {
@@ -57,7 +58,12 @@ const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsDat
 
 
 const PlaceDetailScreen = (props) => {
-  const place = props.route.params.place;
+  /**
+   * HOOKS & VARIABLES
+   */
+
+  const route = useRoute()
+  const placeId = route.params.placeId
   const [modalVisible, setModalVisible] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
@@ -67,10 +73,44 @@ const PlaceDetailScreen = (props) => {
   /**
    * GRAPHQL
    */
+  const GET_PLACE = gql`
+  query($placeId: String) {
+    place(query: $placeId) {
+      id
+      name
+      addedBy {
+        id
+        name
+      }
+      url
+      phone
+      category {
+        id
+        title
+      }
+      review_count
+      avgRating
+      imageUrl
+      formatted_address
+      lat
+      lng
+      google_place_id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+  const { loading: placeLoading, error: placeError, data: placeData, refetch: refetchPlace } = useQuery(GET_PLACE, {
+    variables: {
+      placeId: placeId,
+    },
+  });
+  const place = placeData?.place
 
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
-    variables: { placeId: place.id, orderBy: "updatedAt_DESC", first: 10 },
+    variables: { placeId: placeId, orderBy: "updatedAt_DESC", first: 10 },
   });
 
   const GET_PHOTOS = gql`
@@ -91,7 +131,7 @@ const PlaceDetailScreen = (props) => {
 
   const { loading: photosLoading, error: photosError, data: photosData, refetch: refetchPhotos } = useQuery(GET_PHOTOS, {
     variables: {
-      placeId: place.id,
+      placeId: placeId,
       orderBy: "createdAt_DESC"
     },
   });
@@ -168,14 +208,14 @@ const PlaceDetailScreen = (props) => {
         const data = await r.json()
         // Send mutation to graphQL API
         addPhoto({
-          variables: { url: data.secure_url, placeId: place.id },
+          variables: { url: data.secure_url, placeId: placeId },
           context: {
             headers: {
               Authorization: jwtBearer
             }
           },
           refetchQueries: [
-            { query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } },
+            { query: GET_PHOTOS, variables: { url: data.secure_url, placeId: placeId } },
             {
               query: GET_USER, variables: { userId: tokenAndIdData.userId }, context: {
                 headers: {
@@ -233,14 +273,14 @@ const PlaceDetailScreen = (props) => {
       }).then(async r => {
         const data = await r.json()
         addPhoto({
-          variables: { url: data.secure_url, placeId: place.id },
+          variables: { url: data.secure_url, placeId: placeId },
           context: {
             headers: {
               // Set the token dynamically from cache. 
               Authorization: jwtBearer
             }
           },
-          refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: place.id } }]
+          refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: placeId } }]
         })
 
         // return data.secure_url
@@ -333,6 +373,7 @@ const PlaceDetailScreen = (props) => {
    */
 
   return (
+    !placeLoading &&
     <View>
       <View style={styles.modalContainer}>
         <Modal
@@ -505,7 +546,7 @@ const PlaceDetailScreen = (props) => {
         <View style={styles.moreReviewsButtonContainer}>
           <CustomButton width='50%' title={i18n.t('SeeAllReviews')} color={TourTourColors.primary} onPress={() => {
             props.navigation.navigate('ReviewsList', {
-              placeId: place.id,
+              placeId: placeId,
               loggedInUserId: loggedInUserId
             })
           }} />
