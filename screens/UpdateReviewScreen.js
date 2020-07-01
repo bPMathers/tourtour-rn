@@ -48,8 +48,13 @@ const UpdateReviewScreen = (props) => {
   const [updateReview] = useMutation(UPDATE_REVIEW)
 
   const DELETE_REVIEW = gql`
-    mutation($id: ID!) {
-      deleteReview(id: $id) {
+    mutation($id: ID!, $rating: Float!, $placeId: String!) {
+      deleteReview(
+        id: $id, 
+        data: {
+        rating: $rating
+        placeId: $placeId
+      }) {
         id
       }
     }
@@ -81,7 +86,11 @@ const UpdateReviewScreen = (props) => {
 
   const onDeleteHandler = () => {
     deleteReview({
-      variables: { id: review.id },
+      variables: {
+        id: review.id,
+        rating: review.rating,
+        placeId: place.id
+      },
       refetchQueries: [
         { query: GET_REVIEWS, variables: { placeId: place.id } },
         {
