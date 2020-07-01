@@ -287,6 +287,8 @@ const PlaceDetailScreen = (props) => {
     setScrollY(e.nativeEvent.contentOffset.y)
   }
 
+
+
   /**
    * NAV
    */

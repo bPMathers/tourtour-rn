@@ -7,11 +7,19 @@ import i18n from 'i18n-js'
 import { Ionicons, AntDesign } from '@expo/vector-icons'
 
 import { TourTourColors } from '../constants/Colors'
-import FeaturedPhoto from './FeaturedPhoto';
+import { GET_TOKEN_AND_USER_ID } from '../graphql/queries'
+
 
 const FeaturedPhotosGroup = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState({ addedBy: '' })
+
+  /**
+   * GRAPHQL
+   */
+
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
+  const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
 
   const GET_PHOTOS = gql`
     query($placeId: String) {
@@ -26,11 +34,26 @@ const FeaturedPhotosGroup = (props) => {
     }
   `;
 
-  const { loading, error, data } = useQuery(GET_PHOTOS, {
+  const { loading, error, data, refetch } = useQuery(GET_PHOTOS, {
     variables: {
       placeId: props.place.id,
     },
   });
+
+  const DELETE_PHOTO = gql`
+    mutation($id: ID!) {
+      deletePhoto(id: $id){
+        id 
+      }
+    }
+  `;
+  const [deletePhoto] = useMutation(DELETE_PHOTO, {
+    onCompleted: () => refetch()
+  })
+
+  /**
+   * HELPERS
+   */
 
   const handleOnUserProfileSelect = () => {
     setModalVisible(false)
@@ -50,6 +73,18 @@ const FeaturedPhotosGroup = (props) => {
     )
   }
 
+  const confirmDeletePhoto = () => {
+    deletePhoto({
+      variables: { id: selectedPhoto.id },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      }
+    })
+    setModalVisible(false)
+  }
+
   const renderGridItem = (itemData) => {
 
     return (
@@ -66,6 +101,10 @@ const FeaturedPhotosGroup = (props) => {
       </View>
     );
   };
+
+  /**
+   * RETURN
+   */
 
   if (loading)
     return (

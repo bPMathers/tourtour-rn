@@ -27,7 +27,7 @@ const MyPhotoCard = ({ itemData }) => {
 const MyPhotosListScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState({ addedBy: '' })
-  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const { loading: photosLoading, error: photosError, data: photosData } = useQuery(GET_MY_PHOTOS, {
     context: {
