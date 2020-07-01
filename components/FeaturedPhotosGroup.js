@@ -21,35 +21,36 @@ const FeaturedPhotosGroup = (props) => {
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
 
-  const GET_PHOTOS = gql`
-    query($placeId: String) {
-      photos(query: $placeId) {
-        id
-        url
-        addedBy {
-          id
-          name
-        }
-      }
-    }
-  `;
+  // const GET_PHOTOS = gql`
+  //   query($placeId: String, $orderBy: PhotoOrderByInput) {
+  //     photos(query: $placeId, orderBy: $orderBy) {
+  //       id
+  //       url
+  //       addedBy {
+  //         id
+  //         name
+  //       }
+  //     }
+  //   }
+  // `;
 
-  const { loading, error, data, refetch } = useQuery(GET_PHOTOS, {
-    variables: {
-      placeId: props.place.id,
-    },
-  });
+  // const { loading, error, data, refetch } = useQuery(GET_PHOTOS, {
+  //   variables: {
+  //     placeId: props.place.id,
+  //     orderBy: "createdAt_DESC"
+  //   },
+  // });
 
-  const DELETE_PHOTO = gql`
-    mutation($id: ID!) {
-      deletePhoto(id: $id){
-        id 
-      }
-    }
-  `;
-  const [deletePhoto] = useMutation(DELETE_PHOTO, {
-    onCompleted: () => refetch()
-  })
+  // const DELETE_PHOTO = gql`
+  //   mutation($id: ID!) {
+  //     deletePhoto(id: $id){
+  //       id 
+  //     }
+  //   }
+  // `;
+  // const [deletePhoto] = useMutation(DELETE_PHOTO, {
+  //   onCompleted: () => refetch()
+  // })
 
   /**
    * HELPERS
@@ -74,14 +75,7 @@ const FeaturedPhotosGroup = (props) => {
   }
 
   const confirmDeletePhoto = () => {
-    deletePhoto({
-      variables: { id: selectedPhoto.id },
-      context: {
-        headers: {
-          Authorization: jwtBearer
-        }
-      }
-    })
+    props.onConfirmDeletePhoto(selectedPhoto.id)
     setModalVisible(false)
   }
 
@@ -105,19 +99,6 @@ const FeaturedPhotosGroup = (props) => {
   /**
    * RETURN
    */
-
-  if (loading)
-    return (
-      <View style={styles.metaStateContainer}>
-        <ActivityIndicator size="large" color={TourTourColors.accent} />
-      </View>
-    );
-  if (error)
-    return (
-      <View style={styles.metaStateContainer}>
-        <Text>Error...</Text>
-      </View>
-    );
 
   return (
     <View>
@@ -164,7 +145,7 @@ const FeaturedPhotosGroup = (props) => {
       </View>
 
       <View style={styles.container}>
-        <FlatList data={data.photos.reverse()} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
+        <FlatList data={props.photos} renderItem={renderGridItem} horizontal={true} ItemSeparatorComponent={() => <View style={{ margin: 1 }} />} />
       </View>
     </View>
   );

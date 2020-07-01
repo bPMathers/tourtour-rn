@@ -32,6 +32,7 @@ import FeaturedPhotosGroup from '../components/FeaturedPhotosGroup'
 import ReviewCard from '../components/ReviewCard'
 import StarRating from '../components/StarRating'
 import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS, GET_PLACE } from '../graphql/queries'
+import FadeInView from '../components/FadeInView';
 
 const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
   if (reviewsLoading) {
@@ -62,6 +63,7 @@ const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsDat
 const PlaceDetailScreen = (props) => {
   const place = props.route.params.place;
   const [modalVisible, setModalVisible] = useState(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   // const { data: placeData, refetch } = useQuery(GET_PLACE, { variables: { placeId: place.id } });
@@ -72,8 +74,8 @@ const PlaceDetailScreen = (props) => {
   const loggedInUserId = tokenAndIdData?.userId
 
   const GET_PHOTOS = gql`
-    query($placeId: String) {
-      photos(query: $placeId) {
+    query($placeId: String, $orderBy: PhotoOrderByInput) {
+      photos(query: $placeId, orderBy: $orderBy) {
         id
         url
         place {
@@ -86,6 +88,13 @@ const PlaceDetailScreen = (props) => {
       }
     }
   `;
+
+  const { loading: photosLoading, error: photosError, data: photosData, refetch: refetchPhotos } = useQuery(GET_PHOTOS, {
+    variables: {
+      placeId: place.id,
+      orderBy: "createdAt_DESC"
+    },
+  });
 
   const ADD_PHOTO = gql`
     mutation($url: String!, $placeId: String!) {
@@ -102,7 +111,23 @@ const PlaceDetailScreen = (props) => {
     }
   `;
 
-  const [addPhoto, { data }] = useMutation(ADD_PHOTO)
+  const [addPhoto, { data }] = useMutation(ADD_PHOTO, {
+    onCompleted: () => {
+      setPhotoUploading(false)
+      refetchPhotos()
+    }
+  })
+
+  const DELETE_PHOTO = gql`
+    mutation($id: ID!) {
+      deletePhoto(id: $id){
+        id 
+      }
+    }
+  `;
+  const [deletePhoto] = useMutation(DELETE_PHOTO, {
+    onCompleted: () => refetchPhotos()
+  })
 
   const openImagePickerAsync = async () => {
     const permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -163,6 +188,7 @@ const PlaceDetailScreen = (props) => {
             },
           ]
         })
+        setPhotoUploading(true)
 
         return data.secure_url
       }).catch(err => console.log(err))
@@ -287,7 +313,16 @@ const PlaceDetailScreen = (props) => {
     setScrollY(e.nativeEvent.contentOffset.y)
   }
 
-
+  const handleConfirmDeletePhoto = (selectedPhotoId) => {
+    deletePhoto({
+      variables: { id: selectedPhotoId },
+      context: {
+        headers: {
+          Authorization: jwtBearer
+        }
+      }
+    })
+  }
 
   /**
    * NAV
@@ -444,7 +479,10 @@ const PlaceDetailScreen = (props) => {
             </View>
           </TouchableOpacity>
         </View>
-        <FeaturedPhotosGroup place={place} navigation={props.navigation} loggedInUserId={loggedInUserId} />
+        {photoUploading || photosLoading ? <ActivityIndicator size="large" color={TourTourColors.accent} /> :
+          <FadeInView>
+            <FeaturedPhotosGroup place={place} photos={photosData?.photos} navigation={props.navigation} loggedInUserId={loggedInUserId} onConfirmDeletePhoto={handleConfirmDeletePhoto} />
+          </FadeInView>}
         <View style={styles.reviewsHeaderRow}>
           <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
           <View>
