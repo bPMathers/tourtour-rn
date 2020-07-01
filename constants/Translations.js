@@ -18,7 +18,7 @@ const Translations = {
     // Page names
     UpdateReview: 'Update Review',
     UpdatePlace: 'Update Place',
-    ChooseLocation: 'ChooseLocation',
+    ChooseLocation: 'Choose Location',
     Categories: 'Categories',
     AddPlace: 'Add Place',
 

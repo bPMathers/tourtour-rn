@@ -16,6 +16,7 @@ const MapScreen = (props) => {
         <Ionicons name='ios-save' size={28} color='white' />
       </TouchableOpacity>
     ),
+
   });
 
 
@@ -48,10 +49,6 @@ const MapScreen = (props) => {
       lng: event.nativeEvent.coordinate.longitude,
     })
   }
-
-  // const handleOnRegionChangeComplete = (region) => {
-  //   setMapRgn(region)
-  // }
 
   let markerCoordinates
 

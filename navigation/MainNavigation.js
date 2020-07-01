@@ -113,6 +113,7 @@ function UserStackScreen() {
         component={MapForPlaceUpdateScreen}
         options={{
           title: i18n.t('ChooseLocation'),
+          gestureEnabled: false
         }}
       />
     </UserStack.Navigator>
@@ -184,6 +185,7 @@ function HomeStackScreen() {
         component={MapScreen}
         options={{
           title: i18n.t('ChooseLocation'),
+          gestureEnabled: false
         }}
       />
       <HomeStack.Screen
@@ -191,6 +193,7 @@ function HomeStackScreen() {
         component={MapScreen2}
         options={{
           title: i18n.t('ChooseLocation'),
+          gestureEnabled: false
         }}
       />
       <HomeStack.Screen
@@ -233,6 +236,7 @@ function HomeStackScreen() {
         component={MapForPlaceUpdateScreen}
         options={{
           title: i18n.t('ChooseLocation'),
+          gestureEnabled: false
         }}
       />
     </HomeStack.Navigator>
