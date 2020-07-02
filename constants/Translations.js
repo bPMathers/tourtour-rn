@@ -74,6 +74,7 @@ const Translations = {
     Website: 'Website',
     SeeAllReviews: 'See All Reviews',
     ReviewsFor: 'Reviews for',
+    UndefinedPhone: "Phone # is undefined",
 
     // Review Update
     YourImpressions: 'Update your opinion on',
@@ -178,6 +179,7 @@ const Translations = {
     Website: 'Site Web',
     SeeAllReviews: 'Voir toutes les reviews',
     ReviewsFor: 'Reviews sur',
+    UndefinedPhone: "#Tel non défini",
 
     // Review Update
     YourImpressions: 'Mettre à jour vos impressions sur',

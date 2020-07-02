@@ -57,7 +57,7 @@ const PlacePreviewListItem = (props) => {
                 <View style={styles.leftRow3}>
                   <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
                   <View>
-                    <Text style={styles.phone}>{place.phone ? place.phone : "#Tel non défini"}</Text>
+                    <Text style={styles.phone}>{place.phone ? place.phone : i18n.t('UndefinedPhone')}</Text>
                   </View>
                 </View>
               </View>
@@ -79,7 +79,7 @@ const PlacePreviewListItem = (props) => {
                   <StarRating color='white' rating={place.avgRating} />
                 </View>
                 <View style={styles.rightRow2}>
-                  <Text style={styles.reviewCount}>{place.review_count} reviews</Text>
+                  <Text style={styles.reviewCount}>{place.review_count} {place.review_count === 1 ? "review" : "reviews"}</Text>
                 </View>
               </View>
               <View>

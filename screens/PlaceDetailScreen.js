@@ -450,7 +450,7 @@ const PlaceDetailScreen = (props) => {
                   <View style={styles.phoneRow}>
                     <FontAwesome name='phone' size={14} color='white' style={{ marginRight: 5 }} />
                     <View>
-                      <Text style={styles.phone}>{place.phone ? place.phone : "--- numéro non défini ---"}</Text>
+                      <Text style={styles.phone}>{place.phone ? place.phone : i18n.t('UndefinedPhone')}</Text>
                     </View>
                   </View>
                   <View>
@@ -540,7 +540,7 @@ const PlaceDetailScreen = (props) => {
             <StarRating color={TourTourColors.accent} rating={place.avgRating ?? 0} />
             <View>
               <Text style={{ textAlign: 'right', color: TourTourColors.accent, fontSize: 12 }}>
-                {place.review_count} reviews
+                {place.review_count} {place.review_count === 1 ? "review" : "reviews"}
               </Text>
             </View>
           </View>
