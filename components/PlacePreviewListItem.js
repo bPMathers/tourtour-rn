@@ -66,7 +66,7 @@ const PlacePreviewListItem = (props) => {
                   <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
                   <TouchableOpacity onPress={props.onSelectUserProfile}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                      {place.addedBy.id === props.loggedInUserId ? i18n.t('You') : place.addedBy.name}
+                      {place.addedBy.name}
                     </Text>
                   </TouchableOpacity>
                 </View>
