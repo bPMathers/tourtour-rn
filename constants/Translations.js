@@ -97,6 +97,7 @@ const Translations = {
     NameChangeAlert: 'Are you sure you want to change your name for: ',
     YourNewName: 'Your New Name',
     YourNewStatus: 'Your New Status',
+    NoStatus: "No status at the moment",
 
     // Location
     UseMyLocation: 'Use My Location',
@@ -202,6 +203,7 @@ const Translations = {
     NameChangeAlert: 'Êtes-vous certain(e) de vouloir changer votre nom pour: ',
     YourNewName: 'Votre nouveau nom',
     YourNewStatus: 'Votre nouveau statut',
+    NoStatus: "Aucun statut pour le moment",
 
     // Location
     UseMyLocation: 'Utiliser ma location',

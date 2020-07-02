@@ -28,10 +28,10 @@ export default function App(props) {
   // Could we use Apollo Link Context to set JWT token on the context of each request ?
   const client = new ApolloClient({
     //local IP adress  may change. find a way to fetch it dynamically?
-    uri: 'http://192.168.100.142:4000/',
+    // uri: 'http://192.168.100.142:4000/',
 
     // Production NodeJS app on Heroku
-    // uri: 'https://frozen-caverns-07163.herokuapp.com/',
+    uri: 'https://frozen-caverns-07163.herokuapp.com/',
     cache,
     resolvers: {},
   });

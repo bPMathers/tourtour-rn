@@ -378,7 +378,7 @@ const UserEditScreen = (props) => {
                 }}>
                   <FontAwesome5 name='pencil-alt' size={12} color={TourTourColors.accent} />
                 </TouchableOpacity>
-                <Text style={styles.userStatus}>{userStatus}</Text>
+                <Text style={styles.userStatus}>{userStatus === 'NoStatus' ? i18n.t('NoStatus') : userStatus}</Text>
               </>
             }
           </View>
