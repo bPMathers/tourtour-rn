@@ -20,16 +20,16 @@ const CategorySearchScreen = (props) => {
    * HOOKS
    */
 
-  const { data: tokenAndIdData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
+  const loggedInUserId = tokenAndIdData?.userId
   const { loading: searchLocLoading, error: searchLocError, data: searchLocData, refetch } = useQuery(GET_SEARCH_LOCATION)
-  const { loading: myLocLoading, error: myLocError, data: myLocData } = useQuery(GET_MY_LOCATION)
+  // const { loading: myLocLoading, error: myLocError, data: myLocData } = useQuery(GET_MY_LOCATION)
   const { loading, error, data } = useQuery(GET_CAT_PLACES, {
     variables: {
       catId: props.route.params.categoryId,
     },
   });
   const client = useApolloClient();
-  // city is set from cache, so it seems to always be set before component loads, thus never being null or undefined when needed... but keep an eye on this, not 100% sure of data availability flow.
   const [city, setCity] = useState(searchLocData.searchLocCity);
   const [errorMsg, setErrorMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -135,7 +135,7 @@ const CategorySearchScreen = (props) => {
   const renderGridItem = (itemData) => {
     return (
       <PlacePreviewListItem
-        loggedInUserId={tokenAndIdData?.userId}
+        loggedInUserId={loggedInUserId}
         place={itemData.item}
         onSelectUserProfile={() => {
           props.navigation.navigate('UserProfile', {
