@@ -49,7 +49,10 @@ const CreateReview = (props) => {
   `;
 
   const [createReview] = useMutation(CREATE_REVIEW, {
-    onCompleted: () => props.refetchReviews()
+    onCompleted: () => props.refetchReviews(),
+    refetchQueries: [
+      { query: GET_PLACE, variables: { placeId: place.id } },
+    ],
   })
 
 

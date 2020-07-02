@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -31,7 +31,13 @@ import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS } from '../
 import FadeInView from '../components/FadeInView';
 import { useRoute } from '@react-navigation/native';
 
-const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId }) => {
+const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId, refetch }) => {
+  // console.log(reviewsData?.reviews?.length)
+
+  // useEffect(() => {
+  //   refetch
+  // }, [reviewsData?.reviews])
+
   if (reviewsLoading) {
     return (
       <View style={styles.metaStateContainer}>
@@ -47,6 +53,7 @@ const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsDat
     );
 
   return (
+    !reviewsLoading &&
     reviewsData.reviews.map((review) => {
       return (
         <View key={review.id} style={styles.reviewCardContainer} >
@@ -61,6 +68,8 @@ const PlaceDetailScreen = (props) => {
   /**
    * HOOKS & VARIABLES
    */
+  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
+
 
   const route = useRoute()
   const placeId = route.params.placeId
@@ -101,14 +110,13 @@ const PlaceDetailScreen = (props) => {
   }
 `;
 
-  const { loading: placeLoading, error: placeError, data: placeData, refetch: refetchPlace } = useQuery(GET_PLACE, {
+  const { loading: placeLoading, error: placeError, data: placeData } = useQuery(GET_PLACE, {
     variables: {
       placeId: placeId,
     },
   });
   const place = placeData?.place
 
-  const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: { placeId: placeId, orderBy: "updatedAt_DESC", first: 10 },
   });
@@ -169,6 +177,7 @@ const PlaceDetailScreen = (props) => {
     onCompleted: () => refetchPhotos()
   })
 
+
   /**
    * HELPERS
    */
@@ -183,7 +192,7 @@ const PlaceDetailScreen = (props) => {
 
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 0.5,
       base64: true
     });
@@ -249,7 +258,7 @@ const PlaceDetailScreen = (props) => {
 
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 0.5,
       base64: true
     });
@@ -523,7 +532,10 @@ const PlaceDetailScreen = (props) => {
             <FeaturedPhotosGroup place={place} photos={photosData?.photos} navigation={props.navigation} loggedInUserId={loggedInUserId} onConfirmDeletePhoto={handleConfirmDeletePhoto} />
           </FadeInView>}
         <View style={styles.reviewsHeaderRow}>
-          <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.reviewsHeaderRowTitle}>Reviews</Text>
+            <TouchableOpacity onPress={() => refetch()}><Ionicons name="md-refresh" size={30} color={TourTourColors.accent} /></TouchableOpacity>
+          </View>
           <View>
             <StarRating color={TourTourColors.accent} rating={place.avgRating ?? 0} />
             <View>
@@ -541,6 +553,7 @@ const PlaceDetailScreen = (props) => {
             reviewsLoading={reviewsLoading}
             reviewsError={reviewsError}
             loggedInUserId={loggedInUserId}
+            refetch={() => refetch()}
           />
         </View>
         <View style={styles.moreReviewsButtonContainer}>

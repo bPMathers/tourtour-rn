@@ -6,12 +6,13 @@ import i18n from 'i18n-js'
 
 import { TourTourColors } from '../constants/Colors'
 import SwipeableRating from 'react-native-swipeable-rating';
-import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_MY_REVIEWS, GET_USER, GET_PLACES } from '../graphql/queries'
+import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_MY_REVIEWS, GET_USER, GET_PLACE } from '../graphql/queries'
 import CustomButton from '../components/CustomButton';
 
 
 const UpdateReviewScreen = (props) => {
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
+  // const { data: placeData } = useQuery(GET_PLACE)
   const jwtBearer = "".concat("Bearer ", tokenAndIdData.token).replace(/\"/g, "")
   /**
    * VARIABLES
@@ -60,7 +61,7 @@ const UpdateReviewScreen = (props) => {
     }
   `;
 
-  const [deleteReview, { data: deleteData }] = useMutation(DELETE_REVIEW)
+  const [deleteReview] = useMutation(DELETE_REVIEW)
 
   /**
    * HELPERS
@@ -72,7 +73,7 @@ const UpdateReviewScreen = (props) => {
       variables: { body: body, placeId: place.id, rating: rating, id: review.id },
       refetchQueries: [
         { query: GET_REVIEWS, variables: { placeId: place.id } },
-        // { query: GET_PLACES, variables: { placeId: place.category.id } },
+        { query: GET_PLACE, variables: { placeId: place.id } },
       ],
       context: {
         headers: {
@@ -93,6 +94,7 @@ const UpdateReviewScreen = (props) => {
       },
       refetchQueries: [
         { query: GET_REVIEWS, variables: { placeId: place.id } },
+        { query: GET_PLACE, variables: { placeId: place.id } },
         {
           query: GET_MY_REVIEWS,
           context: {
@@ -111,7 +113,7 @@ const UpdateReviewScreen = (props) => {
               Authorization: jwtBearer
             }
           },
-        }
+        },
       ],
       context: {
         headers: {
