@@ -41,7 +41,9 @@ export const HomeSearchScreen = (props) => {
   if (loading)
     return (
       <View style={styles.metaStateContainer}>
-        <ActivityIndicator size="large" color={TourTourColors.accent} />
+        <View style={styles.animationContainer}>
+          <Animation />
+        </View>
       </View>
     );
   if (error)
@@ -90,16 +92,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: TourTourColors.accent,
 
   },
   animationContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: TourTourColors.accent,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 45,
     paddingBottom: 20,
     marginBottom: 3,
-    backgroundColor: TourTourColors.accent,
   },
   searchInput: {
     flex: 1,

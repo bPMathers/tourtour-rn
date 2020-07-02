@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import jwt from 'jwt-decode'
 import i18n from 'i18n-js'
+import Animation from '../components/Animation';
 
 import { TourTourColors } from '../constants/Colors'
 import CustomButton from '../components/CustomButton'
@@ -154,6 +155,9 @@ const AuthScreen = (props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'position'} keyboardVerticalOffset={Platform.OS === 'android' ? 0 : 50}>
+        <View style={styles.animationContainer}>
+          <Animation width={150} height={150} />
+        </View>
         {isSigningUp &&
           <View>
             <Text style={styles.label}>Nom</Text>
@@ -217,8 +221,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: TourTourColors.accent,
   },
+  animationContainer: {
+    backgroundColor: TourTourColors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 0,
+    paddingBottom: 20,
+    marginBottom: 3,
+  },
   formInput: {
     minWidth: '80%',
+    borderRadius: 8,
     borderWidth: 2,
     borderColor: 'white',
     padding: 10,
