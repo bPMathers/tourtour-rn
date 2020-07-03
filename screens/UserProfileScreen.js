@@ -157,7 +157,9 @@ const UserProfileScreen = (props) => {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {
-                        props.navigation.navigate('UserPlaces')
+                        props.navigation.navigate('UserPlaces', {
+                            userId: data.user.id
+                        })
                     }}>
                         <View style={styles.row}>
                             <View style={styles.rowLeftGroup}>

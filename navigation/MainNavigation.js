@@ -178,7 +178,7 @@ function HomeStackScreen() {
         name='UserPlaces'
         component={UserPlacesListScreen}
         options={({ route }) => ({
-          title: i18n.t('MyPlaces'),
+          title: i18n.t('UserPlaces'),
         })}
       />
       <HomeStack.Screen

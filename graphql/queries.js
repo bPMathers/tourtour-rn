@@ -184,6 +184,32 @@ const GET_MY_PLACES = gql`
     }
   }
 `;
+const GET_USER_PLACES = gql`
+  query($userId: ID) {
+    places(userId: $userId) {
+        id
+        name
+        url
+        phone
+        review_count
+        imageUrl
+        category {
+          id
+        }
+        lat
+        lng
+        formatted_address
+        google_place_id
+        addedBy {
+          id
+          name
+        }
+        avgRating
+        createdAt
+        updatedAt
+    }
+  }
+`;
 
 const GET_MY_PHOTOS = gql`
   query {
@@ -274,6 +300,7 @@ export {
   GET_MY_REVIEWS,
   GET_MY_PHOTOS,
   GET_MY_PLACES,
+  GET_USER_PLACES,
   GET_USER,
   GET_USER_PHOTOS
 

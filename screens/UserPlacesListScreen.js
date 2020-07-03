@@ -4,18 +4,21 @@ import { useQuery } from '@apollo/react-hooks'
 
 import { TourTourColors } from '../constants/Colors'
 import PlacePreviewListItem from '../components/PlacePreviewListItem'
-import { GET_MY_PLACES, GET_TOKEN } from '../graphql/queries'
+import { GET_USER_PLACES, GET_TOKEN } from '../graphql/queries'
 
-const MyPlacesScreen = (props) => {
+const UserPlacesScreen = (props) => {
   const { data: tokenData } = useQuery(GET_TOKEN);
   const jwtBearer = "".concat("Bearer ", tokenData?.token).replace(/\"/g, "")
-  const { data: myPlacesData, loading, error } = useQuery(GET_MY_PLACES, {
+  const { data: userPlacesData, loading, error } = useQuery(GET_USER_PLACES, {
     context: {
       headers: {
         // Set the token dynamically from cache. 
         Authorization: jwtBearer
       }
     },
+    variables: {
+      userId: props.route.params.userId
+    }
   })
 
   const renderListItem = ({ item }) => {
@@ -39,7 +42,7 @@ const MyPlacesScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={myPlacesData.myPlaces} renderItem={renderListItem} />
+      <FlatList data={userPlacesData.places} renderItem={renderListItem} />
     </View>
   );
 }
@@ -56,4 +59,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MyPlacesScreen;
+export default UserPlacesScreen;

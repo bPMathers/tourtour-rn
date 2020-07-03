@@ -21,6 +21,7 @@ const Translations = {
     ChooseLocation: 'Choose Location',
     Categories: 'Categories',
     AddPlace: 'Add Place',
+    UserPlaces: 'User Places',
 
 
     // Category Names
@@ -139,6 +140,7 @@ const Translations = {
     ChooseLocation: 'Choisir Location',
     Categories: 'Catégories',
     AddPlace: 'Ajouter un endroit',
+    UserPlaces: 'Places',
 
 
     // Category Names
