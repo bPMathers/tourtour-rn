@@ -129,7 +129,7 @@ const ReviewsListScreen = (props) => {
         <ActivityIndicator size="large" color={TourTourColors.accent} /></View> :
         <>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
-            <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>{i18n.t('ReviewsFor')}:  {reviewsData?.reviews[0]?.place?.name}</Text>
+            <Text style={{ color: TourTourColors.accent, fontWeight: 'bold' }}>{i18n.t('ReviewsFor')}:  {props.route?.params?.placeName}</Text>
           </View>
           <FlatList data={reviewsData.reviews} renderItem={renderGridItem} ItemSeparatorComponent={() => <View style={{ margin: 4 }} />} />
         </>

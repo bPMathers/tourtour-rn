@@ -560,6 +560,7 @@ const PlaceDetailScreen = (props) => {
           <CustomButton width='50%' title={i18n.t('SeeAllReviews')} color={TourTourColors.primary} onPress={() => {
             props.navigation.navigate('ReviewsList', {
               placeId: placeId,
+              placeName: place.name,
               loggedInUserId: loggedInUserId
             })
           }} />
