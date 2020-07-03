@@ -20,7 +20,7 @@ const renderGridItem = (itemData) => {
 
 const ReviewsListScreen = (props) => {
   const [orderBy, setOrderBy] = useState("updatedAt_DESC")
-  const [orderByText, setOrderByText] = useState("Plus récentes")
+  const [orderByText, setOrderByText] = useState(i18n.t('MostRecent'))
   const [modalVisible, setModalVisible] = useState(false)
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -78,32 +78,32 @@ const ReviewsListScreen = (props) => {
         }}>
           <View style={styles.pickerContainer}>
             <View style={{ paddingVertical: 10, borderBottomColor: 'white', borderBottomWidth: StyleSheet.hairlineWidth, alignItems: 'center' }}>
-              <Text style={{ color: 'white' }}>Trier par</Text>
+              <Text style={{ color: 'white' }}>{i18n.t('OrderBy')}: </Text>
             </View>
             <View style={styles.pickerItem}>
-              <TouchableOpacity onPress={() => { handleOrderBy("updatedAt_DESC"); setOrderByText("Plus récentes") }}>
-                <Text style={styles.pickerItemText}>Plus récentes</Text>
+              <TouchableOpacity onPress={() => { handleOrderBy("updatedAt_DESC"); setOrderByText(i18n.t('MostRecent')) }}>
+                <Text style={styles.pickerItemText}>{i18n.t('MostRecent')}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.pickerItem}>
-              <TouchableOpacity onPress={() => { handleOrderBy("updatedAt_ASC"); setOrderByText("Moins récentes") }}>
-                <Text style={styles.pickerItemText}>Moins récentes</Text>
+              <TouchableOpacity onPress={() => { handleOrderBy("updatedAt_ASC"); setOrderByText(i18n.t('LeastRecent')) }}>
+                <Text style={styles.pickerItemText}>{i18n.t('LeastRecent')}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.pickerItem}>
-              <TouchableOpacity onPress={() => { handleOrderBy("rating_DESC"); setOrderByText("Meilleure cote") }}>
-                <Text style={styles.pickerItemText}>Meilleure cote</Text>
+              <TouchableOpacity onPress={() => { handleOrderBy("rating_DESC"); setOrderByText(i18n.t('BestRating')) }}>
+                <Text style={styles.pickerItemText}>{i18n.t('BestRating')}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.pickerLastItem}>
-              <TouchableOpacity onPress={() => { handleOrderBy("rating_ASC"); setOrderByText("Pire cote") }}>
-                <Text style={styles.pickerItemText}>Pire cote</Text>
+              <TouchableOpacity onPress={() => { handleOrderBy("rating_ASC"); setOrderByText(i18n.t('WorstRating')) }}>
+                <Text style={styles.pickerItemText}>{i18n.t('WorstRating')}</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.cancelPickerButton}>
             <TouchableOpacity onPress={() => { setModalVisible(false) }} >
-              <Text style={styles.pickerItemText}>Annuler</Text>
+              <Text style={styles.pickerItemText}>{i18n.t('Cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -115,7 +115,7 @@ const ReviewsListScreen = (props) => {
             style={styles.searchInput}
             onChangeText={(text) => setSearchInput(text)}
             value={searchInput}
-            placeholder='Rechercher (min. 2 lettres)'
+            placeholder={`${i18n.t('Search')} ${i18n.t('Min2Char')}`}
             autoCapitalize='none'
           />
         </View>

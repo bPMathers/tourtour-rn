@@ -52,6 +52,9 @@ const Translations = {
     Select: 'Select',
     Or: 'or',
     You: 'You',
+    Search: 'Search',
+    Min2Char: 'min. 2 char.',
+    OrderBy: 'Order by',
 
     // Add / Edit Place
     Name: 'Name',
@@ -79,6 +82,13 @@ const Translations = {
     // Review Update
     YourImpressions: 'Update your opinion on',
     ReviewDeleteConfirmAlert: 'Are you sure you want to delete this review?',
+
+
+    // Reviews List
+    BestRating: 'Best Rating',
+    WorstRating: 'Worst Rating',
+    MostRecent: 'Most Recent',
+    LeastRecent: 'Least Recent',
 
     // Photo
     NewPhoto: 'New Photo',
@@ -157,6 +167,9 @@ const Translations = {
     Select: 'Choisir',
     Or: 'ou',
     You: 'Vous',
+    Search: 'Rechercher',
+    Min2Char: 'min. 2 lettres',
+    OrderBy: 'Classer par',
 
 
     // Add / Edit Place
@@ -185,6 +198,12 @@ const Translations = {
     // Review Update
     YourImpressions: 'Mettre à jour vos impressions sur',
     ReviewDeleteConfirmAlert: "Êtes-vous certain(e) de vouloir supprimer ce review ?",
+
+    // Reviews List
+    BestRating: 'Meilleure cote',
+    WorstRating: 'Pire cote',
+    MostRecent: 'Plus récente',
+    LeastRecent: 'Moins récente',
 
     // Photo
     NewPhoto: 'Nouvelle photo',
