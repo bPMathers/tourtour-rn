@@ -32,7 +32,7 @@ const AuthScreen = (props) => {
         }
       }
   `;
-  const [login, { data, client, error }] = useMutation(LOGIN)
+  const [login, { data, client, error: loginError }] = useMutation(LOGIN)
 
   const CREATE_USER = gql`
     mutation($name: String!, $email: String!, $password: String!) {
@@ -51,7 +51,7 @@ const AuthScreen = (props) => {
       }
   `;
 
-  const [createUser, { data: createUserData }] = useMutation(CREATE_USER)
+  const [createUser, { data: createUserData, error: signupError }] = useMutation(CREATE_USER)
 
   let token = data?.loginUser?.token
 
@@ -118,30 +118,48 @@ const AuthScreen = (props) => {
     }).catch(res => {
       console.log(`Error: ${res}`)
     })
-    setIsSigningUp(false)
+    // setIsSigningUp(false)
   }
 
   const handleSignUp = () => {
+    setEmail('')
+    setPw('')
     setIsSigningUp(true)
   }
 
-  let ErrorContainer = () => {
+
+  let LoginErrorContainer = () => {
     return <View></View>
   }
 
-  if (error && !isSigningUp) {
-    ErrorContainer = () => {
+
+  if (loginError && !isSigningUp) {
+    LoginErrorContainer = () => {
       return (
         <View>
-          {error.graphQLErrors.map(({ message }, i) => (
+          {loginError.graphQLErrors.map(({ message }, i) => (
             <Text style={styles.errorMsgs} key={i}>{i18n.t(message)}</Text>
           ))}
         </View>
-
       )
     }
   }
 
+  let SignupErrorContainer = () => {
+    return <View></View>
+  }
+
+  if (signupError && isSigningUp) {
+    SignupErrorContainer = () => {
+      return (
+        <View>
+          {signupError.graphQLErrors.map(({ message }, i) => (
+            <Text style={styles.errorMsgs} key={i}>{i18n.t(message)}</Text>
+          ))}
+        </View>
+      )
+    }
+  }
 
 
   return (
@@ -180,7 +198,8 @@ const AuthScreen = (props) => {
           onChangeText={pw => setPw(pw)}
           value={pw}
         />
-        <ErrorContainer />
+        <LoginErrorContainer />
+        <SignupErrorContainer />
         {!isSigningUp &&
           <View>
             <CustomButton title={i18n.t('Login')} onPress={handleLoginSubmit} color={TourTourColors.primary} />

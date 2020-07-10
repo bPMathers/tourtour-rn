@@ -9,6 +9,8 @@ const Translations = {
     SignUp: 'SignUp',
     Password: 'Password',
     BadCredsError: 'Wrong username and/or password',
+    EmailTakenError: 'A user with this email already exists',
+    PasswordTooShortError: 'Password must have at least 8 characters',
 
     // Tab Bar Navigation
     Find: 'Find',
@@ -128,6 +130,8 @@ const Translations = {
     SignUp: 'Créer un compte',
     Password: 'Mot de passe',
     BadCredsError: "Mauvais nom d'usager et/ou mot de passe",
+    EmailTakenError: 'Cette adresse email est déjà prise par un usager',
+    PasswordTooShortError: 'Password must have at least 8 characters',
 
     // Tab Bar Navigation
     Find: 'Trouver',
