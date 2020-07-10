@@ -47,7 +47,12 @@ const UpdateReviewScreen = (props) => {
     }
   `;
 
-  const [deleteReview] = useMutation(DELETE_REVIEW)
+  const [deleteReview] = useMutation(DELETE_REVIEW, {
+    onCompleted: () => {
+      props.navigation.goBack()
+
+    }
+  })
 
   /**
    * HELPERS
@@ -107,7 +112,6 @@ const UpdateReviewScreen = (props) => {
         }
       },
     })
-    props.navigation.goBack()
 
   }
 

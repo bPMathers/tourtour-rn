@@ -20,6 +20,8 @@ import { gql } from 'apollo-boost';
 import TimeAgo from 'react-native-timeago';
 import { Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import i18n from 'i18n-js'
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+
 
 import CreateReview from '../components/CreateReview'
 import { TourTourColors } from '../constants/Colors'
@@ -65,6 +67,11 @@ const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsDat
 
 
 const PlaceDetailScreen = (props) => {
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  // console.log(isFocused)
+
+
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
 
   const route = useRoute()
@@ -113,6 +120,15 @@ const PlaceDetailScreen = (props) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
     variables: { placeId: placeId, orderBy: "updatedAt_DESC", first: 10 },
   });
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch()
+      console.log('refetch')
+    }
+  }, [isFocused])
+  // console.log(reviewsData.reviews)
+  console.log(`reviewsLoading: ${reviewsLoading}`)
 
   const GET_PHOTOS = gql`
     query($placeId: String, $orderBy: PhotoOrderByInput) {
@@ -539,7 +555,7 @@ const PlaceDetailScreen = (props) => {
           </View>
         </View>
         <View style={styles.reviewsListContainer}>
-          <ReviewsContainer
+          {/*<ReviewsContainer
             place={place}
             navigation={props.navigation}
             reviewsData={reviewsData}
@@ -547,7 +563,15 @@ const PlaceDetailScreen = (props) => {
             reviewsError={reviewsError}
             loggedInUserId={loggedInUserId}
             refetch={() => refetch()}
-          />
+          />*/}
+          {reviewsLoading ? <ActivityIndicator size="large" color={TourTourColors.accent} /> :
+            reviewsData.reviews.map((review) => {
+              return (
+                <View key={review.id} style={styles.reviewCardContainer} >
+                  <ReviewCard loggedInUserId={loggedInUserId} review={review} navigation={navigation} />
+                </View>
+              )
+            })}
         </View>
         <View style={styles.moreReviewsButtonContainer}>
           <CustomButton width='50%' title={i18n.t('SeeAllReviews')} color={TourTourColors.primary} onPress={() => {
