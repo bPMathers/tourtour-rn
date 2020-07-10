@@ -33,43 +33,9 @@ import { GET_REVIEWS, GET_TOKEN_AND_USER_ID, GET_USER, GET_MY_PHOTOS } from '../
 import FadeInView from '../components/FadeInView';
 import { useRoute } from '@react-navigation/native';
 
-const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsData, loggedInUserId, refetch }) => {
-  // console.log(reviewsData?.reviews?.length)
-
-  // useEffect(() => {
-  //   refetch
-  // }, [reviewsData?.reviews])
-
-  if (reviewsLoading) {
-    return (
-      <View style={styles.metaStateContainer}>
-        <ActivityIndicator size="large" color={TourTourColors.accent} />
-      </View>
-    );
-  }
-  if (reviewsError)
-    return (
-      <View style={styles.container}>
-        <Text>Error...</Text>
-      </View>
-    );
-
-  return (
-    !reviewsLoading &&
-    reviewsData.reviews.map((review) => {
-      return (
-        <View key={review.id} style={styles.reviewCardContainer} >
-          <ReviewCard loggedInUserId={loggedInUserId} review={review} navigation={navigation} />
-        </View>
-      )
-    }))
-}
-
-
 const PlaceDetailScreen = (props) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  // console.log(isFocused)
 
 
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
@@ -124,11 +90,8 @@ const PlaceDetailScreen = (props) => {
   useEffect(() => {
     if (isFocused) {
       refetch()
-      console.log('refetch')
     }
   }, [isFocused])
-  // console.log(reviewsData.reviews)
-  console.log(`reviewsLoading: ${reviewsLoading}`)
 
   const GET_PHOTOS = gql`
     query($placeId: String, $orderBy: PhotoOrderByInput) {
@@ -301,7 +264,6 @@ const PlaceDetailScreen = (props) => {
           refetchQueries: [{ query: GET_PHOTOS, variables: { url: data.secure_url, placeId: placeId } }]
         })
 
-        // return data.secure_url
       }).catch(err => console.log(err))
     }
   }
