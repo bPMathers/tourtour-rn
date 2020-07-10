@@ -36,10 +36,7 @@ import { useRoute } from '@react-navigation/native';
 const PlaceDetailScreen = (props) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-
-
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
-
   const route = useRoute()
   const placeId = route.params.placeId
   const [modalVisible, setModalVisible] = useState(false);
@@ -149,7 +146,6 @@ const PlaceDetailScreen = (props) => {
     onCompleted: () => refetchPhotos()
   })
 
-
   /**
    * HELPERS
    */
@@ -169,7 +165,6 @@ const PlaceDetailScreen = (props) => {
       base64: true
     });
     if (!result.cancelled) {
-      // setPhotoUrl(result.uri)
 
       const base64Img = `data:image/jpg;base64,${result.base64}`
 
@@ -235,8 +230,6 @@ const PlaceDetailScreen = (props) => {
       base64: true
     });
     if (!result.cancelled) {
-      // setPhotoUrl(result.uri)
-
       const base64Img = `data:image/jpg;base64,${result.base64}`
 
       //Add your cloud name
