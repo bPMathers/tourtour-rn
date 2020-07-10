@@ -13,15 +13,14 @@ i18n.locale = Localization.locale;
 i18n.fallbacks = true;
 
 // ---- momentjs setup ----
-let moment = require('moment'); // Load moment module to set local language
-require('moment/locale/fr'); // Import moment local language file (other than english) during the application build
-moment.locale(Localization.locale); // Set moment local language
+let moment = require('moment');
+require('moment/locale/fr');
+moment.locale(Localization.locale);
 
 const cache = new InMemoryCache
 
 export default function App(props) {
 
-  // Could we use Apollo Link Context to set JWT token on the context of each request ?
   const client = new ApolloClient({
     //local IP adress may change. find a way to fetch it dynamically?
     uri: 'http://192.168.100.142:4000/',

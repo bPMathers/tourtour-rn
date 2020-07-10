@@ -102,8 +102,6 @@ const AuthScreen = (props) => {
         email: email,
         password: pw
       },
-    }).catch(res => {
-      console.log(`Error: ${res}`)
     })
   }
 
@@ -114,8 +112,6 @@ const AuthScreen = (props) => {
         email: email,
         password: pw
       }
-    }).catch(res => {
-      console.log(`Error: ${res}`)
     })
   }
 
