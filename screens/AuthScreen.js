@@ -11,7 +11,6 @@ import CustomButton from '../components/CustomButton'
 
 const AuthScreen = (props) => {
 
-  // const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
@@ -118,7 +117,6 @@ const AuthScreen = (props) => {
     }).catch(res => {
       console.log(`Error: ${res}`)
     })
-    // setIsSigningUp(false)
   }
 
   const handleSignUp = () => {
@@ -179,10 +177,8 @@ const AuthScreen = (props) => {
             <Text style={styles.label}>Nom</Text>
             <TextInput
               style={styles.formInput}
-              // keyboardType='email-address'
               onChangeText={name => setName(name)}
               value={name}
-              // autoCapitalize='none'
               clearButtonMode='while-editing'
             />
           </View>}
