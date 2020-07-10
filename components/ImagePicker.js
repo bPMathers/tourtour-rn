@@ -8,13 +8,11 @@ import { TourTourColors } from '../constants/Colors';
 import CustomButton from './CustomButton'
 
 const ImgPicker = props => {
-  /**
-   * HOOKS
-   */
+
   const [modalVisible, setModalVisible] = useState(false);
 
   /**
-   * FUNCTIONS
+   * HELPERS
    */
 
   const verifyCameraRollPermissions = async () => {
@@ -43,9 +41,6 @@ const ImgPicker = props => {
     return true;
   };
 
-  /**
-   * HANDLERS
-   */
   const handleUploadExistingPicture = async () => {
     const hasPermission = await verifyCameraRollPermissions();
     if (!hasPermission) {

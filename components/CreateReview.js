@@ -15,9 +15,6 @@ import StarRating from './StarRating'
 
 const CreateReview = (props) => {
   const place = props.place
-  /**
-   * HOOKS
-   */
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const navigation = useNavigation()
@@ -30,10 +27,6 @@ const CreateReview = (props) => {
   const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id, orderBy: "updatedAt_DESC" },
   });
-
-  /**
-   * GRAPHQL
-   */
 
   const CREATE_REVIEW = gql`
     mutation($body: String!, $placeId: String!, $rating: Float!) {
@@ -58,7 +51,6 @@ const CreateReview = (props) => {
     ],
     awaitRefetchQueries: true
   })
-
 
 
   /**
@@ -117,6 +109,10 @@ const CreateReview = (props) => {
       </View>
     );
   }
+
+  /**
+   * RETURN
+   */
 
   return (
     <SafeAreaView>

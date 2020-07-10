@@ -20,9 +20,7 @@ import { GET_CAT_PLACES, GET_ADD_PLACE_DATA, GET_TOKEN } from '../graphql/querie
 import CustomButton from '../components/CustomButton';
 
 const NewPlaceScreen = props => {
-  /**
-   * HOOKS
-   */
+
   const client = useApolloClient()
   const [name, setName] = useState('');
   const [imgBase64, setImgBase64] = useState()
@@ -60,10 +58,6 @@ const NewPlaceScreen = props => {
     setLng(props.route.params.pickedLocationOnMap?.lng)
 
   }, [props.route.params.pickedLocationOnMap])
-
-  /**
-   * GRAPHQL 
-   */
 
   const ADD_PLACE = gql`
     mutation($name: String!, $categoryId: String!, $imageUrl: String, $lat: Float, $lng: Float, $placeId: String, $formatted_address: String, $phone: String, $url: String) {
@@ -182,10 +176,6 @@ const NewPlaceScreen = props => {
 NewPlaceScreen.navigationOptions = {
   headerTitle: 'Add Place'
 };
-
-/**
- * STYLES
- */
 
 const styles = StyleSheet.create({
   form: {

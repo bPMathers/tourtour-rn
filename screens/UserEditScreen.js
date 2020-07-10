@@ -13,10 +13,6 @@ import FadeInView from '../components/FadeInView'
 
 const UserEditScreen = (props) => {
 
-  /**
-   * HOOKS
-   */
-
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
@@ -41,10 +37,6 @@ const UserEditScreen = (props) => {
       setUserStatus(data.user.status)
     }
   }, [data?.user])
-
-  /**
-   * GRAPHQL
-   */
 
   // eventually use same mutation for both updatePicture and update userInfo
   const UPDATE_PICTURE = gql`

@@ -13,11 +13,6 @@ import { GET_TOKEN_AND_USER_ID } from '../graphql/queries'
 const FeaturedPhotosGroup = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState({ addedBy: '' })
-
-  /**
-   * GRAPHQL
-   */
-
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
 

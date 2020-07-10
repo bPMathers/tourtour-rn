@@ -52,11 +52,6 @@ const UpdateMyPlaceScreen = props => {
 
   }, [props.route.params.pickedLocationOnMap])
 
-
-  /**
-   * GRAPHQL
-   */
-
   const UPDATE_PLACE = gql`
     mutation($id: ID!, $name: String!, $imageUrl: String, $lat: Float, $lng: Float, $placeId: String, $formatted_address: String, $phone: String, $url: String) {
     updatePlace(

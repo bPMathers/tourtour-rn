@@ -252,9 +252,6 @@ function HomeStackScreen() {
 }
 
 export default function HomeApp(props) {
-  /**
-   * HOOKS
-   */
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const isLoadingComplete = useCachedResources();

@@ -10,20 +10,12 @@ import { TourTourColors } from '../constants/Colors'
 import CustomButton from '../components/CustomButton'
 
 const AuthScreen = (props) => {
-  /**
-   * HOOKS
-   */
 
   // const { data: tokenData, client: unusedClient } = useQuery(GET_TOKEN_AND_USER_ID);
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
   const [isSigningUp, setIsSigningUp] = useState(false)
-
-
-  /**
-   * GRAPHQL
-   */
 
   const LOGIN = gql`
     mutation($email: String!, $password: String!) {

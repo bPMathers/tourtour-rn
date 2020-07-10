@@ -27,10 +27,6 @@ const UserPhotosListScreen = (props) => {
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
 
-  /**
-   * GRAPHQL
-   */
-
   const DELETE_PHOTO = gql`
     mutation($id: ID!) {
       deletePhoto(id: $id){

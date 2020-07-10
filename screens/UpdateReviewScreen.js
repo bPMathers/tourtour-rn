@@ -14,24 +14,10 @@ const UpdateReviewScreen = (props) => {
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   // const { data: placeData } = useQuery(GET_PLACE)
   const jwtBearer = "".concat("Bearer ", tokenAndIdData.token).replace(/\"/g, "")
-  /**
-   * VARIABLES
-   */
-
   const place = props.route.params.review.place
   const review = props.route.params.review
-
-  /**
-   * HOOKS
-   */
-
   const [rating, setRating] = useState(review.rating)
   const [body, setBody] = useState(review.body);
-
-  /**
-   * GRAPHQL
-   */
-
   const UPDATE_REVIEW = gql`
     mutation($body: String!, $placeId: String!, $rating: Float!, $id: ID!) {
     updateReview(

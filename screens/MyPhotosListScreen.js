@@ -38,10 +38,6 @@ const MyPhotosListScreen = (props) => {
     },
   });
 
-  /**
-   * GRAPHQL
-   */
-
   const DELETE_PHOTO = gql`
     mutation($id: ID!) {
       deletePhoto(id: $id){

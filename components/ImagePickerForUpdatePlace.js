@@ -11,9 +11,7 @@ import { TourTourColors } from '../constants/Colors';
 import CustomButton from './CustomButton'
 
 const ImgPickerForUpdatePlace = props => {
-  /**
-   * HOOKS
-   */
+
   const [modalVisible, setModalVisible] = useState(false);
   const [imgUrl, setImgUrl] = useState(props.initialImgUrl)
 
@@ -21,7 +19,7 @@ const ImgPickerForUpdatePlace = props => {
   const client = useApolloClient();
 
   /**
-   * FUNCTIONS
+   * HELPERS
    */
 
   const verifyCameraRollPermissions = async () => {
@@ -50,9 +48,6 @@ const ImgPickerForUpdatePlace = props => {
     return true;
   };
 
-  /**
-   * HANDLERS
-   */
   const handleUploadExistingPicture = async () => {
     const hasPermission = await verifyCameraRollPermissions();
     if (!hasPermission) {

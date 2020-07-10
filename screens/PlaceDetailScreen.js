@@ -65,11 +65,7 @@ const ReviewsContainer = ({ navigation, reviewsLoading, reviewsError, reviewsDat
 
 
 const PlaceDetailScreen = (props) => {
-  /**
-   * HOOKS & VARIABLES
-   */
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
-
 
   const route = useRoute()
   const placeId = route.params.placeId
@@ -79,9 +75,6 @@ const PlaceDetailScreen = (props) => {
   const jwtBearer = "".concat("Bearer ", tokenAndIdData?.token).replace(/\"/g, "")
   const loggedInUserId = tokenAndIdData?.userId
 
-  /**
-   * GRAPHQL
-   */
   const GET_PLACE = gql`
   query($placeId: String) {
     place(query: $placeId) {

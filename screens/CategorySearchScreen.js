@@ -16,9 +16,7 @@ import { GET_SEARCH_LOCATION, GET_CAT_PLACES, GET_TOKEN_AND_USER_ID, GET_MY_LOCA
 import PlacePreviewListItem from '../components/PlacePreviewListItem';
 
 const CategorySearchScreen = (props) => {
-  /**
-   * HOOKS
-   */
+
 
   const { data: tokenAndIdData } = useQuery(GET_TOKEN_AND_USER_ID);
   const loggedInUserId = tokenAndIdData?.userId
