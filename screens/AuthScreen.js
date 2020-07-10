@@ -127,6 +127,12 @@ const AuthScreen = (props) => {
     setIsSigningUp(true)
   }
 
+  const handleCancelSignup = () => {
+    setEmail('')
+    setPw('')
+    setIsSigningUp(false)
+  }
+
 
   let LoginErrorContainer = () => {
     return <View></View>
@@ -217,7 +223,7 @@ const AuthScreen = (props) => {
               />
             </View>
             <View>
-              <CustomButton title={i18n.t('Cancel')} onPress={() => setIsSigningUp(false)} color={TourTourColors.cancel} />
+              <CustomButton title={i18n.t('Cancel')} onPress={handleCancelSignup} color={TourTourColors.cancel} />
             </View>
           </View>}
       </KeyboardAvoidingView>
