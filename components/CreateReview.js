@@ -27,7 +27,7 @@ const CreateReview = (props) => {
   const [rating, setRating] = useState(3);
   const [showReviewsPane, setShowReviewsPane] = useState(false);
 
-  const { loading: reviewsLoading, error: reviewsError, data: reviewsData, refetch } = useQuery(GET_REVIEWS, {
+  const { loading: reviewsLoading, error: reviewsError, data: reviewsData } = useQuery(GET_REVIEWS, {
     variables: { placeId: place.id, orderBy: "updatedAt_DESC" },
   });
 
@@ -49,10 +49,14 @@ const CreateReview = (props) => {
   `;
 
   const [createReview] = useMutation(CREATE_REVIEW, {
-    onCompleted: () => props.refetchReviews(),
+    onCompleted: () => {
+      props.refetchReviews()
+    },
     refetchQueries: [
       { query: GET_PLACE, variables: { placeId: place.id } },
+      { query: GET_REVIEWS, variables: { placeId: place.id, orderBy: "updatedAt_DESC" } },
     ],
+    awaitRefetchQueries: true
   })
 
 
@@ -69,6 +73,7 @@ const CreateReview = (props) => {
           Authorization: jwtBearer
         }
       },
+
 
 
     })
