@@ -331,6 +331,20 @@ const PlaceDetailScreen = (props) => {
     })
   }
 
+  const handleNavigateToUserProfile = () => {
+    let destination
+    if (place.addedBy.id === loggedInUserId) {
+      destination = 'UserEdit'
+    } else {
+      destination = 'UserProfile'
+    }
+
+    props.navigation.navigate(destination, {
+      userId: place.addedBy.id,
+      userName: place.addedBy.name
+    })
+  }
+
   /**
    * NAV
    */
@@ -419,12 +433,7 @@ const PlaceDetailScreen = (props) => {
                   </View>
                   <View>
                     <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                    <TouchableOpacity onPress={() => {
-                      props.navigation.navigate('UserProfile', {
-                        userId: place.addedBy.id,
-                        userName: place.addedBy.name
-                      })
-                    }}>
+                    <TouchableOpacity onPress={handleNavigateToUserProfile}>
                       <Text style={{ color: 'white', fontWeight: 'bold' }}>
                         {place.addedBy.name}
                       </Text>

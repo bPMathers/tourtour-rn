@@ -135,8 +135,8 @@ const CategorySearchScreen = (props) => {
       <PlacePreviewListItem
         loggedInUserId={loggedInUserId}
         place={itemData.item}
-        onSelectUserProfile={() => {
-          props.navigation.navigate('UserProfile', {
+        onSelectUserProfile={(destination) => {
+          props.navigation.navigate(destination, {
             userId: itemData.item.addedBy.id,
             userName: itemData.item.addedBy.name
           });

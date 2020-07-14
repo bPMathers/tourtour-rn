@@ -167,6 +167,12 @@ function HomeStackScreen() {
           headerBackTitle: i18n.t('Back')
         })}
       />
+      <UserStack.Screen
+        name='UserEdit'
+        component={UserEditScreen}
+        options={{ title: i18n.t('MyProfile') }}
+
+      />
       <HomeStack.Screen
         name='UserPhotos'
         component={UserPhotosListScreen}

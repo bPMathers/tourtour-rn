@@ -20,6 +20,17 @@ const PlacePreviewListItem = (props) => {
   const { place } = props
   const navigation = useNavigation()
 
+  const handleNavigateToUserProfile = () => {
+    let destination
+    if (place.addedBy.id === props.loggedInUserId) {
+      destination = 'UserEdit'
+    } else {
+      destination = 'UserProfile'
+    }
+
+    props.onSelectUserProfile(destination)
+  }
+
   return (
     <View style={styles.placePreviewListItem}>
       <TouchableOpacity style={{ flex: 1 }} onPress={() => {
@@ -64,7 +75,7 @@ const PlacePreviewListItem = (props) => {
               <View style={styles.leftBottomGroup}>
                 <View>
                   <Text style={styles.submittedBy}>{i18n.t('addedBy')}: </Text>
-                  <TouchableOpacity onPress={props.onSelectUserProfile}>
+                  <TouchableOpacity onPress={handleNavigateToUserProfile}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>
                       {place.addedBy.name}
                     </Text>
